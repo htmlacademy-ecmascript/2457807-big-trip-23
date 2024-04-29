@@ -1,7 +1,11 @@
 # Проект «Большое путешествие»
 
 * Студент: [Антон Малявко](https://up.htmlacademy.ru/ecmascript/23/user/2457807).
+<<<<<<< HEAD
 * Наставник: [`Yulia Volkovа`](https://htmlacademy.ru/profile/julie_volkova).
+=======
+* Наставник: `Yulia Volkova`.
+>>>>>>> master
 
 ---
 
