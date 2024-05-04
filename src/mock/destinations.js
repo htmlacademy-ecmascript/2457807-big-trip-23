@@ -1,3 +1,4 @@
+import { getRandomArrayElement } from "../utils";
 const destinations = [
   {
     id: '23fb9425-bbfa-4a42-834c-9c3562395a0b',
@@ -160,3 +161,7 @@ const destinations = [
     ]
   }
 ];
+
+const getDestinations = () => destinations;
+
+export {getDestinations};

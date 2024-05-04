@@ -13,10 +13,11 @@ export default class EventListPresenter {
 
   init() {
     this.boardEvents = [... this.eventsModel.getEvents()];
+    this.boardDestinations = [...this.eventsModel.getDestinations()];
     render(this.eventListComponent, this.eventListContainer);
     render(new FormEventView(), this.eventListComponent.getElement());
     for (let i = 0; i < this.boardEvents.length; i++) {
-      render(new EventView({event: this.boardEvents[i]}), this.eventListComponent.getElement());
+      render(new EventView({eventData: this.boardEvents[i]}, {destinationsData: this.boardDestinations[i]}), this.eventListComponent.getElement());
     }
   }
 }
