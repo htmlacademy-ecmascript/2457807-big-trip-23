@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+import { DateFormat } from './constants';
 const getRandomArrayElement = (items) =>items[Math.floor(Math.random() * items.length)];
 
 
@@ -8,9 +10,10 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 
-function getRandomDate(start, end) {
-  return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-}
+const getRandomDate = (start, end) => new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 
-export {getRandomArrayElement, getRandomInteger, getRandomDate};
+const formatDate = (dueDate) =>dayjs(dueDate).format(DateFormat.DATE_FORMATE);
+const formatTime = (dueDate) =>dayjs(dueDate).format(DateFormat.TIME_FORMAT);
+
+export {getRandomArrayElement, getRandomInteger, getRandomDate, formatDate, formatTime};
 

@@ -6,15 +6,17 @@ import EventView from '../View/event-view.js';
 export default class EventListPresenter {
   eventListComponent = new EventListView();
 
-  constructor({eventListContainer}) {
+  constructor({eventListContainer, eventsModel}) {
     this.eventListContainer = eventListContainer;
+    this.eventsModel = eventsModel;
   }
 
   init() {
+    this.boardEvents = [... this.eventsModel.getEvents()];
     render(this.eventListComponent, this.eventListContainer);
     render(new FormEventView(), this.eventListComponent.getElement());
-    for (let i = 0; i < 3; i++) {
-      render(new EventView(), this.eventListComponent.getElement());
+    for (let i = 0; i < this.boardEvents.length; i++) {
+      render(new EventView({event: this.boardEvents[i]}), this.eventListComponent.getElement());
     }
   }
 }

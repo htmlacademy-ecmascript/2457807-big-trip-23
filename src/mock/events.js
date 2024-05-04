@@ -16,7 +16,7 @@ class Event {
       '2660e1b7-037f-4c8f-acbe-1026f4d48e9d',
       '51734d83-edf3-44b4-86ef-16a0fb7a425f'
     ];
-    this.type = getRandomArrayElement2(EVENT_TYPE_ITEM);
+    this.type = getRandomArrayElement(EVENT_TYPE_ITEM);
   }
 }
 // const events = [];
