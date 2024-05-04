@@ -1,0 +1,10 @@
+import { getEvent } from "../mock/events";
+const EVENTS_NUMBER = 4;
+
+export default class EvantsModel{
+Events = Array.from({length: EVENTS_NUMBER}, getEvent());
+
+getEvent(){
+    return this.Events;
+}
+};
