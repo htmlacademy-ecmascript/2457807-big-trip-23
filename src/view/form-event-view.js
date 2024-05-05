@@ -1,5 +1,40 @@
-import { createElement } from '../render.js';
-import {EVENT_TYPE_ITEM } from '../constants.js';
+import {createElement} from '../render.js';
+import {EVENT_TYPE_ITEM, DESTINATION_ID} from '../constants.js';
+import {formatDate, formatTime, getDuration} from '../utils.js';
+
+const createPictureTemplateItem = ({src, description}) =>`
+<img class="event__photo" src="${src}" alt="${description}."></img>
+`;
+const createEventFormPictureTemplate = ({pictures}) =>{
+  console.log(pictures);
+  if (pictures?.length === 0 || pictures?.length === undefined) {
+    return ''; // Возвращаем пустую строку, если offers пуст или не существует
+  }
+  const picturesTemplate = pictures.reduce(
+    (accumulator, picture) => accumulator + createPictureTemplateItem(picture), '');
+  return picturesTemplate;
+};
+const createEventOffersTemplateItem = ({id, title, price}) =>`
+<div class="event__available-offers">
+  <div class="event__offer-selector">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}-1" type="checkbox" name="event-offer-luggage" checked>
+    <label class="event__offer-label" for="event-offer-${id}-1">
+      <span class="event__offer-title">${title}</span>
+      &plus;&euro;&nbsp;
+      <span class="event__offer-price">${price}</span>
+    </label>
+  </div>`;
+
+const createEventOffersTemplate = (offersData, type) => {
+  const offers = offersData.find((offer) => offer.type === type)?.offers;
+  // console.log(offers?.length);
+  if (offers?.length === 0 || offers?.length === undefined) {
+    return ''; // Возвращаем пустую строку, если offers пуст или не существует
+  }
+  const offersTemplate = offers.reduce(
+    (accumulator, offer) => accumulator + createEventOffersTemplateItem(offer), '');
+  return offersTemplate;
+};
 
 const createFormEventTypeItemTemplate = (type) => `
 <div class="event__type-item">
@@ -7,7 +42,10 @@ const createFormEventTypeItemTemplate = (type) => `
 <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
 </div>`;
 
-const createFormEventTemplate = () => `
+const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
+  const destinations = destinationsData.find((destination) => destination.id === DESTINATION_ID[2]);
+  console.log(destinations.description !== 0 && destinations.pictures !== 0);
+  return `
 <li class="trip-events__item">
 <form class="event event--edit" action="#" method="post">
   <header class="event__header">
@@ -24,7 +62,6 @@ const createFormEventTemplate = () => `
         </fieldset>
       </div>
     </div>
-
     <div class="event__field-group  event__field-group--destination">
       <label class="event__label  event__type-output" for="event-destination-1">
         Flight
@@ -56,75 +93,26 @@ const createFormEventTemplate = () => `
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     <button class="event__reset-btn" type="reset">Cancel</button>
   </header>
-  <section class="event__details">
-    <section class="event__section  event__section--offers">
-      <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-
-      <div class="event__available-offers">
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-luggage-1" type="checkbox" name="event-offer-luggage" checked>
-          <label class="event__offer-label" for="event-offer-luggage-1">
-            <span class="event__offer-title">Add luggage</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">30</span>
-          </label>
-        </div>
-
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-comfort-1" type="checkbox" name="event-offer-comfort" checked>
-          <label class="event__offer-label" for="event-offer-comfort-1">
-            <span class="event__offer-title">Switch to comfort class</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">100</span>
-          </label>
-        </div>
-
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-meal-1" type="checkbox" name="event-offer-meal">
-          <label class="event__offer-label" for="event-offer-meal-1">
-            <span class="event__offer-title">Add meal</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">15</span>
-          </label>
-        </div>
-
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-seats-1" type="checkbox" name="event-offer-seats">
-          <label class="event__offer-label" for="event-offer-seats-1">
-            <span class="event__offer-title">Choose seats</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">5</span>
-          </label>
-        </div>
-
-        <div class="event__offer-selector">
-          <input class="event__offer-checkbox  visually-hidden" id="event-offer-train-1" type="checkbox" name="event-offer-train">
-          <label class="event__offer-label" for="event-offer-train-1">
-            <span class="event__offer-title">Travel by train</span>
-            &plus;&euro;&nbsp;
-            <span class="event__offer-price">40</span>
-          </label>
-        </div>
-      </div>
-    </section>
-
+  <section class="event__details"> 
+  <section class="event__section  event__section--offers">
+  <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+  ${createEventOffersTemplate(offersData, EVENT_TYPE_ITEM[3])} 
+  </div>
+</section>
     <section class="event__section  event__section--destination">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">Geneva is a city in Switzerland that lies at the southern tip of expansive Lac Léman (Lake Geneva). Surrounded by the Alps and Jura mountains, the city has views of dramatic Mont Blanc.</p>
+      <p class="event__destination-description">${destinations.description}</p>
 
       <div class="event__photos-container">
         <div class="event__photos-tape">
-          <img class="event__photo" src="img/photos/1.jpg" alt="Event photo">
-          <img class="event__photo" src="img/photos/2.jpg" alt="Event photo">
-          <img class="event__photo" src="img/photos/3.jpg" alt="Event photo">
-          <img class="event__photo" src="img/photos/4.jpg" alt="Event photo">
-          <img class="event__photo" src="img/photos/5.jpg" alt="Event photo">
+        ${createEventFormPictureTemplate(destinations)}
         </div>
       </div>
     </section>
   </section>
 </form>
 </li>`;
+};
 
 export default class FormEventView {
   constructor({

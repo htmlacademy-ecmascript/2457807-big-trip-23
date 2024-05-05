@@ -1,11 +1,5 @@
-import {
-  createElement
-} from '../render.js';
-import {
-  formatDate,
-  formatTime,
-  getDuration
-} from '../utils.js';
+import {createElement} from '../render.js';
+import {formatDate, formatTime, getDuration} from '../utils.js';
 
 const createOffersItemTemplate = ({title, price}) => `<li class="event__offer">
   <span class="event__offer-title">${title}</span>
@@ -25,7 +19,7 @@ const createOffersTemplate = (offersArray, offersEventArray) => {
     }
   }).filter((element) => element !== undefined);
   const offersTemplate = offersItem.reduce(
-    (accumulator, offer) => accumulator + createOffersItemTemplate(offer), '');  
+    (accumulator, offer) => accumulator + createOffersItemTemplate(offer), '');
   return offersTemplate;
 };
 
