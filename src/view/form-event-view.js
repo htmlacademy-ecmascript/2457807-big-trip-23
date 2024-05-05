@@ -1,7 +1,9 @@
 import {createElement} from '../render.js';
 import {EVENT_TYPE_ITEM, DESTINATION_ID} from '../constants.js';
-import {formatDate, formatTime, getDuration} from '../utils.js';
+import {formatDate, formatTime, getDuration, getRandomInteger} from '../utils.js';
 
+const randomTestOffersEventType = EVENT_TYPE_ITEM[getRandomInteger(0, EVENT_TYPE_ITEM.length -1)];
+const randomTestDestinationsId = DESTINATION_ID[getRandomInteger(0, DESTINATION_ID.length -1)]
 const createPictureTemplateItem = ({src, description}) =>`
 <img class="event__photo" src="${src}" alt="${description}."></img>
 `;
@@ -42,7 +44,9 @@ const createFormEventTypeItemTemplate = (type) => `
 </div>`;
 
 const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
-  const destinations = destinationsData.find((destination) => destination.id === DESTINATION_ID[2]);
+  const destinations = destinationsData.find((destination) => destination.id === randomTestDestinationsId);
+  const isEmptydestinations = (destinations.description === '') && (destinations.pictures.length === 0);
+  const isEmptyOffers = createEventOffersTemplate(offersData, randomTestOffersEventType) === '';
   return `
 <li class="trip-events__item">
 <form class="event event--edit" action="#" method="post">
@@ -91,13 +95,13 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     <button class="event__reset-btn" type="reset">Cancel</button>
   </header>
-  <section class="event__details"> 
-  <section class="event__section  event__section--offers">
+  <section class="event__details ${(isEmptyOffers && isEmptydestinations) ? 'visually-hidden' : ''}"> 
+  <section class="event__section  event__section--offers ${isEmptyOffers ? 'visually-hidden' : ''}">
   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-  ${createEventOffersTemplate(offersData, EVENT_TYPE_ITEM[3])} 
+  ${createEventOffersTemplate(offersData, randomTestOffersEventType)} 
   </div>
 </section>
-    <section class="event__section  event__section--destination">
+    <section class="event__section  event__section--destination ${isEmptydestinations ? 'visually-hidden' : ''}">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
       <p class="event__destination-description">${destinations.description}</p>
 
