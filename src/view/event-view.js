@@ -1,17 +1,62 @@
-import { createElement } from '../render.js';
-import { formatDate, formatTime, getDuration } from '../utils.js';
+import {
+  createElement
+} from '../render.js';
+import {
+  formatDate,
+  formatTime,
+  getDuration
+} from '../utils.js';
 
-const createEventTemplate = (eventData, destinations) => {
-  const {id: idEvent, basePrice, dateFrom, dateTo, destination, isFavorite, offers, type} = eventData;
-  //  const {description, name, pictures} = destinationsData;
-  
+const createOffersItemTemplate = ({title, price}) => `<li class="event__offer">
+  <span class="event__offer-title">${title}</span>
+  &plus;&euro;&nbsp;
+  <span class="event__offer-price">${price}</span>
+</li>`;
+
+const createOffersTemplate = (offersArray, offersEventArray) => {
+  if (offersEventArray.length === 0 || offersArray.length === 0) {
+    return ''; // Возвращаем пустую строку, если offers пуст или не существует
+  }
+  const offersItem = offersArray.map((offerElement) => {
+
+    const isoffers = offersEventArray.find((offersEventItem) => offersEventItem === offerElement.id);
+    if (isoffers || isoffers !== undefined) {
+      return offerElement;
+    }
+  }).filter((element) => element !== undefined);
+  const offersTemplate = offersItem.reduce(
+    (accumulator, offer) => accumulator + createOffersItemTemplate(offer), '');  
+  return offersTemplate;
+};
+
+const createEventTemplate = (eventData, destinationsData, offersData) => {
+  const {
+    id: idEvent,
+    basePrice,
+    dateFrom,
+    dateTo,
+    destination: idDestinationEvent,
+    isFavorite,
+    offers: offersEventArray,
+    type
+  } = eventData;
+  const {
+    id: idDestination,
+    description,
+    name,
+    pictures
+  } = destinationsData;
+  const {
+    type: typeOffer,
+    offers: offersArray
+  } = offersData;
   return (`
   <div class="event">
     <time class="event__date" datetime="${dateFrom}">${formatDate(dateFrom)}</time>
     <div class="event__type">
       <img class="event__type-icon" width="42" height="42" src="img/icons/${type}.png" alt="Event type icon">
     </div>
-    <h3 class="event__title">${type} ${destination}</h3>
+    <h3 class="event__title">${type} ${name}</h3>
     <div class="event__schedule">
       <p class="event__time">
         <time class="event__start-time" datetime="${dateFrom}">${formatTime(dateFrom)}</time>
@@ -25,11 +70,7 @@ const createEventTemplate = (eventData, destinations) => {
   </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-      <li class="event__offer">
-        <span class="event__offer-title">Order Uber</span>
-        &plus;&euro;&nbsp;
-        <span class="event__offer-price">20</span>
-      </li>
+    ${createOffersTemplate(offersArray, offersEventArray)}
     </ul>
     <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
       <span class="visually-hidden">Add to favorite</span>
@@ -44,13 +85,18 @@ const createEventTemplate = (eventData, destinations) => {
 };
 
 export default class EventView {
-  constructor({eventData, destinationsData}){
+  constructor({
+    eventData,
+    destinationsData,
+    offersData
+  }) {
     this.event = eventData;
-    this.destinations = destinationsData;
+    this.destinationsData = destinationsData;
+    this.offersData = offersData;
   }
 
   getTemplate() {
-    return createEventTemplate(this.event, this.destinations);
+    return createEventTemplate(this.event, this.destinationsData, this.offersData);
   }
 
   getElement() {

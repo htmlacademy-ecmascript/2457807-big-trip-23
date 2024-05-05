@@ -127,8 +127,18 @@ const createFormEventTemplate = () => `
 </li>`;
 
 export default class FormEventView {
+  constructor({
+    eventData,
+    destinationsData,
+    offersData
+  }) {
+    this.event = eventData;
+    this.destinationsData = destinationsData;
+    this.offersData = offersData;
+  }
+
   getTemplate() {
-    return createFormEventTemplate();
+    return createFormEventTemplate(this.event, this.destinationsData, this.offersData);
   }
 
   getElement() {
