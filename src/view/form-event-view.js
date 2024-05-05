@@ -6,7 +6,6 @@ const createPictureTemplateItem = ({src, description}) =>`
 <img class="event__photo" src="${src}" alt="${description}."></img>
 `;
 const createEventFormPictureTemplate = ({pictures}) =>{
-  console.log(pictures);
   if (pictures?.length === 0 || pictures?.length === undefined) {
     return ''; // Возвращаем пустую строку, если offers пуст или не существует
   }
@@ -44,7 +43,6 @@ const createFormEventTypeItemTemplate = (type) => `
 
 const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
   const destinations = destinationsData.find((destination) => destination.id === DESTINATION_ID[2]);
-  console.log(destinations.description !== 0 && destinations.pictures !== 0);
   return `
 <li class="trip-events__item">
 <form class="event event--edit" action="#" method="post">
