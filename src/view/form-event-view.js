@@ -2,14 +2,14 @@ import {createElement} from '../render.js';
 import {EVENT_TYPE_ITEM, DESTINATION_ID} from '../constants.js';
 import {formatDate, formatTime, getDuration, getRandomInteger} from '../utils.js';
 
-const randomTestOffersEventType = EVENT_TYPE_ITEM[getRandomInteger(0, EVENT_TYPE_ITEM.length -1)];
-const randomTestDestinationsId = DESTINATION_ID[getRandomInteger(0, DESTINATION_ID.length -1)]
+const randomTestOffersEventType = EVENT_TYPE_ITEM[getRandomInteger(0, EVENT_TYPE_ITEM.length - 1)];
+const randomTestDestinationsId = DESTINATION_ID[getRandomInteger(0, DESTINATION_ID.length - 1)];
 const createPictureTemplateItem = ({src, description}) =>`
 <img class="event__photo" src="${src}" alt="${description}."></img>
 `;
 const createEventFormPictureTemplate = ({pictures}) =>{
   if (pictures?.length === 0 || pictures?.length === undefined) {
-    return ''; // Возвращаем пустую строку, если offers пуст или не существует
+    return '';
   }
   const picturesTemplate = pictures.reduce(
     (accumulator, picture) => accumulator + createPictureTemplateItem(picture), '');
@@ -28,9 +28,8 @@ const createEventOffersTemplateItem = ({id, title, price}) =>`
 
 const createEventOffersTemplate = (offersData, type) => {
   const offers = offersData.find((offer) => offer.type === type)?.offers;
-  // console.log(offers?.length);
   if (offers?.length === 0 || offers?.length === undefined) {
-    return ''; // Возвращаем пустую строку, если offers пуст или не существует
+    return '';
   }
   const offersTemplate = offers.reduce(
     (accumulator, offer) => accumulator + createEventOffersTemplateItem(offer), '');

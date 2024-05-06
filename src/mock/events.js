@@ -30,31 +30,9 @@ class Event {
     let arrayRandom = Array.from({length: randomArray}, offersArray);
     arrayRandom = arrayRandom.filter((element) => element !== undefined);
     const uniqueOffersArray = new Set(arrayRandom);
-    // console.log(uniqueOffersArray);
     return [...uniqueOffersArray];
   }
 }
-// const ev = new Event;
-// console.log(ev.offers);
-// console.log(new Event);
-// console.log(ev.offers, ev.type);
-// const index = getOffers().findIndex((offer) => offer.type === 'ship');
-// const lentghArray = getOffers()[getOffers().findIndex((offer) => offer.type === 'ship')].offers.length;
-// const randomArray = getRandomInteger(0, getOffers()[getOffers().findIndex((offer) => offer.type === 'ship')].offers.length);
-// console.log(randomArray);
-// const offersArray = () => getOffers()[index].offers[getRandomInteger(0, getOffers()[index].offers.length)].id;
-// console.log(offersArray());
-// console.log(getOffers()[index].type);
-// const arrayRandom = Array.from({length: randomArray}, offersArray);
-// console.log(arrayRandom);
-// const events = [];
-// for(let i = 1; i <= 10; i++){
-//   events.push(Event);
-// }
-// Array.from({length: getOffers[this.type].length}, getOffers()[this.type]);
-// const index = getOffers().findIndex((offer) => offer.type === 'ship');
-// const lentgh Array = getOffers()[index].offers.length;
-// const randomArray = getRandomInteger(0, getOffers()[index].offers.length);
 
 const getEvents = () => new Event;
 

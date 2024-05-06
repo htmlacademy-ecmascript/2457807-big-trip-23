@@ -9,7 +9,7 @@ const createOffersItemTemplate = ({title, price}) => `<li class="event__offer">
 
 const createOffersTemplate = (offersArray, offersEventArray) => {
   if (offersEventArray.length === 0 || offersArray.length === 0) {
-    return ''; // Возвращаем пустую строку, если offers пуст или не существует
+    return '';
   }
   const offersItem = offersArray.map((offerElement) => {
 
@@ -77,7 +77,6 @@ const createEventTemplate = (eventData, destinationsData, offersData) => {
     </button>
   </div>`);
 };
-
 export default class EventView {
   constructor({
     eventData,
