@@ -60,7 +60,6 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
   const offersTemplate = createEventOffersTemplate(offersData, randomTestOffersEventType);
   const isEmptyDestinations = (destinations.description === '') && (destinations.pictures.length === 0);
   const isEmptyOffers = offersTemplate === '';
-  console.log(destinationsData);
   return `
 <li class="trip-events__item">
 <form class="event event--edit" action="#" method="post">
