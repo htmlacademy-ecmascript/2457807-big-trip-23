@@ -1,15 +1,24 @@
 import {createElement} from '../render.js';
 import {EVENT_TYPES_TRIP} from '../constants.js';
-import { getRandomInteger} from '../utils.js';
+import { getRandomInteger, getRandomArrayElement, formatTime, formatDateForm} from '../utils.js';
 import { getDestinations } from '../mock/destinations.js';
 
 const destinationsId = () => getDestinations().map((element) => element.id);
 const randomTestOffersEventType = EVENT_TYPES_TRIP[getRandomInteger(0, EVENT_TYPES_TRIP.length - 1)];
 const randomTestDestinationsId = destinationsId()[getRandomInteger(0, destinationsId().length - 1)];
 
+const createListOptionsDestinationItem = ({name}) =>`<option value="${name}"></option>`;
+
+const createListOptionsDestination = (destinations) =>{
+  const destinationNameTemplate = destinations.reduce(
+    (accumulator, destination) => accumulator + createListOptionsDestinationItem(destination), '');
+  return destinationNameTemplate;
+};
+
 const createPictureTemplateItem = ({src, description}) =>`
 <img class="event__photo" src="${src}" alt="${description}."></img>
 `;
+
 const createEventFormPictureTemplate = ({pictures}) =>{
   if (pictures?.length === 0 || pictures?.length === undefined) {
     return '';
@@ -45,11 +54,13 @@ const createFormEventTypeItemTemplate = (type) => `
 <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
 </div>`;
 
+
 const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
   const destinations = destinationsData.find((destination) => destination.id === randomTestDestinationsId);
   const offersTemplate = createEventOffersTemplate(offersData, randomTestOffersEventType);
   const isEmptyDestinations = (destinations.description === '') && (destinations.pictures.length === 0);
   const isEmptyOffers = offersTemplate === '';
+  console.log(destinationsData);
   return `
 <li class="trip-events__item">
 <form class="event event--edit" action="#" method="post">
@@ -69,22 +80,20 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
     </div>
     <div class="event__field-group  event__field-group--destination">
       <label class="event__label  event__type-output" for="event-destination-1">
-        Flight
+        ${getRandomArrayElement(EVENT_TYPES_TRIP)}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="Geneva" list="destination-list-1">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="" list="destination-list-1" placeholder = "Choose a trip">
       <datalist id="destination-list-1">
-        <option value="Amsterdam"></option>
-        <option value="Geneva"></option>
-        <option value="Chamonix"></option>
+       ${createListOptionsDestination(destinationsData)}
       </datalist>
     </div>
 
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="19/03/19 00:00">
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDateForm(new Date)} ${formatTime(new Date)}">
       &mdash;
       <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="19/03/19 00:00">
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDateForm(new Date)} ${formatTime(new Date)}">
     </div>
 
     <div class="event__field-group  event__field-group--price">

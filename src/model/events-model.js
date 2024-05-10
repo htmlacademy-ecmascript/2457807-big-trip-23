@@ -25,15 +25,13 @@ export default class EventsModel{
     return offers.find((offer) => offer.type === type);
   }
 
-  getOffersById(type, idOffersItem){
-    const offersType = this.getOffersById(type);
+  getArrayOffersById(type, idOffersItem){
+    const offersType = this.getOffersByType(type);
     return offersType.offers.find((offer) => offer.id === idOffersItem);
   }
 
   getDestinationById(id){
     const destinations = this.getDestinations();
-    return destinations.id.find((destination) => destination.id === id);
+    return destinations.find((destination) => destination.id === id);
   }
-
-
 }

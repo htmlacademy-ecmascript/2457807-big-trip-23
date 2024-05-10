@@ -24,12 +24,14 @@ export default class EventListPresenter {
       destinationsData: this.boardDestinations,
       offersData: this.boardOffers}), this.eventListComponent.getElement());
     for (let i = 1; i < this.boardEvents.length; i++) {
-      const indexDestination = this.boardDestinations.findIndex((destination) => destination.id === this.boardEvents[i].destination);
-      const indexOffers = this.boardOffers.findIndex((offer) => offer.type === this.boardEvents[i].type);
+      // const indexDestination = this.boardDestinations.findIndex((destination) => destination.id === this.boardEvents[i].destination);
+      // const indexOffers = this.boardOffers.findIndex((offer) => offer.type === this.boardEvents[i].type);
       render(new EventView({
         eventData: this.boardEvents[i],
-        destinationsData: this.boardDestinations[indexDestination],
-        offersData: this.boardOffers[indexOffers]
+        destinationsData: this.eventsModel.getDestinationById(this.boardEvents[i].destination),
+        // destinationsData: this.boardDestinations[indexDestination],
+        offersData: this.eventsModel.getOffersByType(this.boardEvents[i].type),
+        // offersData: this.boardOffers[indexOffers]
       }),
       this.eventListComponent.getElement());
     }

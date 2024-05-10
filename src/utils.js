@@ -16,7 +16,8 @@ const getRandomDate = (start, end) => new Date(start.getTime() + Math.random() *
 
 const formatDate = (dueDate) =>dayjs(dueDate).format(DateFormat.DATE_FORMATE);
 const formatTime = (dueDate) =>dayjs(dueDate).format(DateFormat.TIME_FORMAT);
-
+const formatDateForm = (dueDate) =>dayjs(dueDate).format(DateFormat.DATE_FORMATE_FORM);
+console.log(formatDateForm(new Date()));
 const getDuration = (dateFrom, dateTo) => {
 
   const start = dayjs(dateFrom).startOf('minute');
@@ -37,5 +38,5 @@ const getDuration = (dateFrom, dateTo) => {
 };
 
 
-export {getRandomArrayElement, getRandomInteger, getRandomDate, formatDate, formatTime, getDuration};
+export {getRandomArrayElement, getRandomInteger, getRandomDate, formatDate, formatTime, formatDateForm, getDuration};
 

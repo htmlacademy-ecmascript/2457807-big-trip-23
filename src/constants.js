@@ -4,7 +4,8 @@ const EVENT_TYPES_TRIP = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'ch
 
 const DateFormat = {
   DATE_FORMATE: 'MMM DD',
-  TIME_FORMAT: 'HH:mm'
+  TIME_FORMAT: 'HH:mm',
+  DATE_FORMATE_FORM: 'DD/MM/YY',
 };
 
 export {FILTER_TYPES, SORT_TYPES, EVENT_TYPES_TRIP, DateFormat};
