@@ -1,40 +1,37 @@
-import { EVENT_TYPE_ITEM } from '../constants';
+import { EVENT_TYPES_TRIP } from '../constants';
 import { getRandomArrayElement, getRandomInteger, getRandomDate } from '../utils';
 import { getDestinations } from './destinations';
 import { getOffers } from './offers';
 
-const startDateFrom = new Date(2024, 1, 1);
-const endDateFrom = new Date(2024, 6, 30);
-const startDateTo = new Date(2024, 7, 1);
-const endDateTo = new Date(2024, 12, 31);
-class Event {
-  constructor (){
-    this.id = `36a94e3e-91f1-4760-bc3c-8033642f75${getRandomInteger(10,99)}`;
-    this.basePrice = getRandomInteger(1000, 5000);
-    this.dateFrom = getRandomDate(startDateFrom, endDateFrom);
-    this.dateTo = getRandomDate(startDateTo, endDateTo);
-    this.destination = getRandomArrayElement(getDestinations()).id;
-    this.isFavorite = !!getRandomInteger(0, 1);
-    this.type = getRandomArrayElement(EVENT_TYPE_ITEM);
-    this.offers = this.getRandomOffers() || [''];
-    // [
-    //   '2660e1b7-037f-4c8f-acbe-1026f4d48e9d',
-    //   '51734d83-edf3-44b4-86ef-16a0fb7a425f'
-    // ];
-  }
 
-  getRandomOffers(){
-    const index = getOffers().findIndex((offer) => offer.type === this.type);
-    const randomArray = getRandomInteger(0, getOffers()[getOffers().findIndex((offer) => offer.type === this.type)].offers.length - 1);
-    const offersArray = () => getOffers()[index].offers[getRandomInteger(0, getOffers()[index].offers.length) - 1]?.id;
-    let arrayRandom = Array.from({length: randomArray}, offersArray);
-    arrayRandom = arrayRandom.filter((element) => element !== undefined);
-    const uniqueOffersArray = new Set(arrayRandom);
-    return [...uniqueOffersArray];
-  }
-}
+const startDateFrom = new Date(2024, 6, 1);
+const endDateFrom = new Date(2024, 7, 30);
+const startDateTo = new Date(2024, 7, 28);
+const endDateTo = new Date(2024, 8, 31);
 
-const getEvents = () => new Event;
+const getRandomOffersArrayId = (type) =>{
+  const offersDataTypeEvent = getOffers().find((offer) => offer.type === type);
+  const lengthTypeOffers = offersDataTypeEvent.offers.length;
+  const randomOffersId = () => offersDataTypeEvent.offers[getRandomInteger(0, lengthTypeOffers)]?.id;
+  const arrayOffersRandom = Array.from({length: getRandomInteger(0, lengthTypeOffers)}, randomOffersId);
+  const arrayOffersRandomWithoutUndefined = arrayOffersRandom.filter((element) => element !== undefined);
+  const uniqueOffersArrayId = new Set(arrayOffersRandomWithoutUndefined);
+  return [...uniqueOffersArrayId];
+};
 
+const getRandomEvent = () => {
+  const type = getRandomArrayElement(EVENT_TYPES_TRIP);
+  const offersRandomArrayId = getRandomOffersArrayId(type);
+  return {
+    id: crypto.randomUUID(),
+    basePrice: getRandomInteger(1000, 5000),
+    dateFrom: getRandomDate(startDateFrom, endDateFrom),
+    dateTo: getRandomDate(startDateTo, endDateTo),
+    destination: getRandomArrayElement(getDestinations()).id,
+    isFavorite: !!getRandomInteger(0, 1),
+    type: type,
+    offers: offersRandomArrayId || [''],
+  };
+};
 
-export {getEvents};
+export {getRandomEvent};

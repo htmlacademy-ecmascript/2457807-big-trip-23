@@ -2,8 +2,8 @@ import dayjs from 'dayjs';
 import { DateFormat } from './constants';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
-const getRandomArrayElement = (items) =>items[Math.floor(Math.random() * items.length)];
 
+const getRandomArrayElement = (items) =>items[Math.floor(Math.random() * items.length)];
 
 const getRandomInteger = (a, b) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -18,19 +18,15 @@ const formatDate = (dueDate) =>dayjs(dueDate).format(DateFormat.DATE_FORMATE);
 const formatTime = (dueDate) =>dayjs(dueDate).format(DateFormat.TIME_FORMAT);
 
 const getDuration = (dateFrom, dateTo) => {
-  // Обрезаем до минут начальную и конечную даты
+
   const start = dayjs(dateFrom).startOf('minute');
   const end = dayjs(dateTo).startOf('minute');
-  const diffInMs = end.diff(start); // Вычисляем разницу в миллисекундах
-  // eslint-disable-next-line no-shadow
-  const duration = dayjs.duration(diffInMs); // Создаем объект длительности с разницей в миллисекундах
+  const differenceInMilliseconds = end.diff(start);
+  const eventDuration = dayjs.duration(differenceInMilliseconds);
+  const days = Math.floor(eventDuration.asDays());
+  const hours = eventDuration.hours();
+  const minutes = eventDuration.minutes();
 
-  // Получаем количество целых дней, часов, минут
-  const days = Math.floor(duration.asDays());
-  const hours = duration.hours();
-  const minutes = duration.minutes();
-
-  // Форматируем длительность в строку в формате "DDDH HHM" или "HHM" или "MM"
   if (days > 0) {
     return `${days.toString().padStart(2, '0')}D ${hours.toString().padStart(2, '0')}H ${minutes.toString().padStart(2, '0')}M`;
   } else if (hours > 0) {

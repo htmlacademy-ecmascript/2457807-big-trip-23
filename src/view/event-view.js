@@ -13,8 +13,8 @@ const createOffersTemplate = (offersArray, offersEventArray) => {
   }
   const offersItem = offersArray.map((offerElement) => {
 
-    const isoffers = offersEventArray.find((offersEventItem) => offersEventItem === offerElement.id);
-    if (isoffers || isoffers !== undefined) {
+    const isOffers = offersEventArray.find((offersEventItem) => offersEventItem === offerElement.id);
+    if (isOffers || isOffers !== undefined) {
       return offerElement;
     }
   }).filter((element) => element !== undefined);
@@ -25,23 +25,17 @@ const createOffersTemplate = (offersArray, offersEventArray) => {
 
 const createEventTemplate = (eventData, destinationsData, offersData) => {
   const {
-    id: idEvent,
     basePrice,
     dateFrom,
     dateTo,
-    destination: idDestinationEvent,
     isFavorite,
     offers: offersEventArray,
     type
   } = eventData;
   const {
-    id: idDestination,
-    description,
     name,
-    pictures
   } = destinationsData;
   const {
-    type: typeOffer,
     offers: offersArray
   } = offersData;
   return (`

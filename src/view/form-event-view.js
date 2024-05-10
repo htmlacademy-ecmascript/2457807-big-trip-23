@@ -1,9 +1,12 @@
 import {createElement} from '../render.js';
-import {EVENT_TYPE_ITEM, DESTINATION_ID} from '../constants.js';
-import {formatDate, formatTime, getDuration, getRandomInteger} from '../utils.js';
+import {EVENT_TYPES_TRIP} from '../constants.js';
+import { getRandomInteger} from '../utils.js';
+import { getDestinations } from '../mock/destinations.js';
 
-const randomTestOffersEventType = EVENT_TYPE_ITEM[getRandomInteger(0, EVENT_TYPE_ITEM.length - 1)];
-const randomTestDestinationsId = DESTINATION_ID[getRandomInteger(0, DESTINATION_ID.length - 1)];
+const destinationsId = () => getDestinations().map((element) => element.id);
+const randomTestOffersEventType = EVENT_TYPES_TRIP[getRandomInteger(0, EVENT_TYPES_TRIP.length - 1)];
+const randomTestDestinationsId = destinationsId()[getRandomInteger(0, destinationsId().length - 1)];
+
 const createPictureTemplateItem = ({src, description}) =>`
 <img class="event__photo" src="${src}" alt="${description}."></img>
 `;
@@ -44,8 +47,9 @@ const createFormEventTypeItemTemplate = (type) => `
 
 const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
   const destinations = destinationsData.find((destination) => destination.id === randomTestDestinationsId);
-  const isEmptydestinations = (destinations.description === '') && (destinations.pictures.length === 0);
-  const isEmptyOffers = createEventOffersTemplate(offersData, randomTestOffersEventType) === '';
+  const offersTemplate = createEventOffersTemplate(offersData, randomTestOffersEventType);
+  const isEmptyDestinations = (destinations.description === '') && (destinations.pictures.length === 0);
+  const isEmptyOffers = offersTemplate === '';
   return `
 <li class="trip-events__item">
 <form class="event event--edit" action="#" method="post">
@@ -59,7 +63,7 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
       <div class="event__type-list">
         <fieldset class="event__type-group">
           <legend class="visually-hidden">Event type</legend>
-          ${EVENT_TYPE_ITEM.map((type) => createFormEventTypeItemTemplate(type)).join('')}
+          ${EVENT_TYPES_TRIP.map((type) => createFormEventTypeItemTemplate(type)).join('')}
         </fieldset>
       </div>
     </div>
@@ -94,13 +98,13 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     <button class="event__reset-btn" type="reset">Cancel</button>
   </header>
-  <section class="event__details ${(isEmptyOffers && isEmptydestinations) ? 'visually-hidden' : ''}"> 
+  <section class="event__details ${(isEmptyOffers && isEmptyDestinations) ? 'visually-hidden' : ''}"> 
   <section class="event__section  event__section--offers ${isEmptyOffers ? 'visually-hidden' : ''}">
   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
-  ${createEventOffersTemplate(offersData, randomTestOffersEventType)} 
+  ${offersTemplate} 
   </div>
 </section>
-    <section class="event__section  event__section--destination ${isEmptydestinations ? 'visually-hidden' : ''}">
+    <section class="event__section  event__section--destination ${isEmptyDestinations ? 'visually-hidden' : ''}">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
       <p class="event__destination-description">${destinations.description}</p>
 

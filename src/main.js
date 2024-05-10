@@ -1,4 +1,4 @@
-import NewEventButtonView from './view/new-event-button-view.js';
+import NewEventButtonView from './View/new-event-button-view.js';
 import FilterView from './view/filter-view.js';
 import SortView from './view/sort-view.js';
 import { render, RenderPosition } from './render.js';
@@ -9,7 +9,7 @@ import EventsModel from './model/events-model';
 const tripMainSection = document.querySelector('.trip-main');
 const tripFilters = tripMainSection.querySelector('.trip-controls__filters');
 const tripEventSection = document.querySelector('.trip-events');
-const eventsModel = new EventsModel;
+const eventsModel = new EventsModel();
 const eventListPresenter = new EventListPresenter({eventListContainer: tripEventSection, eventsModel});
 
 
