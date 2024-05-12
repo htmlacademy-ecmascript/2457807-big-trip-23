@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {EVENT_TYPES_TRIP} from '../constants.js';
 import { getRandomInteger, getRandomArrayElement, formatTime, formatDateForm} from '../utils.js';
 import { getDestinations } from '../mock/destinations.js';
@@ -127,30 +127,18 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
 </li>`;
 };
 
-export default class FormEventView {
-  constructor({
-    eventData,
-    destinationsData,
-    offersData
-  }) {
-    this.event = eventData;
-    this.destinationsData = destinationsData;
-    this.offersData = offersData;
+export default class FormEventView extends AbstractView{
+  #eventData = null;
+  #destinationsData = [];
+  #offersData = [];
+  constructor({eventData, destinationsData, offersData}) {
+    super();
+    this.#eventData = eventData;
+    this.#destinationsData = destinationsData;
+    this.#offersData = offersData;
   }
 
-  getTemplate() {
-    return createFormEventTemplate(this.event, this.destinationsData, this.offersData);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createFormEventTemplate(this.#eventData, this.#destinationsData, this.#offersData);
   }
 }

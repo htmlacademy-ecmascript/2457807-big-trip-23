@@ -30,7 +30,7 @@ const getRandomEvent = () => {
     destination: getRandomArrayElement(getDestinations()).id,
     isFavorite: !!getRandomInteger(0, 1),
     type: type,
-    offers: offersRandomArrayId || [''],
+    offers: offersRandomArrayId || [],
   };
 };
 

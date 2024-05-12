@@ -1,7 +1,7 @@
+import { render, RenderPosition} from './framework/render.js';
 import NewEventButtonView from './View/new-event-button-view.js';
 import FilterView from './view/filter-view.js';
 import SortView from './view/sort-view.js';
-import { render, RenderPosition } from './render.js';
 import EventListPresenter from './presenter/event-list-presenter.js';
 import EventsModel from './model/events-model';
 

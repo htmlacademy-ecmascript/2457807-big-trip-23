@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {formatDate, formatTime, getDuration} from '../utils.js';
 
 const createOffersItemTemplate = ({title, price}) => `<li class="event__offer">
@@ -34,7 +34,7 @@ const createEventTemplate = (eventData, destinationsData, offersData) => {
   } = eventData;
   const {
     name,
-  } = destinationsData;
+  } = destinationsData;  
   const {
     offers: offersArray
   } = offersData;
@@ -71,30 +71,18 @@ const createEventTemplate = (eventData, destinationsData, offersData) => {
     </button>
   </div>`);
 };
-export default class EventView {
-  constructor({
-    eventData,
-    destinationsData,
-    offersData
-  }) {
-    this.event = eventData;
-    this.destinationsData = destinationsData;
-    this.offersData = offersData;
+export default class EventView extends AbstractView{
+  #eventData = null;
+  #destinationData = null;
+  #offersData = [];
+  constructor({eventData, destinationData, offersData}) {
+    super();
+    this.#eventData = eventData;
+    this.#destinationData = destinationData;
+    this.#offersData = offersData;
   }
 
-  getTemplate() {
-    return createEventTemplate(this.event, this.destinationsData, this.offersData);
-  }
-
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
+  get template() {
+    return createEventTemplate(this.#eventData, this.#destinationData, this.#offersData);
   }
 }
