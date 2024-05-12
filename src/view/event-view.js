@@ -34,7 +34,7 @@ const createEventTemplate = (eventData, destinationsData, offersData) => {
   } = eventData;
   const {
     name,
-  } = destinationsData;  
+  } = destinationsData;
   const {
     offers: offersArray
   } = offersData;
