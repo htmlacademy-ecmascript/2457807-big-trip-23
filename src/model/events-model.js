@@ -8,6 +8,7 @@ export default class EventsModel{
   #destinations = getDestinations();
   #offers = getOffers();
 
+
   get events(){
     return this.#events;
   }
@@ -33,5 +34,21 @@ export default class EventsModel{
   getDestinationById(id){
     const destinations = this.destinations;
     return destinations.find((destination) => destination.id === id);
+  }
+
+  getTotalCostTrip(){
+    const costTripWithoutOffers = this.#events.reduce((total, eventTrip) => total + eventTrip.basePrice , 0);
+    let costOffersAllEvents = 0;
+    this.#events.forEach((eventTrip) => {
+      if(eventTrip.offers.length !== 0){
+        const offersTrip = this.getOffersByType(eventTrip.type);
+        offersTrip.offers.forEach((offerTrip) => {
+          if(offerTrip.length !== 0 && eventTrip.offers.includes(offerTrip.id)){
+            costOffersAllEvents += offerTrip.price;
+          }
+        });
+      }
+    });
+    return costTripWithoutOffers + costOffersAllEvents;
   }
 }

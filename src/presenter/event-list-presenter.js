@@ -35,10 +35,10 @@ export default class EventListPresenter {
     // this.#eventListComponent.element);
 
     for (let i = 0; i < this.#boardEvents.length; i++) {
-      this.#renderForm(
-        this.#boardEvents[i],
-        this.#boardDestinations,
-        this.#boardOffers);
+      // this.#renderForm(
+      //   this.#boardEvents[i],
+      //   this.#boardDestinations,
+      //   this.#boardOffers);
 
       this.#renderEvent(
         this.#boardEvents[i],
