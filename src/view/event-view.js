@@ -24,20 +24,10 @@ const createOffersTemplate = (offersArray, offersEventArray) => {
 };
 
 const createEventTemplate = (eventData, destinationsData, offersData) => {
-  const {
-    basePrice,
-    dateFrom,
-    dateTo,
-    isFavorite,
-    offers: offersEventArray,
-    type
+  const {basePrice, dateFrom, dateTo, isFavorite, offers: offersEventArray, type
   } = eventData;
-  const {
-    name,
-  } = destinationsData;
-  const {
-    offers: offersArray
-  } = offersData;
+  const { name, } = destinationsData;
+  const { offers: offersArray } = offersData;
   return (`
   <div class="event">
     <time class="event__date" datetime="${dateFrom}">${formatDate(dateFrom)}</time>
