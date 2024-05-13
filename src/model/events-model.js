@@ -1,7 +1,7 @@
 import { getRandomEvent } from '../mock/events';
 import { getDestinations } from '../mock/destinations';
 import { getOffers } from '../mock/offers';
-const EVENTS_NUMBER = 4;
+const EVENTS_NUMBER = 12;
 
 export default class EventsModel{
   #events = Array.from({length: EVENTS_NUMBER}, getRandomEvent);

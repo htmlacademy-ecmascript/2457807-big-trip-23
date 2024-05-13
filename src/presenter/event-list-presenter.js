@@ -1,10 +1,8 @@
-import {render, replace, remove} from '../framework/render.js';
+import {render, replace} from '../framework/render.js';
 import EventListView from '../view/event-list-view.js';
 import FormEventView from '../view/form-event-view.js';
 import EventView from '../View/event-view.js';
 import SortView from '../view/sort-view.js';
-
-// const FORM_EVENT_INDEX = 0;
 export default class EventListPresenter {
   #eventListContainer = null;
   #eventsModel = null;
@@ -25,6 +23,7 @@ export default class EventListPresenter {
     this.#boardEvents = [...this.#eventsModel.events];
     render(this.#sortComponent, this.#eventListContainer);
     render(this.#eventListComponent, this.#eventListContainer);
+
     for (let i = 0; i < this.#boardEvents.length; i++) {
       this.#renderEvent(this.#boardEvents[i]);
     }
