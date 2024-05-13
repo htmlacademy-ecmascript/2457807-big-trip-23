@@ -2,8 +2,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 
 
 const CreateListEmptyViewTemplate = (typeMessage) =>{
-  let messageListEmpty = '';
-  console.log(typeMessage);
+  let messageListEmpty = '';  
   switch (typeMessage) {
     case 'everything':
       messageListEmpty = 'Click New Event to create your first point';
