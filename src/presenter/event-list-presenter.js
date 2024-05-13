@@ -1,4 +1,4 @@
-import {render} from '../framework/render.js';
+import {render, replace, remove} from '../framework/render.js';
 import EventListView from '../view/event-list-view.js';
 import FormEventView from '../view/form-event-view.js';
 import EventView from '../View/event-view.js';

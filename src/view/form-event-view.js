@@ -131,14 +131,23 @@ export default class FormEventView extends AbstractView{
   #eventData = null;
   #destinationsData = [];
   #offersData = [];
-  constructor({eventData, destinationsData, offersData}) {
+  #handleFormSubmit = null;
+  constructor({eventData, destinationsData, offersData, onFormSubmit}) {
     super();
     this.#eventData = eventData;
     this.#destinationsData = destinationsData;
     this.#offersData = offersData;
+    this.#handleFormSubmit = onFormSubmit;
+    this.element.querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
   }
 
   get template() {
     return createFormEventTemplate(this.#eventData, this.#destinationsData, this.#offersData);
   }
+
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
 }
