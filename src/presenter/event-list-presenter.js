@@ -23,37 +23,46 @@ export default class EventListPresenter {
 
   init() {
     this.#boardEvents = [...this.#eventsModel.events];
-    this.#boardDestinations = [...this.#eventsModel.destinations];
-    this.#boardOffers = [...this.#eventsModel.offers];
-
     render(this.#sortComponent, this.#eventListContainer);
     render(this.#eventListComponent, this.#eventListContainer);
-
-    // render(new FormEventView({eventData: this.#boardEvents[FORM_EVENT_INDEX],
-    //   destinationsData: this.#boardDestinations,
-    //   offersData: this.#boardOffers}),
-    // this.#eventListComponent.element);
-
     for (let i = 0; i < this.#boardEvents.length; i++) {
-      // this.#renderForm(
-      //   this.#boardEvents[i],
-      //   this.#boardDestinations,
-      //   this.#boardOffers);
-
-      this.#renderEvent(
-        this.#boardEvents[i],
-        this.#eventsModel.getDestinationById(this.#boardEvents[i].destination),
-        this.#eventsModel.getOffersByType(this.#boardEvents[i].type));
+      this.#renderEvent(this.#boardEvents[i]);
     }
   }
 
-  #renderForm(eventData, destinationsData, offersData){
-    const eventFormComponent = new FormEventView({eventData, destinationsData, offersData});
-    render(eventFormComponent, this.#eventListComponent.element);
-  }
+  #renderEvent(event) {
+    const escKeyDownHandler = (evt) => {
+      if (evt.key === 'Escape') {
+        evt.preventDefault();
+        replaceFormEventToEven();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    };
+    const eventComponent = new EventView({
+      eventData: event,
+      destinationData: this.#eventsModel.getDestinationById(event.destination),
+      offersData: this.#eventsModel.getOffersByType(event.type),
+      onEditClick: () => {
+        replaceEvenToFormEvent();
+        document.addEventListener('keydown', escKeyDownHandler);
+      }
+    });
+    const eventFormComponent = new FormEventView({
+      eventData: event,
+      destinationsData: [...this.#eventsModel.destinations],
+      offersData: [...this.#eventsModel.offers],
+      onFormSubmit: () => {
+        replaceFormEventToEven();
+        document.removeEventListener('keydown', escKeyDownHandler);
+      }
+    });
+    function replaceEvenToFormEvent(){
+      replace(eventFormComponent, eventComponent);
+    }
 
-  #renderEvent(eventData, destinationData, offersData) {
-    const eventComponent = new EventView({eventData, destinationData, offersData});
+    function replaceFormEventToEven(){
+      replace(eventComponent, eventFormComponent);
+    }
     render(eventComponent, this.#eventListComponent.element);
   }
 }
