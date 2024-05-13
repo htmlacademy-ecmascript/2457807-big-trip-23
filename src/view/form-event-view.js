@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {EVENT_TYPES_TRIP} from '../constants.js';
-import {formatTime, formatDateForm} from '../utils.js';
+import {formatTime, formatDateForm} from '../utils/utils.js';
 
 const createListOptionsDestinationItem = ({name}) =>`<option value="${name}"></option>`;
 
@@ -107,7 +107,7 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
   </header>
 
   <section class="event__details ${(isEmptyOffers && isEmptyDestinations) ? 'visually-hidden' : ''}">
-   
+
   <section class="event__section  event__section--offers ${isEmptyOffers ? 'visually-hidden' : ''}">
   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
   <div class="event__available-offers">

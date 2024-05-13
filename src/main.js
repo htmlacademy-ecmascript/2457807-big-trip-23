@@ -13,7 +13,9 @@ const tripEventSection = document.querySelector('.trip-events');
 const eventsModel = new EventsModel();
 const eventListPresenter = new EventListPresenter({eventListContainer: tripEventSection, eventsModel});
 
-render(new TripInfoView(), tripMainSection, RenderPosition.AFTERBEGIN);
+const totalCount = eventsModel.getTotalCostTrip();
+
+render(new TripInfoView(totalCount), tripMainSection, RenderPosition.AFTERBEGIN);
 render(new NewEventButtonView(), tripMainSection, RenderPosition.BEFOREEND);
 render(new FilterView(), tripFilters);
 

@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import {formatDate, formatTime, getDuration} from '../utils.js';
+import {formatDate, formatTime, getDuration} from '../utils/utils.js';
 
 const createOffersItemTemplate = ({title, price}) => `<li class="event__offer">
   <span class="event__offer-title">${title}</span>
