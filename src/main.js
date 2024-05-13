@@ -1,5 +1,5 @@
 import { render, RenderPosition} from './framework/render.js';
-import NewEventButtonView from './View/new-event-button-view.js';
+import NewEventButtonView from './View/new-event-button-view';
 import FilterView from './view/filter-view.js';
 import TripInfoView from './view/trip-info-view.js';
 

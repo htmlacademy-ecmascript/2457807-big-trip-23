@@ -1,7 +1,7 @@
 import {render, replace} from '../framework/render.js';
 import EventListView from '../view/event-list-view.js';
 import FormEventView from '../view/form-event-view.js';
-import EventView from '../View/event-view.js';
+import EventView from '../view/event-view.js';
 import SortView from '../view/sort-view.js';
 export default class EventListPresenter {
   #eventListContainer = null;

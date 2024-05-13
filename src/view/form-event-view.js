@@ -23,7 +23,6 @@ const createEventFormPictureTemplate = ({pictures}) =>{
   return picturesTemplate;
 };
 const createEventOffersTemplateItem = ({id, title, price}, isCheckedOffers) =>`
-<div class="event__available-offers">
   <div class="event__offer-selector">
     <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}-1" type="checkbox" name="event-offer-luggage" ${isCheckedOffers ? 'checked' : ''}>
     <label class="event__offer-label" for="event-offer-${id}-1">
@@ -106,12 +105,16 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     <button class="event__reset-btn" type="reset">Cancel</button>
   </header>
-  <section class="event__details ${(isEmptyOffers && isEmptyDestinations) ? 'visually-hidden' : ''}"> 
+
+  <section class="event__details ${(isEmptyOffers && isEmptyDestinations) ? 'visually-hidden' : ''}">
+   
   <section class="event__section  event__section--offers ${isEmptyOffers ? 'visually-hidden' : ''}">
   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+  <div class="event__available-offers">
   ${offersTemplate} 
   </div>
 </section>
+
     <section class="event__section  event__section--destination ${isEmptyDestinations ? 'visually-hidden' : ''}">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
       <p class="event__destination-description">${destinations.description}</p>
