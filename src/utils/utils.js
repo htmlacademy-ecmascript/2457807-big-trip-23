@@ -22,7 +22,6 @@ const formatDateForm = (dueDate) => dayjs(dueDate).format(DateFormat.DATE_FORMAT
 const isTaskExpired = (dueDate) => dueDate && dayjs().isAfter(dueDate, 'D');
 
 
-
 const getDuration = (dateFrom, dateTo) => {
 
   const start = dayjs(dateFrom).startOf('minute');

@@ -3,12 +3,16 @@ import EventListView from '../view/event-list-view.js';
 import FormEventView from '../view/form-event-view.js';
 import EventView from '../view/event-view.js';
 import SortView from '../view/sort-view.js';
+import ListEmptyView from '../view/list-empty-view.js';
+import { FILTER_TYPES } from '../constants.js';
 export default class EventListPresenter {
   #eventListContainer = null;
   #eventsModel = null;
 
   #sortComponent = new SortView();
   #eventListComponent = new EventListView();
+  #listEmptyComponent = null;
+  #typeEmptyMessage = null;
 
   #boardEvents = [];
   #boardDestinations = [];
@@ -24,8 +28,14 @@ export default class EventListPresenter {
     render(this.#sortComponent, this.#eventListContainer);
     render(this.#eventListComponent, this.#eventListContainer);
 
-    for (let i = 0; i < this.#boardEvents.length; i++) {
-      this.#renderEvent(this.#boardEvents[i]);
+    if(this.#boardEvents.length === 0){
+      this.typeEmptyMessage = FILTER_TYPES[0];
+      this.#listEmptyComponent = new ListEmptyView(this.typeEmptyMessage);
+      render(this.#listEmptyComponent, this.#eventListContainer);
+    }else{
+      for (let i = 0; i < this.#boardEvents.length; i++) {
+        this.#renderEvent(this.#boardEvents[i]);
+      }
     }
   }
 
