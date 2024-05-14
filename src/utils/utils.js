@@ -41,6 +41,5 @@ const getDuration = (dateFrom, dateTo) => {
   }
 };
 
-
 export {getRandomArrayElement, getRandomInteger, getRandomDate, formatDate, formatTime, formatDateForm, getDuration};
 

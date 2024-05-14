@@ -8,4 +8,5 @@ const DateFormat = {
   DATE_FORMATE_FORM: 'DD/MM/YY',
 };
 
+
 export {FILTER_TYPES, SORT_TYPES, EVENT_TYPES_TRIP, DateFormat};
