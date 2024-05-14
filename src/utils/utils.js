@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import { DateFormat } from './constants';
+import { DateFormat } from '../constants';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
@@ -14,9 +14,13 @@ const getRandomInteger = (a, b) => {
 
 const getRandomDate = (start, end) => new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
 
-const formatDate = (dueDate) =>dayjs(dueDate).format(DateFormat.DATE_FORMATE);
-const formatTime = (dueDate) =>dayjs(dueDate).format(DateFormat.TIME_FORMAT);
-const formatDateForm = (dueDate) =>dayjs(dueDate).format(DateFormat.DATE_FORMATE_FORM);
+const isTaskRepeating = (repeating) => Object.values(repeating).some(Boolean);
+
+const formatDate = (dueDate) => dayjs(dueDate).format(DateFormat.DATE_FORMATE);
+const formatTime = (dueDate) => dayjs(dueDate).format(DateFormat.TIME_FORMAT);
+const formatDateForm = (dueDate) => dayjs(dueDate).format(DateFormat.DATE_FORMATE_FORM);
+const isTaskExpired = (dueDate) => dueDate && dayjs().isAfter(dueDate, 'D');
+
 
 const getDuration = (dateFrom, dateTo) => {
 

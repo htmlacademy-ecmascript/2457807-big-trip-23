@@ -1,11 +1,6 @@
-import {createElement} from '../render.js';
+import AbstractView from '../framework/view/abstract-view.js';
 import {EVENT_TYPES_TRIP} from '../constants.js';
-import { getRandomInteger, getRandomArrayElement, formatTime, formatDateForm} from '../utils.js';
-import { getDestinations } from '../mock/destinations.js';
-
-const destinationsId = () => getDestinations().map((element) => element.id);
-const randomTestOffersEventType = EVENT_TYPES_TRIP[getRandomInteger(0, EVENT_TYPES_TRIP.length - 1)];
-const randomTestDestinationsId = destinationsId()[getRandomInteger(0, destinationsId().length - 1)];
+import {formatTime, formatDateForm} from '../utils/utils.js';
 
 const createListOptionsDestinationItem = ({name}) =>`<option value="${name}"></option>`;
 
@@ -27,10 +22,9 @@ const createEventFormPictureTemplate = ({pictures}) =>{
     (accumulator, picture) => accumulator + createPictureTemplateItem(picture), '');
   return picturesTemplate;
 };
-const createEventOffersTemplateItem = ({id, title, price}) =>`
-<div class="event__available-offers">
+const createEventOffersTemplateItem = ({id, title, price}, isCheckedOffers) =>`
   <div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}-1" type="checkbox" name="event-offer-luggage" checked>
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}-1" type="checkbox" name="event-offer-luggage" ${isCheckedOffers ? 'checked' : ''}>
     <label class="event__offer-label" for="event-offer-${id}-1">
       <span class="event__offer-title">${title}</span>
       &plus;&euro;&nbsp;
@@ -38,26 +32,31 @@ const createEventOffersTemplateItem = ({id, title, price}) =>`
     </label>
   </div>`;
 
-const createEventOffersTemplate = (offersData, type) => {
-  const offers = offersData.find((offer) => offer.type === type)?.offers;
+const createEventOffersTemplate = (offersData, eventData) => {
+  const offers = offersData.find((offer) => offer.type === eventData.type)?.offers;
   if (offers?.length === 0 || offers?.length === undefined) {
     return '';
   }
   const offersTemplate = offers.reduce(
-    (accumulator, offer) => accumulator + createEventOffersTemplateItem(offer), '');
+    (accumulator, offer) => {
+      const isCheckedOffers = eventData.offers.includes(offer.id);
+      return (accumulator + createEventOffersTemplateItem(offer, isCheckedOffers));
+    },
+    '');
   return offersTemplate;
 };
 
-const createFormEventTypeItemTemplate = (type) => `
+const createFormEventTypeItemTemplate = (type, typeEvent) => `
 <div class="event__type-item">
-<input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}">
+<input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${typeEvent === type ? 'checked' : ''}>
 <label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
 </div>`;
 
 
 const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
-  const destinations = destinationsData.find((destination) => destination.id === randomTestDestinationsId);
-  const offersTemplate = createEventOffersTemplate(offersData, randomTestOffersEventType);
+  const destinations = destinationsData.find((destination) => destination.id === eventData.destination);
+
+  const offersTemplate = createEventOffersTemplate(offersData, eventData);
   const isEmptyDestinations = (destinations.description === '') && (destinations.pictures.length === 0);
   const isEmptyOffers = offersTemplate === '';
   return `
@@ -67,21 +66,21 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
     <div class="event__type-wrapper">
       <label class="event__type  event__type-btn" for="event-type-toggle-1">
         <span class="visually-hidden">Choose event type</span>
-        <img class="event__type-icon" width="17" height="17" src="img/icons/flight.png" alt="Event type icon">
+        <img class="event__type-icon" width="17" height="17" src="img/icons/${eventData.type}.png" alt="Event type icon">
       </label>
       <input class="event__type-toggle  visually-hidden" id="event-type-toggle-1" type="checkbox">
       <div class="event__type-list">
         <fieldset class="event__type-group">
           <legend class="visually-hidden">Event type</legend>
-          ${EVENT_TYPES_TRIP.map((type) => createFormEventTypeItemTemplate(type)).join('')}
+          ${EVENT_TYPES_TRIP.map((type) => createFormEventTypeItemTemplate(type, eventData.type)).join('')}
         </fieldset>
       </div>
     </div>
     <div class="event__field-group  event__field-group--destination">
       <label class="event__label  event__type-output" for="event-destination-1">
-        ${getRandomArrayElement(EVENT_TYPES_TRIP)}
+        ${eventData.type}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="" list="destination-list-1" placeholder = "Choose a trip">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinations.name}" list="destination-list-1" placeholder = "Choose a trip">
       <datalist id="destination-list-1">
        ${createListOptionsDestination(destinationsData)}
       </datalist>
@@ -89,10 +88,10 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
 
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDateForm(new Date)} ${formatTime(new Date)}">
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDateForm(eventData.dateFrom)} ${formatTime(eventData.dateFrom)}">
       &mdash;
       <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDateForm(new Date)} ${formatTime(new Date)}">
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDateForm(eventData.dateTo)} ${formatTime(eventData.dateTo)}">
     </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -106,12 +105,16 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
     <button class="event__reset-btn" type="reset">Cancel</button>
   </header>
-  <section class="event__details ${(isEmptyOffers && isEmptyDestinations) ? 'visually-hidden' : ''}"> 
+
+  <section class="event__details ${(isEmptyOffers && isEmptyDestinations) ? 'visually-hidden' : ''}">
+
   <section class="event__section  event__section--offers ${isEmptyOffers ? 'visually-hidden' : ''}">
   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
+  <div class="event__available-offers">
   ${offersTemplate} 
   </div>
 </section>
+
     <section class="event__section  event__section--destination ${isEmptyDestinations ? 'visually-hidden' : ''}">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
       <p class="event__destination-description">${destinations.description}</p>
@@ -127,30 +130,27 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
 </li>`;
 };
 
-export default class FormEventView {
-  constructor({
-    eventData,
-    destinationsData,
-    offersData
-  }) {
-    this.event = eventData;
-    this.destinationsData = destinationsData;
-    this.offersData = offersData;
+export default class FormEventView extends AbstractView{
+  #eventData = null;
+  #destinationsData = [];
+  #offersData = [];
+  #handleFormSubmit = null;
+  constructor({eventData, destinationsData, offersData, onFormSubmit}) {
+    super();
+    this.#eventData = eventData;
+    this.#destinationsData = destinationsData;
+    this.#offersData = offersData;
+    this.#handleFormSubmit = onFormSubmit;
+    this.element.querySelector('form')
+      .addEventListener('submit', this.#formSubmitHandler);
   }
 
-  getTemplate() {
-    return createFormEventTemplate(this.event, this.destinationsData, this.offersData);
+  get template() {
+    return createFormEventTemplate(this.#eventData, this.#destinationsData, this.#offersData);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #formSubmitHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleFormSubmit();
+  };
 }

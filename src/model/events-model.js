@@ -1,27 +1,28 @@
 import { getRandomEvent } from '../mock/events';
 import { getDestinations } from '../mock/destinations';
 import { getOffers } from '../mock/offers';
-const EVENTS_NUMBER = 4;
+const EVENTS_NUMBER = 12;
 
 export default class EventsModel{
-  events = Array.from({length: EVENTS_NUMBER}, getRandomEvent);
-  destinations = getDestinations();
-  offers = getOffers();
+  #events = Array.from({length: EVENTS_NUMBER}, getRandomEvent);
+  #destinations = getDestinations();
+  #offers = getOffers();
 
-  getEvents(){
-    return this.events;
+
+  get events(){
+    return this.#events;
   }
 
-  getDestinations(){
-    return this.destinations;
+  get destinations(){
+    return this.#destinations;
   }
 
-  getOffers(){
-    return this.offers;
+  get offers(){
+    return this.#offers;
   }
 
   getOffersByType(type){
-    const offers = this.getOffers();
+    const offers = this.offers;
     return offers.find((offer) => offer.type === type);
   }
 
@@ -31,7 +32,23 @@ export default class EventsModel{
   }
 
   getDestinationById(id){
-    const destinations = this.getDestinations();
+    const destinations = this.destinations;
     return destinations.find((destination) => destination.id === id);
+  }
+
+  getTotalCostTrip(){
+    const costTripWithoutOffers = this.#events.reduce((total, eventTrip) => total + eventTrip.basePrice , 0);
+    let costOffersAllEvents = 0;
+    this.#events.forEach((eventTrip) => {
+      if(eventTrip.offers.length !== 0){
+        const offersTrip = this.getOffersByType(eventTrip.type);
+        offersTrip.offers.forEach((offerTrip) => {
+          if(offerTrip.length !== 0 && eventTrip.offers.includes(offerTrip.id)){
+            costOffersAllEvents += offerTrip.price;
+          }
+        });
+      }
+    });
+    return costTripWithoutOffers + costOffersAllEvents;
   }
 }

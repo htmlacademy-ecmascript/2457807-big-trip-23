@@ -1,5 +1,5 @@
-import {createElement} from '../render.js';
-import {formatDate, formatTime, getDuration} from '../utils.js';
+import AbstractView from '../framework/view/abstract-view.js';
+import {formatDate, formatTime, getDuration} from '../utils/utils.js';
 
 const createOffersItemTemplate = ({title, price}) => `<li class="event__offer">
   <span class="event__offer-title">${title}</span>
@@ -24,20 +24,10 @@ const createOffersTemplate = (offersArray, offersEventArray) => {
 };
 
 const createEventTemplate = (eventData, destinationsData, offersData) => {
-  const {
-    basePrice,
-    dateFrom,
-    dateTo,
-    isFavorite,
-    offers: offersEventArray,
-    type
+  const {basePrice, dateFrom, dateTo, isFavorite, offers: offersEventArray, type
   } = eventData;
-  const {
-    name,
-  } = destinationsData;
-  const {
-    offers: offersArray
-  } = offersData;
+  const { name, } = destinationsData;
+  const { offers: offersArray } = offersData;
   return (`
   <div class="event">
     <time class="event__date" datetime="${dateFrom}">${formatDate(dateFrom)}</time>
@@ -71,30 +61,27 @@ const createEventTemplate = (eventData, destinationsData, offersData) => {
     </button>
   </div>`);
 };
-export default class EventView {
-  constructor({
-    eventData,
-    destinationsData,
-    offersData
-  }) {
-    this.event = eventData;
-    this.destinationsData = destinationsData;
-    this.offersData = offersData;
+export default class EventView extends AbstractView{
+  #eventData = null;
+  #destinationData = null;
+  #offersData = [];
+  #handleEditClick = null;
+  constructor({eventData, destinationData, offersData, onEditClick}) {
+    super();
+    this.#eventData = eventData;
+    this.#destinationData = destinationData;
+    this.#offersData = offersData;
+    this.#handleEditClick = onEditClick;
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#editClickHandler,);
   }
 
-  getTemplate() {
-    return createEventTemplate(this.event, this.destinationsData, this.offersData);
+  get template() {
+    return createEventTemplate(this.#eventData, this.#destinationData, this.#offersData);
   }
 
-  getElement() {
-    if (!this.element) {
-      this.element = createElement(this.getTemplate());
-    }
-
-    return this.element;
-  }
-
-  removeElement() {
-    this.element = null;
-  }
+  #editClickHandler = (evt) => {
+    evt.preventDefault();
+    this.#handleEditClick();
+  };
 }
