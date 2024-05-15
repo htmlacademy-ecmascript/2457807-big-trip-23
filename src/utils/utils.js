@@ -3,6 +3,7 @@ import { DateFormat } from '../constants';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
+
 const getRandomArrayElement = (items) =>items[Math.floor(Math.random() * items.length)];
 
 const getRandomInteger = (a, b) => {
@@ -40,6 +41,16 @@ const getDuration = (dateFrom, dateTo) => {
     return `${minutes}M`;
   }
 };
+
+import EventsModel from '../model/events-model';
+import { FiltresTypes, DATE_NOW } from '../constants';
+
+const events = new EventsModel();
+console.log(events);
+const filterEventEverything = (events) => events.events;
+const filterEventFuture = (events) => events.filter((event) => event.dateFrom > DATE_NOW);
+const filterEventPresent = (events) => events.filter((event) => event.dateFrom <= DATE_NOW && event.dateTo >= DATE_NOW);
+const filterEventPresent = (events) => events.filter((event) => event.dateTo < DATE_NOW);
 
 export {getRandomArrayElement, getRandomInteger, getRandomDate, formatDate, formatTime, formatDateForm, getDuration};
 
