@@ -13,7 +13,22 @@ ${SORT_TYPES.map((type) => createSortItemTemplate(type)).join('')}
 </form>`;
 
 export default class SortView extends AbstractView{
+  // #eventData = null;
+  // #handleEditClick = null;
+  // constructor({eventData, onEditClick}) {
+  //   super();
+  //   this.#eventData = eventData;
+  //   this.#handleEditClick = onEditClick;
+  //   this.element.querySelector('.trip-sort')
+  //     .addEventListener('click', this.#editClickHandler,);
+  // }
+
   get template() {
     return createFilterViewTemplate();
   }
+
+  // #editClickHandler = (evt) => {
+  //   evt.preventDefault();
+  //   this.#handleEditClick();
+  // };
 }

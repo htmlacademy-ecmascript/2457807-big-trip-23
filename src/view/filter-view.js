@@ -14,7 +14,22 @@ ${FILTER_TYPES.map((type) => createFilterItemTemplate(type)).join('')}
 </form>`;
 
 export default class FilterView extends AbstractView{
+  // #eventData = null;
+  // #handleEditClick = null;
+  // constructor({eventData, onEditClick}) {
+  //   super();
+  //   this.#eventData = eventData;
+  //   this.#handleEditClick = onEditClick;
+  //   this.element.querySelector('.trip-filters')
+  //     .addEventListener('click', this.#editClickHandler,);
+  // }
+
   get template() {
     return createFilterViewTemplate();
   }
+
+  // #editClickHandler = (evt) => {
+  //   evt.preventDefault();
+  //   this.#handleEditClick();
+  // };
 }

@@ -4,10 +4,10 @@ import { getDestinations } from './destinations';
 import { getOffers } from './offers';
 
 
-const startDateFrom = new Date(2024, 6, 1);
-const endDateFrom = new Date(2024, 7, 30);
-const startDateTo = new Date(2024, 7, 28);
-const endDateTo = new Date(2024, 8, 31);
+const startDateFrom = new Date(2022, 6, 1);
+const endDateFrom = new Date(2026, 7, 30);
+const startDateTo = new Date(2023, 7, 28);
+const endDateTo = new Date(2027, 8, 31);
 
 const getRandomOffersArrayId = (type) =>{
   const offersDataTypeEvent = getOffers().find((offer) => offer.type === type);

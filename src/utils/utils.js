@@ -2,6 +2,8 @@ import dayjs from 'dayjs';
 import { DateFormat } from '../constants';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
+import {FilterType, DATE_NOW } from '../constants';
+import EventsModel from '../model/events-model';
 
 
 const getRandomArrayElement = (items) =>items[Math.floor(Math.random() * items.length)];
@@ -42,15 +44,25 @@ const getDuration = (dateFrom, dateTo) => {
   }
 };
 
-import EventsModel from '../model/events-model';
-import { FiltresTypes, DATE_NOW } from '../constants';
 
-const events = new EventsModel();
-console.log(events);
-const filterEventEverything = (events) => events.events;
-const filterEventFuture = (events) => events.filter((event) => event.dateFrom > DATE_NOW);
-const filterEventPresent = (events) => events.filter((event) => event.dateFrom <= DATE_NOW && event.dateTo >= DATE_NOW);
-const filterEventPresent = (events) => events.filter((event) => event.dateTo < DATE_NOW);
+const eventsDate = new EventsModel();
 
-export {getRandomArrayElement, getRandomInteger, getRandomDate, formatDate, formatTime, formatDateForm, getDuration};
+// const filterEventEverything = (events) => events;
+// const filterEventFuture = (events) => events.filter((event) => event.dateFrom > DATE_NOW);
+// const filterEventPresent = (events) => events.filter((event) => event.dateFrom <= DATE_NOW && event.dateTo >= DATE_NOW);
+// const filterEventPast = (events) => events.filter((event) => event.dateTo < DATE_NOW);
+
+const filterEvents = {
+  [FilterType.EVERYTHING]: (events) => events,
+  [FilterType.FUTURE]: (events) => events.filter((item) => Date.parse(item.dateFrom) > Date.parse(DATE_NOW)),
+  [FilterType.PRESENT]: (events) => events.filter((item) => Date.parse(item.dateFrom) <= Date.parse(DATE_NOW) && Date.parse(item.dateTo) >= Date.parse(DATE_NOW)),
+  [FilterType.PAST]: (events) => events.filter((item) => Date.parse(item.dateTo) < Date.parse(DATE_NOW)),
+};
+
+// console.log(DATE_NOW);
+// console.log(eventsDate);
+console.log(filterEvents['past'](eventsDate.events));
+
+
+export {getRandomArrayElement, getRandomInteger, getRandomDate, formatDate, formatTime, formatDateForm, getDuration, filterEvents};
 
