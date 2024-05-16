@@ -45,7 +45,7 @@ const getDuration = (dateFrom, dateTo) => {
 };
 
 
-const eventsDate = new EventsModel();
+// const eventsDate = new EventsModel();
 
 // const filterEventEverything = (events) => events;
 // const filterEventFuture = (events) => events.filter((event) => event.dateFrom > DATE_NOW);
@@ -58,7 +58,13 @@ const filterEvents = {
   [FilterType.PRESENT]: (events) => events.filter((item) => Date.parse(item.dateFrom) <= Date.parse(DATE_NOW) && Date.parse(item.dateTo) >= Date.parse(DATE_NOW)),
   [FilterType.PAST]: (events) => events.filter((item) => Date.parse(item.dateTo) < Date.parse(DATE_NOW)),
 };
-
+function generateFilters(events) {
+  return Object.entries(filterEvents).map(([filterType, filterTask]) => ({
+    type: filterType,
+    count: filterTask(events).length,
+  }));
+}
+// console.log(generateFilters(eventsDate.events));
 // const sortEvents = {
 //   [SortType.Day]: (events) => events,
 //   [SortType.TIME]: (events) => events.sort((a, b) => return new Date.parse(item.dateFrom) > Date.parse(DATE_NOW)),
@@ -69,5 +75,5 @@ const filterEvents = {
 // console.log(filterEvents['past'](eventsDate.events));
 
 
-export {getRandomArrayElement, getRandomInteger, getRandomDate, formatDate, formatTime, formatDateForm, getDuration, filterEvents};
+export {getRandomArrayElement, getRandomInteger, getRandomDate, formatDate, formatTime, formatDateForm, getDuration, filterEvents, generateFilters};
 

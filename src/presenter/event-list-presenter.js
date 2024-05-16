@@ -6,7 +6,7 @@ import SortView from '../view/sort-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import { FILTER_TYPES } from '../constants.js';
 import FilterView from '../view/filter-view.js';
-import { filterEvents } from '../utils/utils.js';
+import { filterEvents, generateFilters } from '../utils/utils.js';
 export default class EventListPresenter {
   #eventListContainer = null;
   #tripFiltersContainer = null;
@@ -50,8 +50,9 @@ export default class EventListPresenter {
 
   #filterRender(eventsData){
     const eventsDataFilter = eventsData;
+    const filters = generateFilters(eventsData);
     const filterComponent = new FilterView({
-      eventData: eventsData,
+      filters
     });
     render(filterComponent, this.#tripFiltersContainer);
     document.querySelector('.trip-filters')
