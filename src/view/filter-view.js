@@ -9,20 +9,20 @@ const createFilterItemTemplate = (type) => `
 
 const createFilterViewTemplate = () => `
 <form class="trip-filters" action="#" method="get">
-${FILTER_TYPES.map((type) => createFilterItemTemplate(type)).join('')}               
+${FILTER_TYPES.map((type) => createFilterItemTemplate(type)).join('')}
 <button class="visually-hidden" type="submit">Accept filter</button>
 </form>`;
 
 export default class FilterView extends AbstractView{
-  // #eventData = null;
-  // #handleEditClick = null;
-  // constructor({eventData, onEditClick}) {
-  //   super();
-  //   this.#eventData = eventData;
-  //   this.#handleEditClick = onEditClick;
-  //   this.element.querySelector('.trip-filters')
-  //     .addEventListener('click', this.#editClickHandler,);
-  // }
+  #eventData = null;
+  #handleEditClick = null;
+  constructor({eventData}) {
+    super();
+    this.#eventData = eventData;
+    // this.#handleEditClick = onEditClick;
+    // this.element.querySelector('.trip-filters')
+    //   .addEventListener('click', this.#editClickHandler,);
+  }
 
   get template() {
     return createFilterViewTemplate();
@@ -30,6 +30,6 @@ export default class FilterView extends AbstractView{
 
   // #editClickHandler = (evt) => {
   //   evt.preventDefault();
-  //   this.#handleEditClick();
+  //   this.#handleEditClick(evt);
   // };
 }

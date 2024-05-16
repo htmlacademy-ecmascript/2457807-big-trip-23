@@ -1,6 +1,6 @@
 import { render, RenderPosition} from './framework/render.js';
 import NewEventButtonView from './View/new-event-button-view';
-import FilterView from './view/filter-view.js';
+// import FilterView from './view/filter-view.js';
 import TripInfoView from './view/trip-info-view.js';
 
 
@@ -12,12 +12,12 @@ const tripMainSection = document.querySelector('.trip-main');
 const tripFilters = tripMainSection.querySelector('.trip-controls__filters');
 const tripEventSection = document.querySelector('.trip-events');
 const eventsModel = new EventsModel();
-const eventListPresenter = new EventListPresenter({eventListContainer: tripEventSection, eventsModel});
+const eventListPresenter = new EventListPresenter({eventListContainer: tripEventSection, tripFiltersContainer: tripFilters, eventsModel});
 
 const totalCount = eventsModel.getTotalCostTrip();
 
 render(new TripInfoView(totalCount), tripMainSection, RenderPosition.AFTERBEGIN);
 render(new NewEventButtonView(), tripMainSection, RenderPosition.BEFOREEND);
-render(new FilterView(), tripFilters);
+// render(new FilterView(), tripFilters);
 
 eventListPresenter.init();

@@ -111,7 +111,7 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
   <section class="event__section  event__section--offers ${isEmptyOffers ? 'visually-hidden' : ''}">
   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
   <div class="event__available-offers">
-  ${offersTemplate} 
+  ${offersTemplate}
   </div>
 </section>
 

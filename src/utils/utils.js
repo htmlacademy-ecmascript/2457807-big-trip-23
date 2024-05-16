@@ -2,7 +2,7 @@ import dayjs from 'dayjs';
 import { DateFormat } from '../constants';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
-import {FilterType, DATE_NOW } from '../constants';
+import {FilterType, SortType, DATE_NOW } from '../constants';
 import EventsModel from '../model/events-model';
 
 
@@ -59,9 +59,14 @@ const filterEvents = {
   [FilterType.PAST]: (events) => events.filter((item) => Date.parse(item.dateTo) < Date.parse(DATE_NOW)),
 };
 
+// const sortEvents = {
+//   [SortType.Day]: (events) => events,
+//   [SortType.TIME]: (events) => events.sort((a, b) => return new Date.parse(item.dateFrom) > Date.parse(DATE_NOW)),
+//   [SortType.PRICE]: (events) => events.sort((item) => Date.parse(item.price) <= Date.parse(DATE_NOW)),
+// }
 // console.log(DATE_NOW);
 // console.log(eventsDate);
-console.log(filterEvents['past'](eventsDate.events));
+// console.log(filterEvents['past'](eventsDate.events));
 
 
 export {getRandomArrayElement, getRandomInteger, getRandomDate, formatDate, formatTime, formatDateForm, getDuration, filterEvents};

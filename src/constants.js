@@ -7,6 +7,11 @@ const FilterType = {
   PRESENT: 'present',
   PAST: 'past',
 };
+const SortType = {
+  Day: 'day',
+  TIME: 'time',
+  PRICE: 'price',
+};
 const DateFormat = {
   DATE_FORMATE: 'MMM DD',
   TIME_FORMAT: 'HH:mm',
@@ -14,4 +19,4 @@ const DateFormat = {
 };
 const DATE_NOW = new Date().toISOString();
 
-export {FILTER_TYPES, FilterType, SORT_TYPES, EVENT_TYPES_TRIP, DateFormat, DATE_NOW};
+export {FILTER_TYPES, FilterType, SORT_TYPES, SortType, EVENT_TYPES_TRIP, DateFormat, DATE_NOW};

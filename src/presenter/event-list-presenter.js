@@ -1,15 +1,19 @@
-import {render, replace} from '../framework/render.js';
+import {remove, render, replace} from '../framework/render.js';
 import EventListView from '../view/event-list-view.js';
 import FormEventView from '../view/form-event-view.js';
 import EventView from '../view/event-view.js';
 import SortView from '../view/sort-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import { FILTER_TYPES } from '../constants.js';
+import FilterView from '../view/filter-view.js';
+import { filterEvents } from '../utils/utils.js';
 export default class EventListPresenter {
   #eventListContainer = null;
+  #tripFiltersContainer = null;
   #eventsModel = null;
 
   #sortComponent = new SortView();
+  // #filterComponent = null;
   #eventListComponent = new EventListView();
   #listEmptyComponent = null;
   #typeEmptyMessage = null;
@@ -18,13 +22,17 @@ export default class EventListPresenter {
   #boardDestinations = [];
   #boardOffers = [];
 
-  constructor({eventListContainer, eventsModel}) {
+  constructor({eventListContainer,tripFiltersContainer, eventsModel}) {
     this.#eventListContainer = eventListContainer;
+    this.#tripFiltersContainer = tripFiltersContainer;
     this.#eventsModel = eventsModel;
+
   }
 
   init() {
     this.#boardEvents = [...this.#eventsModel.events];
+    this.#filterRender(this.#boardEvents);
+
     render(this.#sortComponent, this.#eventListContainer);
     render(this.#eventListComponent, this.#eventListContainer);
 
@@ -32,12 +40,32 @@ export default class EventListPresenter {
       this.typeEmptyMessage = FILTER_TYPES[0];
       this.#listEmptyComponent = new ListEmptyView(this.typeEmptyMessage);
       render(this.#listEmptyComponent, this.#eventListContainer);
+
     }else{
       for (let i = 0; i < this.#boardEvents.length; i++) {
         this.#renderEvent(this.#boardEvents[i]);
       }
     }
   }
+
+  #filterRender(eventsData){
+    const eventsDataFilter = eventsData;
+    const filterComponent = new FilterView({
+      eventData: eventsData,
+    });
+    render(filterComponent, this.#tripFiltersContainer);
+    document.querySelector('.trip-filters')
+      .addEventListener('click', filterEvent);
+
+    function filterEvent(evt){
+      if(evt.target.value !== undefined){
+        const eventsFilter = filterEvents[String(evt.target.value)](eventsDataFilter);
+        console.log(eventsFilter);
+      }
+      console.log(evt.target.value);
+    }
+  }
+
 
   #renderEvent(event) {
     const escKeyDownHandler = (evt) => {
@@ -65,6 +93,7 @@ export default class EventListPresenter {
         document.removeEventListener('keydown', escKeyDownHandler);
       }
     });
+
     function replaceEvenToFormEvent(){
       replace(eventFormComponent, eventComponent);
     }
@@ -72,6 +101,7 @@ export default class EventListPresenter {
     function replaceFormEventToEven(){
       replace(eventComponent, eventFormComponent);
     }
+
     render(eventComponent, this.#eventListComponent.element);
   }
 }
