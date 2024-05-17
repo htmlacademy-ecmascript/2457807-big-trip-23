@@ -8,7 +8,9 @@ const FilterType = {
   PAST: 'past',
 };
 const SortType = {
-  Day: 'day',
+  DAY: 'day',
+  EVENT: 'event',
+  TYPE: 'type',
   TIME: 'time',
   PRICE: 'price',
 };
