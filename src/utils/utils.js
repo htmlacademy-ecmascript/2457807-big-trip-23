@@ -3,6 +3,7 @@ import { DateFormat } from '../constants';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
+
 const getRandomArrayElement = (items) =>items[Math.floor(Math.random() * items.length)];
 
 const getRandomInteger = (a, b) => {
@@ -41,6 +42,26 @@ const getDuration = (dateFrom, dateTo) => {
   }
 };
 
+
+// import EventsModel from '../model/events-model';
+// import { SortType } from '../constants';
+
+// const event = new EventsModel;
+// const sortEvents = {
+//   [SortType.DAY]: (events) => events.sort((a, b) => new Date(b.dateFrom) - new Date(a.dateFrom)),
+//   [SortType.EVENT]: (events) => events.sort((a, b) => a.type.localeCompare(b.type)),
+//   [SortType.PRICE]: (events) => events.sort((a, b) => b.basePrice - a.basePrice),
+//   [SortType.TIME]: (events) => events.sort((a, b) => new Date(b.dateTo - b.dateFrom) - new Date(a.dateTo - a.dateFrom)),
+//   [SortType.TYPE]: (events) => events.sort((a, b) => b.offers.length - a.offers.length),
+// };
+// function generateSort(events) {
+//   return Object.entries(sortEvents).map(([sortType, sortTask]) => ({
+//     type: sortType,
+//     count: sortTask(events).length,
+//   }));
+// }
+
+// console.table(generateSort(event.events));
 
 export {getRandomArrayElement, getRandomInteger, getRandomDate, formatDate, formatTime, formatDateForm, getDuration};
 
