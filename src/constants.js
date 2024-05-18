@@ -14,6 +14,14 @@ const SortType = {
   TIME: 'time',
   PRICE: 'price',
 };
+const EventsMessages = {
+  EVERYTHING: 'Click New Event to create your first point',
+  PAST: 'There are no past events now',
+  PRESENT: 'There are no present events now',
+  FUTURE: 'There are no future events now',
+  FAILED_LOAD: 'Failed to load latest route information',
+  LOADING: 'Loading...'
+};
 const DateFormat = {
   DATE_FORMATE: 'MMM DD',
   TIME_FORMAT: 'HH:mm',
@@ -21,4 +29,4 @@ const DateFormat = {
 };
 const DATE_NOW = new Date().toISOString();
 
-export {FILTER_TYPES, FilterType, SORT_TYPES, SortType, EVENT_TYPES_TRIP, DateFormat, DATE_NOW};
+export {FILTER_TYPES, FilterType, SORT_TYPES, SortType, EVENT_TYPES_TRIP, DateFormat, DATE_NOW, EventsMessages};
