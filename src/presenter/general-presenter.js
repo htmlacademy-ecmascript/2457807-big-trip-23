@@ -60,7 +60,7 @@ export default class EventListPresenter {
   }
 
   #renderSort(eventsData){
-    const sorts = generateSort(eventsData);    
+    const sorts = generateSort(eventsData);
     const sortComponent = new SortView({sorts});
     render(sortComponent, this.#eventListContainer);
   }

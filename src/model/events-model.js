@@ -1,16 +1,18 @@
 import { getRandomEvent } from '../mock/events';
 import { getDestinations } from '../mock/destinations';
 import { getOffers } from '../mock/offers';
-const EVENTS_NUMBER = 100;
+import { sortEvents } from '../utils/sort-events';
+
+const EVENTS_NUMBER = 10;
 
 export default class EventsModel{
-  #events = Array.from({length: EVENTS_NUMBER}, getRandomEvent);
+  #eventsModel = Array.from({length: EVENTS_NUMBER}, getRandomEvent);
   #destinations = getDestinations();
   #offers = getOffers();
 
 
   get events(){
-    return this.#events;
+    return this.#eventsModel;
   }
 
   get destinations(){
@@ -37,9 +39,9 @@ export default class EventsModel{
   }
 
   getTotalCostTrip(){
-    const costTripWithoutOffers = this.#events.reduce((total, eventTrip) => total + eventTrip.basePrice , 0);
+    const costTripWithoutOffers = this.#eventsModel.reduce((total, eventTrip) => total + eventTrip.basePrice , 0);
     let costOffersAllEvents = 0;
-    this.#events.forEach((eventTrip) => {
+    this.#eventsModel.forEach((eventTrip) => {
       if(eventTrip.offers.length !== 0){
         const offersTrip = this.getOffersByType(eventTrip.type);
         offersTrip.offers.forEach((offerTrip) => {
@@ -50,5 +52,22 @@ export default class EventsModel{
       }
     });
     return costTripWithoutOffers + costOffersAllEvents;
+  }
+
+  getTripInfo(){
+    const sortDestinationsEvents = [...sortEvents['day'](this.#eventsModel)];
+    const uniqueIdDestinations = [... new Set(sortDestinationsEvents.map((item) =>item.destination))];
+    const destinations = getDestinations();
+    let uniqueDestinationNames = [];
+    const nameTripCity = () => uniqueIdDestinations.forEach((uniqueIdDestination) =>{
+      destinations.forEach((destination) =>{
+        if(destination.id === uniqueIdDestination){
+          uniqueDestinationNames.push(destination);
+        }
+      });
+    });
+    nameTripCity();
+    uniqueDestinationNames = uniqueDestinationNames.map((item) => item.name);
+return uniqueDestinationNames || '';
   }
 }
