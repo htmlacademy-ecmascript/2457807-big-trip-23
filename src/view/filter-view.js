@@ -1,5 +1,4 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { FILTER_TYPES } from '../constants.js';
 
 const createFilterItemTemplate = (filter, isChecked) => {
   const {type, count} = filter;

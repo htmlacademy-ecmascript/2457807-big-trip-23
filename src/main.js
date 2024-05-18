@@ -3,8 +3,7 @@ import NewEventButtonView from './View/new-event-button-view';
 // import FilterView from './view/filter-view.js';
 import TripInfoView from './view/trip-info-view.js';
 
-
-import EventListPresenter from './presenter/event-list-presenter.js';
+import EventListPresenter from './presenter/general-presenter.js';
 import EventsModel from './model/events-model';
 
 

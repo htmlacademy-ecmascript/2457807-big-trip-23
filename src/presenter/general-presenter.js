@@ -9,6 +9,8 @@ import ListEmptyView from '../view/list-empty-view.js';
 import FilterView from '../view/filter-view.js';
 // import { filterEvents, generateFilters } from '../utils/utils.js';
 import { filterEvents, generateFilters } from '../utils/filtr-event.js';
+import { generateSort } from '../utils/sort-events.js';
+
 export default class EventListPresenter {
   #eventListContainer = null;
   #tripFiltersContainer = null;
@@ -33,7 +35,7 @@ export default class EventListPresenter {
   init() {
     this.#boardEvents = [...this.#eventsModel.events];
     this.#filterRender(this.#boardEvents);
-    this.#renderSort();
+    this.#renderSort(this.#boardEvents);
     this.#renderBoardEvents();
   }
 
@@ -57,16 +59,16 @@ export default class EventListPresenter {
     render(new ListEmptyView(typeMessage), this.#eventListContainer);
   }
 
-  #renderSort(){
-    render(this.#sortComponent, this.#eventListContainer);
+  #renderSort(eventsData){
+    const sorts = generateSort(eventsData);    
+    const sortComponent = new SortView({sorts});
+    render(sortComponent, this.#eventListContainer);
   }
 
   #filterRender(eventsData){
     const eventsDataFilter = eventsData;
     const filters = generateFilters(eventsData);
-    const filterComponent = new FilterView({
-      filters
-    });
+    const filterComponent = new FilterView({filters});
     render(filterComponent, this.#tripFiltersContainer);
     document.querySelector('.trip-filters')
       .addEventListener('click', filterEvent);
