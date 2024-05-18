@@ -9,10 +9,10 @@ const FilterType = {
 };
 const SortType = {
   DAY: 'day',
-  EVENT: 'event',
-  TYPE: 'type',
+  EVENT: 'event',  
   TIME: 'time',
   PRICE: 'price',
+  OFFERS: 'offers',
 };
 const EventsMessages = {
   EVERYTHING: 'Click New Event to create your first point',

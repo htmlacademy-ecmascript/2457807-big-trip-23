@@ -15,8 +15,8 @@ const eventListPresenter = new EventListPresenter({eventListContainer: tripEvent
 
 const totalCount = eventsModel.getTotalCostTrip();
 const tripInfo = eventsModel.getTripInfo();
-console.log(tripInfo);
 render(new TripInfoView(totalCount,tripInfo), tripMainSection, RenderPosition.AFTERBEGIN);
 render(new NewEventButtonView(), tripMainSection, RenderPosition.BEFOREEND);
+
 // render(new FilterView(), tripFilters);
 eventListPresenter.init();
