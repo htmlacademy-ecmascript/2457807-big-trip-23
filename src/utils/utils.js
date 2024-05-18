@@ -61,7 +61,6 @@ const getDuration = (dateFrom, dateTo) => {
 //   }));
 // }
 
-
 // console.table(generateSort(event.events));
 
 export {getRandomArrayElement, getRandomInteger, getRandomDate, formatDate, formatTime, formatDateForm, getDuration};

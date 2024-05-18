@@ -16,7 +16,6 @@ export default class EventListPresenter {
   #sortComponent = new SortView();
   // #filterComponent = null;
   #eventListComponent = new EventListView();
-  #listEmptyComponent = null;
   #typeEmptyMessage = null;
 
   #boardEvents = [];
@@ -33,20 +32,24 @@ export default class EventListPresenter {
   init() {
     this.#boardEvents = [...this.#eventsModel.events];
     this.#filterRender(this.#boardEvents);
+    this.#renderSort();
+    this.#renderBoardEvents();
+  }
 
-    render(this.#sortComponent, this.#eventListContainer);
+  #renderBoardEvents(){
     render(this.#eventListComponent, this.#eventListContainer);
-
     if(this.#boardEvents.length === 0){
       this.typeEmptyMessage = FILTER_TYPES[0];
-      this.#listEmptyComponent = new ListEmptyView(this.typeEmptyMessage);
-      render(this.#listEmptyComponent, this.#eventListContainer);
-
-    }else{
-      for (let i = 0; i < this.#boardEvents.length; i++) {
-        this.#renderEvent(this.#boardEvents[i]);
-      }
+      render(new ListEmptyView(this.typeEmptyMessage), this.#eventListContainer);
+      return;
     }
+    for (let i = 0; i < this.#boardEvents.length; i++) {
+      this.#renderEvent(this.#boardEvents[i]);
+    }
+  }
+
+  #renderSort(){
+    render(this.#sortComponent, this.#eventListContainer);
   }
 
   #filterRender(eventsData){
