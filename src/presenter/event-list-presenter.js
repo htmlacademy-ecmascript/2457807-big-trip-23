@@ -5,7 +5,7 @@ import FormEventView from '../view/form-event-view.js';
 import EventView from '../view/event-view.js';
 import SortView from '../view/sort-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
-import { FILTER_TYPES } from '../constants.js';
+// import { FILTER_TYPES } from '../constants.js';
 import FilterView from '../view/filter-view.js';
 // import { filterEvents, generateFilters } from '../utils/utils.js';
 import { filterEvents, generateFilters } from '../utils/filtr-event.js';
@@ -40,10 +40,10 @@ export default class EventListPresenter {
   #renderBoardEvents(){
     render(this.#eventListComponent, this.#eventListContainer);
     if(this.#boardEvents.length === 0){
-      this.#renderNoEvents(EventsMessages.EVERYTHING)
+      this.#renderNoEvents(EventsMessages.EVERYTHING);
       return;
     }
-  this.#renderEvents();
+    this.#renderEvents();
   }
 
   #renderEvents(from, to){
@@ -53,8 +53,8 @@ export default class EventListPresenter {
       .forEach((event) => this.#renderEvent(event));
   }
 
-  #renderNoEvents(typeMessage){   
-      render(new ListEmptyView(typeMessage), this.#eventListContainer);   
+  #renderNoEvents(typeMessage){
+    render(new ListEmptyView(typeMessage), this.#eventListContainer);
   }
 
   #renderSort(){
@@ -74,9 +74,9 @@ export default class EventListPresenter {
     function filterEvent(evt){
       if(evt.target.value !== undefined){
         const eventsFilter = filterEvents[String(evt.target.value)](eventsDataFilter);
-        console.log(eventsFilter);
+        // console.log(eventsFilter);
       }
-      console.log(evt.target.value);
+      // console.log(evt.target.value);
     }
   }
 
