@@ -72,9 +72,12 @@ export default class EventsModel{
   }
 
   getTripTime(){
-    const dateStart = sortEvents['day'](this.#eventsModel)[this.#eventsModel.length - 1].dateFrom;
+    const dateStart = sortEvents['day'](this.#eventsModel)[this.#eventsModel.length - 1]?.dateFrom;
     const getDateEnd = () => this.#eventsModel.sort((a, b) => new Date(b.dateTo) - new Date(a.dateTo));
+    if(this.#eventsModel.length === 0){
+      return ['' , ''];
+    }
     const dateEnd = getDateEnd().map((item) =>item.dateTo)[0];
-    return [dateStart, dateEnd] || [''];
+    return [dateStart, dateEnd] || ['', ''];
   }
 }

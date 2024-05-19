@@ -68,7 +68,7 @@ export default class EventListPresenter {
   }
 
   #filterRender(eventsData){
-    const eventsDataFilter = eventsData;
+    // const eventsDataFilter = eventsData;
     const filters = generateFilters(eventsData);
     const filterComponent = new FilterView({filters});
     render(filterComponent, this.#tripFiltersContainer);
@@ -77,7 +77,7 @@ export default class EventListPresenter {
 
     function filterEvent(evt){
       if(evt.target.value !== undefined){
-        const eventsFilter = filterEvents[String(evt.target.value)](eventsDataFilter);
+        // const eventsFilter = filterEvents[String(evt.target.value)](eventsDataFilter);
       }
     }
   }
