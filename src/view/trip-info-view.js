@@ -2,7 +2,7 @@ import AbstractView from '../framework/view/abstract-view.js';
 import { formatDateTripInfo } from '../utils/utils.js';
 
 const CreateTripInfoViewTemplate = (total, tripTitle, tripInfoTime) =>{
-  const [fistCity, secondCity,] = tripTitle;
+  const [firstCity, secondCity,] = tripTitle;
   let endCity = tripTitle[tripTitle.length - 1];
   const [dateStart, dateEnd] = tripInfoTime;
   if(tripTitle.length === 1) {
@@ -22,7 +22,7 @@ const CreateTripInfoViewTemplate = (total, tripTitle, tripInfoTime) =>{
 <section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">
-    ${tripTitle.length > 0 ? fistCity : ''} 
+    ${tripTitle.length > 0 ? firstCity : ''} 
    ${intermediateCityTripInfo}
     ${tripTitle.length > 0 ? endCity : ''}</h1>
 
