@@ -17,7 +17,10 @@ export default class EventPresenter{
   init(event, eventsModel) {
     this.#event = event;
     this.#eventsModel = eventsModel;
-    console.log(this.#eventsModel.getDestinationById(this.#event.destination));
+
+    const previwEventComponent = this.#eventComponent;
+    const previwEventFormComponent = this.#eventFormComponent;
+
 
     this.#eventComponent = new EventView({
       eventData: this.#event,
@@ -32,7 +35,24 @@ export default class EventPresenter{
       offersData: [...this.#eventsModel.offers],
       onFormSubmit: this.#handleFormSummit,
     });
-    render(this.#eventComponent, this.#eventListContainer);
+
+    if(previwEventComponent === null || previwEventFormComponent === null){
+      render(this.#eventComponent, this.#eventListContainer);
+      return;
+    }
+    if( this.#eventListContainer.contains(previwEventComponent.element)){
+      replace(this.#eventComponent, previwEventComponent);
+    }
+    if( this.#eventListContainer.contains(previwEventFormComponent.element)){
+      replace(this.#eventFormComponent, previwEventFormComponent);
+    }
+    remove(previwEventComponent);
+    remove(previwEventFormComponent);
+  }
+
+  destroy(){
+    remove(this.#eventComponent);
+    remove(this.#eventFormComponent);
   }
 
   #replaceEvenToFormEvent(){

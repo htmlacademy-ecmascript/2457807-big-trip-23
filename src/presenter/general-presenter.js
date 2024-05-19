@@ -3,10 +3,6 @@ import { EventsMessages } from '../constants.js';
 import EventPresenter from './event-presenter.js';
 
 import EventListView from '../view/event-list-view.js';
-
-import FormEventView from '../view/form-event-view.js';
-import EventView from '../view/event-view.js';
-
 import SortView from '../view/sort-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import FilterView from '../view/filter-view.js';
@@ -25,8 +21,9 @@ export default class EventListPresenter {
   // #noEventsComponent = new ListEmptyView();
 
   #boardEvents = [];
-  #boardDestinations = [];
-  #boardOffers = [];
+  #eventsPresenter = new Map();
+  // #boardDestinations = [];
+  // #boardOffers = [];
 
   constructor({eventListContainer,tripFiltersContainer, eventsModel}) {
     this.#eventListContainer = eventListContainer;
@@ -63,7 +60,8 @@ export default class EventListPresenter {
   }
 
   #renderSort(eventsData){
-    const sorts = generateSort(eventsData);
+    const eventsSortData = [...eventsData]
+    const sorts = generateSort(eventsSortData);
     const sortComponent = new SortView({sorts});
     render(sortComponent, this.#eventListContainer);
   }
@@ -91,5 +89,10 @@ export default class EventListPresenter {
       eventListContainer: this.#eventListComponent.element,
     });
     eventPresenter.init(event, this.#eventsModel);
+    this.#eventsPresenter.set(event.id, event);        
+  }
+  #clearEventList(){
+    this.#eventsPresenter.forEach((presenter) => presenter.destroy());
+    this.#eventsPresenter.clear();
   }
 }

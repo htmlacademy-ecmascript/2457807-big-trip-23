@@ -9,7 +9,7 @@ const createSortItemTemplate = (sort, isChecked) => {
 };
 
 const createFilterViewTemplate = (sorts) => {
-  const sortItemsTemplate = sorts.map((sort, index) => createSortItemTemplate(sort, index === 0)).join('');
+  const sortItemsTemplate = sorts.map((sort, index) => createSortItemTemplate(sort, index === 0)).join('');  
   return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
 ${sortItemsTemplate}
 </form>`;
