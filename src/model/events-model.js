@@ -12,7 +12,7 @@ export default class EventsModel{
 
 
   get events(){
-    return this.#eventsModel;
+    return sortEvents['day'](this.#eventsModel);
   }
 
   get destinations(){
