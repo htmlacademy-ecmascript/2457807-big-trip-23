@@ -9,6 +9,7 @@ import FilterView from '../view/filter-view.js';
 
 import { filterEvents, generateFilters } from '../utils/filtr-event.js';
 import { generateSort } from '../utils/sort-events.js';
+import { updateItem } from '../utils/common.js';
 
 export default class EventListPresenter {
   #eventListContainer = null;
@@ -60,7 +61,7 @@ export default class EventListPresenter {
   }
 
   #renderSort(eventsData){
-    const eventsSortData = [...eventsData]
+    const eventsSortData = [...eventsData];
     const sorts = generateSort(eventsSortData);
     const sortComponent = new SortView({sorts});
     render(sortComponent, this.#eventListContainer);
@@ -86,13 +87,21 @@ export default class EventListPresenter {
 
   #renderEvent(event) {
     const eventPresenter = new EventPresenter({
-      eventListContainer: this.#eventListComponent.element,
+      eventListContainer: this.#eventListComponent.element, eventsModel: this.#eventsModel,
+      onDataChange: this.#handleEventPresenter,
     });
-    eventPresenter.init(event, this.#eventsModel);
-    this.#eventsPresenter.set(event.id, event);        
+    eventPresenter.init(event);
+    this.#eventsPresenter.set(event.id, eventPresenter);
   }
+
   #clearEventList(){
     this.#eventsPresenter.forEach((presenter) => presenter.destroy());
     this.#eventsPresenter.clear();
   }
+
+  #handleEventPresenter = (updateEvent) =>{
+    this.#boardEvents = updateItem(this.#boardEvents, updateEvent);
+    console.log(this.#eventsPresenter.get(updateEvent.id));
+    this.#eventsPresenter.get(updateEvent.id).init(updateEvent);
+  };
 }

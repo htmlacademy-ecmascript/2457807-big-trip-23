@@ -10,13 +10,16 @@ export default class EventPresenter{
   #event = null;
   #eventsModel = null;
 
-  constructor({eventListContainer}){
+  #handleDataChange = null;
+
+  constructor({eventListContainer, eventsModel, onDataChange}){
     this.#eventListContainer = eventListContainer;
+    this.#eventsModel = eventsModel;
+    this.#handleDataChange = onDataChange;
   }
 
-  init(event, eventsModel) {
+  init(event) {
     this.#event = event;
-    this.#eventsModel = eventsModel;
 
     const previwEventComponent = this.#eventComponent;
     const previwEventFormComponent = this.#eventFormComponent;
@@ -27,6 +30,7 @@ export default class EventPresenter{
       destinationData: this.#eventsModel.getDestinationById(this.#event.destination),
       offersData: this.#eventsModel.getOffersByType(this.#event.type),
       onEditClick: this.#handleEditClick,
+      onFavoriteClick: this.#handleFavoriteClick,
     });
 
     this.#eventFormComponent = new FormEventView({
@@ -40,10 +44,10 @@ export default class EventPresenter{
       render(this.#eventComponent, this.#eventListContainer);
       return;
     }
-    if( this.#eventListContainer.contains(previwEventComponent.element)){
+    if(this.#eventListContainer.contains(previwEventComponent.element)){
       replace(this.#eventComponent, previwEventComponent);
     }
-    if( this.#eventListContainer.contains(previwEventFormComponent.element)){
+    if(this.#eventListContainer.contains(previwEventFormComponent.element)){
       replace(this.#eventFormComponent, previwEventFormComponent);
     }
     remove(previwEventComponent);
@@ -79,6 +83,10 @@ export default class EventPresenter{
 
   #handleFormSummit = () => {
     this.#replaceFormEventToEven();
+  };
+
+  #handleFavoriteClick = () => {
+    this.#handleDataChange({...this.#event, isFavorite: !this.#event.isFavorite});
   };
 
 }
