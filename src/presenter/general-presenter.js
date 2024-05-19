@@ -1,5 +1,5 @@
-import {remove, render, replace} from '../framework/render.js';
-import { EventsMessages } from '../constants.js';
+import {render} from '../framework/render.js';
+import { EventsMessages, SortType } from '../constants.js';
 import EventPresenter from './event-presenter.js';
 
 import EventListView from '../view/event-list-view.js';
@@ -7,8 +7,8 @@ import SortView from '../view/sort-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import FilterView from '../view/filter-view.js';
 
-import { filterEvents, generateFilters } from '../utils/filtr-event.js';
-import { generateSort } from '../utils/sort-events.js';
+import { generateFilters } from '../utils/filtr-event.js';
+import { generateSort, sortEvents } from '../utils/sort-events.js';
 import { updateItem } from '../utils/common.js';
 
 export default class EventListPresenter {
@@ -16,7 +16,9 @@ export default class EventListPresenter {
   #tripFiltersContainer = null;
   #eventsModel = null;
 
-  #sortComponent = new SortView();
+  #sortComponent = null;
+  #currentSortType = SortType.DAY;
+  #sourceBoardTask = [];
   // #filterComponent = null;
   #eventListComponent = new EventListView();
   // #noEventsComponent = new ListEmptyView();
@@ -26,15 +28,15 @@ export default class EventListPresenter {
   // #boardDestinations = [];
   // #boardOffers = [];
 
-  constructor({eventListContainer,tripFiltersContainer, eventsModel}) {
+  constructor({eventListContainer,tripFiltersContainer, eventsModel,}) {
     this.#eventListContainer = eventListContainer;
     this.#tripFiltersContainer = tripFiltersContainer;
     this.#eventsModel = eventsModel;
-
   }
 
   init() {
     this.#boardEvents = [...this.#eventsModel.events];
+    this.#sourceBoardTask = [...this.#eventsModel.events];
     this.#filterRender(this.#boardEvents);
     this.#renderSort(this.#boardEvents);
     this.#renderBoardEvents();
@@ -63,8 +65,13 @@ export default class EventListPresenter {
   #renderSort(eventsData){
     const eventsSortData = [...eventsData];
     const sorts = generateSort(eventsSortData);
-    const sortComponent = new SortView({sorts});
-    render(sortComponent, this.#eventListContainer);
+    this.#sortComponent = new SortView({sorts, onSortTypeChange: this.#handleSortTypeChange});
+    render(this.#sortComponent, this.#eventListContainer);
+  }
+
+  #sortEvents(sortType){
+    sortEvents[sortType](this.#boardEvents);
+    this.#currentSortType = sortType;
   }
 
   #filterRender(eventsData){
@@ -98,12 +105,22 @@ export default class EventListPresenter {
     this.#eventsPresenter.clear();
   }
 
-  #handleEventPresenter = (updateEvent) =>{
+  #handleEventPresenter = (updateEvent) => {
     this.#boardEvents = updateItem(this.#boardEvents, updateEvent);
+    this.#sourceBoardTask = updateItem(this.#sourceBoardTask, updateEvent);
     this.#eventsPresenter.get(updateEvent.id).init(updateEvent);
   };
 
-  #handleModeChange = () =>{
+  #handleModeChange = () => {
     this.#eventsPresenter.forEach((presenter) => presenter.resetView());
+  };
+
+  #handleSortTypeChange = (sortType) => {
+    if(this.#currentSortType === sortType){
+      return;
+    }
+    this.#sortEvents(sortType);
+    this.#clearEventList();
+    this.#renderEvents();
   };
 }
