@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {EVENT_TYPES_TRIP} from '../constants.js';
-import { formatTime, formatDateForm } from '../utils/utils.js';
+import {formatDateForm } from '../utils/utils.js';
 
 const createListOptionsDestinationItem = ({name}) =>`<option value="${name}"></option>`;
 

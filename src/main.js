@@ -20,5 +20,4 @@ const tripInfoTime = eventsModel.getTripTime();
 render(new TripInfoView(totalCount,tripInfo, tripInfoTime), tripMainSection, RenderPosition.AFTERBEGIN);
 render(new NewEventButtonView(), tripMainSection, RenderPosition.BEFOREEND);
 
-// render(new FilterView(), tripFilters);
 eventListPresenter.init();

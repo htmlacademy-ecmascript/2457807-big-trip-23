@@ -78,9 +78,7 @@ export default class EventListPresenter {
     function filterEvent(evt){
       if(evt.target.value !== undefined){
         const eventsFilter = filterEvents[String(evt.target.value)](eventsDataFilter);
-        // console.log(eventsFilter);
       }
-      // console.log(evt.target.value);
     }
   }
 
@@ -89,6 +87,7 @@ export default class EventListPresenter {
     const eventPresenter = new EventPresenter({
       eventListContainer: this.#eventListComponent.element, eventsModel: this.#eventsModel,
       onDataChange: this.#handleEventPresenter,
+      onModeChange: this.#handleModeChange,
     });
     eventPresenter.init(event);
     this.#eventsPresenter.set(event.id, eventPresenter);
@@ -101,7 +100,10 @@ export default class EventListPresenter {
 
   #handleEventPresenter = (updateEvent) =>{
     this.#boardEvents = updateItem(this.#boardEvents, updateEvent);
-    console.log(this.#eventsPresenter.get(updateEvent.id));
     this.#eventsPresenter.get(updateEvent.id).init(updateEvent);
+  };
+
+  #handleModeChange = () =>{
+    this.#eventsPresenter.forEach((presenter) => presenter.resetView());
   };
 }

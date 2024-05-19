@@ -1,4 +1,5 @@
 import {remove, render, replace} from '../framework/render.js';
+import { Mode } from '../constants.js';
 import FormEventView from '../view/form-event-view.js';
 import EventView from '../view/event-view.js';
 
@@ -11,18 +12,21 @@ export default class EventPresenter{
   #eventsModel = null;
 
   #handleDataChange = null;
+  #handleModeChange = null;
+  #mode = Mode.DEFAULT;
 
-  constructor({eventListContainer, eventsModel, onDataChange}){
+  constructor({eventListContainer, eventsModel, onDataChange, onModeChange}){
     this.#eventListContainer = eventListContainer;
     this.#eventsModel = eventsModel;
     this.#handleDataChange = onDataChange;
+    this.#handleModeChange = onModeChange;
   }
 
   init(event) {
     this.#event = event;
 
-    const previwEventComponent = this.#eventComponent;
-    const previwEventFormComponent = this.#eventFormComponent;
+    const previewEventComponent = this.#eventComponent;
+    const previewEventFormComponent = this.#eventFormComponent;
 
 
     this.#eventComponent = new EventView({
@@ -40,18 +44,18 @@ export default class EventPresenter{
       onFormSubmit: this.#handleFormSummit,
     });
 
-    if(previwEventComponent === null || previwEventFormComponent === null){
+    if(previewEventComponent === null || previewEventFormComponent === null){
       render(this.#eventComponent, this.#eventListContainer);
       return;
     }
-    if(this.#eventListContainer.contains(previwEventComponent.element)){
-      replace(this.#eventComponent, previwEventComponent);
+    if(this.#mode === Mode.DEFAULT){
+      replace(this.#eventComponent, previewEventComponent);
     }
-    if(this.#eventListContainer.contains(previwEventFormComponent.element)){
-      replace(this.#eventFormComponent, previwEventFormComponent);
+    if(this.#mode === Mode.EDITING){
+      replace(this.#eventFormComponent, previewEventFormComponent);
     }
-    remove(previwEventComponent);
-    remove(previwEventFormComponent);
+    remove(previewEventComponent);
+    remove(previewEventFormComponent);
   }
 
   destroy(){
@@ -59,14 +63,23 @@ export default class EventPresenter{
     remove(this.#eventFormComponent);
   }
 
+  resetView(){
+    if(this.#mode !== Mode.DEFAULT){
+      this.#replaceFormEventToEven();
+    }
+  }
+
   #replaceEvenToFormEvent(){
     replace(this.#eventFormComponent, this.#eventComponent);
     document.addEventListener('keydown', this.#escKeyDownHandler);
+    this.#handleModeChange();
+    this.#mode = Mode.EDITING;
   }
 
   #replaceFormEventToEven(){
     replace(this.#eventComponent, this.#eventFormComponent);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
+    this.#mode = Mode.DEFAULT;
   }
 
   #escKeyDownHandler = (evt) => {
