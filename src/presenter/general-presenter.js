@@ -1,13 +1,16 @@
 import {remove, render, replace} from '../framework/render.js';
 import { EventsMessages } from '../constants.js';
+import EventPresenter from './event-presenter.js';
+
 import EventListView from '../view/event-list-view.js';
+
 import FormEventView from '../view/form-event-view.js';
 import EventView from '../view/event-view.js';
+
 import SortView from '../view/sort-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
-// import { FILTER_TYPES } from '../constants.js';
 import FilterView from '../view/filter-view.js';
-// import { filterEvents, generateFilters } from '../utils/utils.js';
+
 import { filterEvents, generateFilters } from '../utils/filtr-event.js';
 import { generateSort } from '../utils/sort-events.js';
 
@@ -19,7 +22,7 @@ export default class EventListPresenter {
   #sortComponent = new SortView();
   // #filterComponent = null;
   #eventListComponent = new EventListView();
-  #noEventsComponent = new ListEmptyView();
+  // #noEventsComponent = new ListEmptyView();
 
   #boardEvents = [];
   #boardDestinations = [];
@@ -84,40 +87,9 @@ export default class EventListPresenter {
 
 
   #renderEvent(event) {
-    const escKeyDownHandler = (evt) => {
-      if (evt.key === 'Escape') {
-        evt.preventDefault();
-        replaceFormEventToEven();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    };
-    const eventComponent = new EventView({
-      eventData: event,
-      destinationData: this.#eventsModel.getDestinationById(event.destination),
-      offersData: this.#eventsModel.getOffersByType(event.type),
-      onEditClick: () => {
-        replaceEvenToFormEvent();
-        document.addEventListener('keydown', escKeyDownHandler);
-      }
+    const eventPresenter = new EventPresenter({
+      eventListContainer: this.#eventListComponent.element,
     });
-    const eventFormComponent = new FormEventView({
-      eventData: event,
-      destinationsData: [...this.#eventsModel.destinations],
-      offersData: [...this.#eventsModel.offers],
-      onFormSubmit: () => {
-        replaceFormEventToEven();
-        document.removeEventListener('keydown', escKeyDownHandler);
-      }
-    });
-
-    function replaceEvenToFormEvent(){
-      replace(eventFormComponent, eventComponent);
-    }
-
-    function replaceFormEventToEven(){
-      replace(eventComponent, eventFormComponent);
-    }
-
-    render(eventComponent, this.#eventListComponent.element);
+    eventPresenter.init(event, this.#eventsModel);
   }
 }
