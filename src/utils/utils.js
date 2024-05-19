@@ -20,6 +20,8 @@ const isTaskRepeating = (repeating) => Object.values(repeating).some(Boolean);
 const formatDate = (dueDate) => dayjs(dueDate).format(DateFormat.DATE_FORMATE);
 const formatTime = (dueDate) => dayjs(dueDate).format(DateFormat.TIME_FORMAT);
 const formatDateForm = (dueDate) => dayjs(dueDate).format(DateFormat.DATE_FORMATE_FORM);
+const formatDateTripInfo = (dueDate) => dayjs(dueDate).format(DateFormat.DATE_FORMATE_TRIP_INFO);
+
 const isTaskExpired = (dueDate) => dueDate && dayjs().isAfter(dueDate, 'D');
 
 
@@ -63,5 +65,5 @@ const getDuration = (dateFrom, dateTo) => {
 
 // console.table(generateSort(event.events));
 
-export {getRandomArrayElement, getRandomInteger, getRandomDate, formatDate, formatTime, formatDateForm, getDuration};
+export {getRandomArrayElement, getRandomInteger, getRandomDate, formatDate, formatTime, formatDateForm, formatDateTripInfo, getDuration};
 

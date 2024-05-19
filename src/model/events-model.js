@@ -68,6 +68,13 @@ export default class EventsModel{
     });
     nameTripCity();
     uniqueDestinationNames = uniqueDestinationNames.map((item) => item.name);
-return uniqueDestinationNames || '';
+    return uniqueDestinationNames || '';
+  }
+
+  getTripTime(){
+    const dateStart = sortEvents['day'](this.#eventsModel)[this.#eventsModel.length - 1].dateFrom;
+    const getDateEnd = () => this.#eventsModel.sort((a, b) => new Date(b.dateTo) - new Date(a.dateTo));
+    const dateEnd = getDateEnd().map((item) =>item.dateTo)[0];
+    return [dateStart, dateEnd] || [''];
   }
 }

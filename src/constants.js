@@ -26,6 +26,7 @@ const DateFormat = {
   DATE_FORMATE: 'MMM DD',
   TIME_FORMAT: 'HH:mm',
   DATE_FORMATE_FORM: 'DD/MM/YY',
+  DATE_FORMATE_TRIP_INFO: 'DD MMM YY',
 };
 const DATE_NOW = new Date().toISOString();
 
