@@ -26,7 +26,7 @@ const CreateTripInfoViewTemplate = (total, tripTitle, tripInfoTime) =>{
    ${intermediateCityTripInfo}
     ${tripTitle.length > 0 ? endCity : ''}</h1>
 
-    <p class="trip-info__dates">${dateStart !== '' ? `${formatDateTripInfo(dateStart) }&nbsp;&mdash;&nbsp;` : ''}
+    <p class="trip-info__dates">${dateStart !== '' ? `${formatDateTripInfo(dateStart)}&nbsp;&mdash;&nbsp;` : ''}
     ${dateStart !== '' ? formatDateTripInfo(dateEnd) : ''}</p>
   </div>
 

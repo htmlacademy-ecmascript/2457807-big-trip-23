@@ -31,7 +31,7 @@ const DateFormat = {
   DATE_FORMATE: 'MMM DD',
   TIME_FORMAT: 'HH:mm',
   DATE_FORMATE_FORM: 'DD/MM/YY HH:mm',
-  DATE_FORMATE_TRIP_INFO: 'DD MMM YY',
+  DATE_FORMATE_TRIP_INFO: 'DD MMM YYYY',
 };
 const DATE_NOW = new Date().toISOString();
 
