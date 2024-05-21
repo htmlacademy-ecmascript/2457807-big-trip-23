@@ -1,18 +1,18 @@
-import { getRandomEvent } from '../mock/events';
-import { getDestinations } from '../mock/destinations';
-import { getOffers } from '../mock/offers';
-import { sortEvents } from '../utils/sort-events';
+import { getRandomEvent } from '../mock/events.js';
+import { getDestinations } from '../mock/destinations.js';
+import { getOffers } from '../mock/offers.js';
+import { sortEvents } from '../utils/sort-events.js';
+import { SortType } from '../constants.js';
 
 const EVENTS_NUMBER = 10;
 
 export default class EventsModel{
-  #eventsModel = Array.from({length: EVENTS_NUMBER}, getRandomEvent);
+  #events = Array.from({length: EVENTS_NUMBER}, getRandomEvent);
   #destinations = getDestinations();
   #offers = getOffers();
 
-
   get events(){
-    return sortEvents['day'](this.#eventsModel);
+    return sortEvents[SortType.DAY](this.#events);
   }
 
   get destinations(){
@@ -39,9 +39,9 @@ export default class EventsModel{
   }
 
   getTotalCostTrip(){
-    const costTripWithoutOffers = this.#eventsModel.reduce((total, eventTrip) => total + eventTrip.basePrice , 0);
+    const costTripWithoutOffers = this.#events.reduce((total, eventTrip) => total + eventTrip.basePrice , 0);
     let costOffersAllEvents = 0;
-    this.#eventsModel.forEach((eventTrip) => {
+    this.#events.forEach((eventTrip) => {
       if(eventTrip.offers.length !== 0){
         const offersTrip = this.getOffersByType(eventTrip.type);
         offersTrip.offers.forEach((offerTrip) => {
@@ -55,8 +55,9 @@ export default class EventsModel{
   }
 
   getTripInfo(){
-    const sortDestinationsEvents = [...sortEvents['day'](this.#eventsModel)];
-    const uniqueIdDestinations = [... new Set(sortDestinationsEvents.map((item) =>item.destination))];
+    const sortDestinationsEvents = [...sortEvents[SortType.DAY](this.#events)];
+    // const uniqueIdDestinations = [... new Set(sortDestinationsEvents.map((item) =>item.destination))];
+    const uniqueIdDestinations = sortDestinationsEvents.map((item) =>item.destination);
     const destinations = getDestinations();
     let uniqueDestinationNames = [];
     const nameTripCity = () => uniqueIdDestinations.forEach((uniqueIdDestination) =>{
@@ -72,9 +73,9 @@ export default class EventsModel{
   }
 
   getTripTime(){
-    const dateStart = sortEvents['day'](this.#eventsModel)[this.#eventsModel.length - 1]?.dateFrom;
-    const getDateEnd = () => this.#eventsModel.sort((a, b) => new Date(b.dateTo) - new Date(a.dateTo));
-    if(this.#eventsModel.length === 0){
+    const dateStart = sortEvents[SortType.DAY](this.#events)[0]?.dateFrom;
+    const getDateEnd = () => this.#events.sort((a, b) => new Date(b.dateTo) - new Date(a.dateTo));
+    if(this.#events.length === 0){
       return ['' , ''];
     }
     const dateEnd = getDateEnd().map((item) =>item.dateTo)[0];

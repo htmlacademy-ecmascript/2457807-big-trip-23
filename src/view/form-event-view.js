@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {EVENT_TYPES_TRIP} from '../constants.js';
-import {formatDateForm } from '../utils/utils.js';
+import {formatDateForm } from '../utils/date.js';
 
 const createListOptionsDestinationItem = ({name}) =>`<option value="${name}"></option>`;
 
@@ -99,11 +99,14 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${eventData.basePrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">Cancel</button>
+    <button class="event__reset-btn" type="reset">Delete</button>
+    <button class="event__rollup-btn" type="button">
+    <span class="visually-hidden">Open event</span>
+    </button>
   </header>
 
   <section class="event__details ${(isEmptyOffers && isEmptyDestinations) ? 'visually-hidden' : ''}">
@@ -143,6 +146,8 @@ export default class FormEventView extends AbstractView{
     this.#handleFormSubmit = onFormSubmit;
     this.element.querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#formSubmitHandler);
   }
 
   get template() {

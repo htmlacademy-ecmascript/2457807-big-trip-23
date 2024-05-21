@@ -1,7 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { formatDateTripInfo } from '../utils/utils.js';
+import { formatDateTripInfo } from '../utils/date.js';
 
-const CreateTripInfoViewTemplate = (total, tripTitle, tripInfoTime) =>{
+const createTripInfoViewTemplate = (total, tripTitle, tripInfoTime) =>{
   const [firstCity, secondCity,] = tripTitle;
   let endCity = tripTitle[tripTitle.length - 1];
   const [dateStart, dateEnd] = tripInfoTime;
@@ -24,7 +24,7 @@ const CreateTripInfoViewTemplate = (total, tripTitle, tripInfoTime) =>{
     <h1 class="trip-info__title">
     ${tripTitle.length > 0 ? firstCity : ''} 
    ${intermediateCityTripInfo}
-    ${tripTitle.length > 0 ? endCity : ''}</h1>
+    ${tripTitle.length > 1 ? endCity : ''}</h1>
 
     <p class="trip-info__dates">${dateStart !== '' ? `${formatDateTripInfo(dateStart)}&nbsp;&mdash;&nbsp;` : ''}
     ${dateStart !== '' ? formatDateTripInfo(dateEnd) : ''}</p>
@@ -49,6 +49,6 @@ export default class TripInfoView extends AbstractView{
   }
 
   get template() {
-    return CreateTripInfoViewTemplate(this.#totalCount, this.#tripInfo, this.#tripInfoTime);
+    return createTripInfoViewTemplate(this.#totalCount, this.#tripInfo, this.#tripInfoTime);
   }
 }

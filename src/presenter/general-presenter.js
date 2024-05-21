@@ -11,22 +11,18 @@ import { generateFilters } from '../utils/filtr-event.js';
 import { generateSort, sortEvents } from '../utils/sort-events.js';
 import { updateItem } from '../utils/common.js';
 
-export default class EventListPresenter {
+export default class GeneralPresenter {
   #eventListContainer = null;
   #tripFiltersContainer = null;
-  #eventsModel = null;
-
+  
   #sortComponent = null;
   #currentSortType = SortType.DAY;
-  #sourceBoardTask = [];
-  // #filterComponent = null;
+  #sourceBoardTask = [];  
   #eventListComponent = new EventListView();
-  // #noEventsComponent = new ListEmptyView();
-
+  
+  #eventsModel = null;
   #boardEvents = [];
   #eventsPresenter = new Map();
-  // #boardDestinations = [];
-  // #boardOffers = [];
 
   constructor({eventListContainer,tripFiltersContainer, eventsModel,}) {
     this.#eventListContainer = eventListContainer;
@@ -37,7 +33,7 @@ export default class EventListPresenter {
   init() {
     this.#boardEvents = [...this.#eventsModel.events];
     this.#sourceBoardTask = [...this.#eventsModel.events];
-    this.#filterRender(this.#boardEvents);
+    this.#renderFilter(this.#boardEvents);
     this.#renderSort(this.#boardEvents);
     this.#renderBoardEvents();
   }
@@ -74,13 +70,13 @@ export default class EventListPresenter {
     this.#currentSortType = sortType;
   }
 
-  #filterRender(eventsData){
+  #renderFilter(eventsData){
     // const eventsDataFilter = eventsData;
     const filters = generateFilters(eventsData);
     const filterComponent = new FilterView({filters});
     render(filterComponent, this.#tripFiltersContainer);
     document.querySelector('.trip-filters')
-      .addEventListener('click', filterEvent);
+      .addEventListener('change', filterEvent);
 
     function filterEvent(evt){
       if(evt.target.value !== undefined){
@@ -93,7 +89,7 @@ export default class EventListPresenter {
   #renderEvent(event) {
     const eventPresenter = new EventPresenter({
       eventListContainer: this.#eventListComponent.element, eventsModel: this.#eventsModel,
-      onDataChange: this.#handleEventPresenter,
+      onDataChange: this.#handleEventChange,
       onModeChange: this.#handleModeChange,
     });
     eventPresenter.init(event);
@@ -105,7 +101,7 @@ export default class EventListPresenter {
     this.#eventsPresenter.clear();
   }
 
-  #handleEventPresenter = (updateEvent) => {
+  #handleEventChange = (updateEvent) => {
     this.#boardEvents = updateItem(this.#boardEvents, updateEvent);
     this.#sourceBoardTask = updateItem(this.#sourceBoardTask, updateEvent);
     this.#eventsPresenter.get(updateEvent.id).init(updateEvent);
