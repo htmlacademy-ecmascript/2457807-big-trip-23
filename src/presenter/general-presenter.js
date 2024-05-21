@@ -14,12 +14,12 @@ import { updateItem } from '../utils/common.js';
 export default class GeneralPresenter {
   #eventListContainer = null;
   #tripFiltersContainer = null;
-  
+
   #sortComponent = null;
   #currentSortType = SortType.DAY;
-  #sourceBoardTask = [];  
+  #sourceBoardTask = [];
   #eventListComponent = new EventListView();
-  
+
   #eventsModel = null;
   #boardEvents = [];
   #eventsPresenter = new Map();

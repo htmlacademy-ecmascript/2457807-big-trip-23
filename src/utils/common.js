@@ -8,7 +8,6 @@ const getRandomInteger = (a, b) => {
   return Math.floor(result);
 };
 const getRandomDate = (start, end) => new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
-const isTaskRepeating = (repeating) => Object.values(repeating).some(Boolean);
-const isTaskExpired = (dueDate) => dueDate && dayjs().isAfter(dueDate, 'D');
+
 
 export {getRandomArrayElement, getRandomInteger, getRandomDate, updateItem};
