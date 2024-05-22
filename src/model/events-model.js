@@ -56,9 +56,8 @@ export default class EventsModel{
 
   getTripInfo(){
     const sortDestinationsEvents = [...sortEvents[SortType.DAY](this.#events)];
-    // const uniqueIdDestinations = [... new Set(sortDestinationsEvents.map((item) =>item.destination))];
-    const uniqueIdDestinations = sortDestinationsEvents.map((item) =>item.destination);
-    const destinations = getDestinations();
+    const uniqueIdDestinations = [... new Set(sortDestinationsEvents.map((item) =>item.destination))];
+    const destinations = this.#destinations;
     let uniqueDestinationNames = [];
     const nameTripCity = () => uniqueIdDestinations.forEach((uniqueIdDestination) =>{
       destinations.forEach((destination) =>{
@@ -73,11 +72,10 @@ export default class EventsModel{
   }
 
   getTripTime(){
-    const dateStart = sortEvents[SortType.DAY](this.#events)[0]?.dateFrom;
-    const getDateEnd = () => this.#events.sort((a, b) => new Date(b.dateTo) - new Date(a.dateTo));
     if(this.#events.length === 0){
-      return ['' , ''];
-    }
+      return ['' , ''];    }
+    const dateStart = sortEvents[SortType.DAY](this.#events)[0]?.dateFrom;
+    const getDateEnd = () => this.#events.sort((a, b) => new Date(b.dateTo) - new Date(a.dateTo));   
     const dateEnd = getDateEnd().map((item) =>item.dateTo)[0];
     return [dateStart, dateEnd] || ['', ''];
   }
