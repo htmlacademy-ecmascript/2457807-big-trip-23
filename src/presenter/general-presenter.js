@@ -1,5 +1,5 @@
-import {render} from '../framework/render.js';
-import { EventsMessages, SortType } from '../constants.js';
+import {render, remove} from '../framework/render.js';
+import { EventsMessages, FilterType, SortType } from '../constants.js';
 import EventPresenter from './event-presenter.js';
 
 import EventListView from '../view/event-list-view.js';
@@ -7,7 +7,7 @@ import SortView from '../view/sort-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import FilterView from '../view/filter-view.js';
 
-import { generateFilters } from '../utils/filtr-event.js';
+import { generateFilters, filterEvents } from '../utils/filtr-event.js';
 import { generateSort, sortEvents } from '../utils/sort-events.js';
 import { updateItem } from '../utils/common.js';
 
@@ -17,6 +17,8 @@ export default class GeneralPresenter {
 
   #sortComponent = null;
   #currentSortType = SortType.DAY;
+  #filterComponent = null;
+  #currentFilterType = FilterType.EVERYTHING;
   #sourceBoardTask = [];
   #eventListComponent = new EventListView();
 
@@ -59,6 +61,9 @@ export default class GeneralPresenter {
   }
 
   #renderSort(eventsData){
+    if(this.#sortComponent !== null){
+      remove(this.#sortComponent);
+    }
     const eventsSortData = [...eventsData];
     const sorts = generateSort(eventsSortData);
     this.#sortComponent = new SortView({sorts, onSortTypeChange: this.#handleSortTypeChange});
@@ -71,18 +76,18 @@ export default class GeneralPresenter {
   }
 
   #renderFilter(eventsData){
-    // const eventsDataFilter = eventsData;
-    const filters = generateFilters(eventsData);
-    const filterComponent = new FilterView({filters});
-    render(filterComponent, this.#tripFiltersContainer);
-    document.querySelector('.trip-filters')
-      .addEventListener('change', filterEvent);
+    const eventsFilterData = [...eventsData];
+    const filters = generateFilters(eventsFilterData);
+    this.#filterComponent = new FilterView({filters, onFilterTypeChange: this.#handleFilterTypeChange});
+    render(this.#filterComponent, this.#tripFiltersContainer);
+  }
 
-    function filterEvent(evt){
-      if(evt.target.value !== undefined){
-        // const eventsFilter = filterEvents[String(evt.target.value)](eventsDataFilter);
-      }
-    }
+  #filterEvents(filterType){
+    this.#boardEvents = this.#sourceBoardTask;
+    this.#boardEvents = filterEvents[filterType](this.#boardEvents);
+    this.#sortEvents(SortType.DAY);
+    this.#currentFilterType = filterType;
+    this.#renderSort(this.#boardEvents);
   }
 
 
@@ -116,6 +121,15 @@ export default class GeneralPresenter {
       return;
     }
     this.#sortEvents(sortType);
+    this.#clearEventList();
+    this.#renderEvents();
+  };
+
+  #handleFilterTypeChange = (filterType) =>{
+    if(this.#currentFilterType === filterType){
+      return;
+    }
+    this.#filterEvents(filterType);
     this.#clearEventList();
     this.#renderEvents();
   };
