@@ -85,7 +85,7 @@ export default class GeneralPresenter {
   #filterEvents(filterType){
     this.#boardEvents = this.#sourceBoardTask;
     this.#boardEvents = filterEvents[filterType](this.#boardEvents);
-    this.#sortEvents(SortType.DAY);
+    sortEvents[SortType.DAY](this.#boardEvents);
     this.#currentFilterType = filterType;
     this.#renderSort(this.#boardEvents);
   }
