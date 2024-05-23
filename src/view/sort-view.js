@@ -1,34 +1,39 @@
 import AbstractView from '../framework/view/abstract-view.js';
-import { SORT_TYPES } from '../constants.js';
 
-const createSortItemTemplate = (type) => `
-<div class="trip-sort__item  trip-sort__item--${type}">
-  <input id="sort-${type}" class="trip-sort__input  visually-hidden" type="radio" name="trip-sort" value="sort-${type}" checked>
-  <label class="trip-sort__btn" for="sort-${type}">${type}</label>
+const createSortItemTemplate = (sort, isChecked) => {
+  const {type, count} = sort;
+  return`<div class="trip-sort__item  trip-sort__item--${type}">
+  <input id="sort-${type}" class="trip-sort__input  visually-hidden" data-sort-type = ${type}
+   type="radio" name="trip-sort" value="sort-${type}" ${isChecked ? 'checked' : ''} ${(count === 0 || type === 'offers' || type === 'event') ? 'disabled' : '' }>
+  <label class="trip-sort__btn" for="sort-${type}" >${type}</label>
 </div>`;
+};
 
-const createFilterViewTemplate = () => `
-<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
-${SORT_TYPES.map((type) => createSortItemTemplate(type)).join('')}
+const createSortViewTemplate = (sorts) => {
+  const sortItemsTemplate = sorts.map((sort, index) => createSortItemTemplate(sort, index === 0)).join('');
+  return `<form class="trip-events__trip-sort  trip-sort" action="#" method="get">
+${sortItemsTemplate}
 </form>`;
+};
 
 export default class SortView extends AbstractView{
-  // #eventData = null;
-  // #handleEditClick = null;
-  // constructor({eventData, onEditClick}) {
-  //   super();
-  //   this.#eventData = eventData;
-  //   this.#handleEditClick = onEditClick;
-  //   this.element.querySelector('.trip-sort')
-  //     .addEventListener('click', this.#editClickHandler,);
-  // }
-
-  get template() {
-    return createFilterViewTemplate();
+  #sorts = null;
+  #handleSortTypeChange = null;
+  constructor({sorts, onSortTypeChange}) {
+    super();
+    this.#sorts = sorts;
+    this.#handleSortTypeChange = onSortTypeChange;
+    this.element.addEventListener('change', this.#sortTypeChangeHandler);
   }
 
-  // #editClickHandler = (evt) => {
-  //   evt.preventDefault();
-  //   this.#handleEditClick();
-  // };
+  get template() {
+    return createSortViewTemplate(this.#sorts);
+  }
+
+  #sortTypeChangeHandler = (evt) => {
+    if(evt.target.tagName !== 'INPUT'){
+      return;
+    }
+    this.#handleSortTypeChange(evt.target.dataset.sortType);
+  };
 }

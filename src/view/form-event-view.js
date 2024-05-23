@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 import {EVENT_TYPES_TRIP} from '../constants.js';
-import { formatTime, formatDateForm } from '../utils/utils.js';
+import {formatDateForm } from '../utils/date.js';
 
 const createListOptionsDestinationItem = ({name}) =>`<option value="${name}"></option>`;
 
@@ -24,8 +24,8 @@ const createEventFormPictureTemplate = ({pictures}) =>{
 };
 const createEventOffersTemplateItem = ({id, title, price}, isCheckedOffers) =>`
   <div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${id}-1" type="checkbox" name="event-offer-luggage" ${isCheckedOffers ? 'checked' : ''}>
-    <label class="event__offer-label" for="event-offer-${id}-1">
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${title}-${id}" type="checkbox" name="event-offer-luggage" ${isCheckedOffers ? 'checked' : ''}>
+    <label class="event__offer-label" for="event-offer-${title}-${id}">
       <span class="event__offer-title">${title}</span>
       &plus;&euro;&nbsp;
       <span class="event__offer-price">${price}</span>
@@ -88,10 +88,10 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
 
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDateForm(eventData.dateFrom)} ${formatTime(eventData.dateFrom)}">
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" value="${formatDateForm(eventData.dateFrom)}">
       &mdash;
       <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDateForm(eventData.dateTo)} ${formatTime(eventData.dateTo)}">
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" value="${formatDateForm(eventData.dateTo)}">
     </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -99,11 +99,14 @@ const createFormEventTemplate = (eventData, destinationsData, offersData) =>{
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="">
+      <input class="event__input  event__input--price" id="event-price-1" type="text" name="event-price" value="${eventData.basePrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">Cancel</button>
+    <button class="event__reset-btn" type="reset">Delete</button>
+    <button class="event__rollup-btn" type="button">
+    <span class="visually-hidden">Open event</span>
+    </button>
   </header>
 
   <section class="event__details ${(isEmptyOffers && isEmptyDestinations) ? 'visually-hidden' : ''}">
@@ -143,6 +146,8 @@ export default class FormEventView extends AbstractView{
     this.#handleFormSubmit = onFormSubmit;
     this.element.querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
+    this.element.querySelector('.event__rollup-btn')
+      .addEventListener('click', this.#formSubmitHandler);
   }
 
   get template() {

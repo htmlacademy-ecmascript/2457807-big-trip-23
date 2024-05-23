@@ -1,23 +1,20 @@
 import { render, RenderPosition} from './framework/render.js';
-import NewEventButtonView from './View/new-event-button-view';
-// import FilterView from './view/filter-view.js';
+import NewEventButtonView from './view/new-event-button-view.js';
 import TripInfoView from './view/trip-info-view.js';
-
-
-import EventListPresenter from './presenter/event-list-presenter.js';
-import EventsModel from './model/events-model';
-
+import GeneralPresenter from './presenter/general-presenter.js';
+import EventsModel from './model/events-model.js';
 
 const tripMainSection = document.querySelector('.trip-main');
 const tripFilters = tripMainSection.querySelector('.trip-controls__filters');
 const tripEventSection = document.querySelector('.trip-events');
 const eventsModel = new EventsModel();
-const eventListPresenter = new EventListPresenter({eventListContainer: tripEventSection, tripFiltersContainer: tripFilters, eventsModel});
+const generalPresenter = new GeneralPresenter({eventListContainer: tripEventSection, tripFiltersContainer: tripFilters, eventsModel});
 
 const totalCount = eventsModel.getTotalCostTrip();
+const tripInfo = eventsModel.getTripInfo();
+const tripInfoTime = eventsModel.getTripTime();
 
-render(new TripInfoView(totalCount), tripMainSection, RenderPosition.AFTERBEGIN);
+render(new TripInfoView(totalCount,tripInfo, tripInfoTime), tripMainSection, RenderPosition.AFTERBEGIN);
 render(new NewEventButtonView(), tripMainSection, RenderPosition.BEFOREEND);
-// render(new FilterView(), tripFilters);
+generalPresenter.init();
 
-eventListPresenter.init();

@@ -1,13 +1,12 @@
-import { EVENT_TYPES_TRIP } from '../constants';
-import { getRandomArrayElement, getRandomInteger, getRandomDate } from '../utils/utils';
-import { getDestinations } from './destinations';
-import { getOffers } from './offers';
+import { EVENT_TYPES_TRIP } from '../constants.js';
+import { getRandomArrayElement, getRandomInteger, getRandomDate } from '../utils/common.js';
+import { getDestinations } from './destinations.js';
+import { getOffers } from './offers.js';
 
-
-const startDateFrom = new Date(2022, 6, 1);
-const endDateFrom = new Date(2026, 7, 30);
-const startDateTo = new Date(2023, 7, 28);
-const endDateTo = new Date(2027, 8, 31);
+const startDateFrom = new Date(2024, 1, 1);
+const endDateFrom = new Date(2024, 6, 30);
+const startDateTo = new Date(2024, 7, 1);
+const endDateTo = new Date(2024, 12, 31);
 
 const getRandomOffersArrayId = (type) =>{
   const offersDataTypeEvent = getOffers().find((offer) => offer.type === type);

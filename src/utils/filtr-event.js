@@ -1,5 +1,4 @@
-// import EventsModel from '../model/events-model';
-import {FilterType, DATE_NOW } from '../constants';
+import {FilterType, DATE_NOW } from '../constants.js';
 
 const filterEvents = {
   [FilterType.EVERYTHING]: (events) => events,

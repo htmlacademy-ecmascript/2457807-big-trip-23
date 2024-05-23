@@ -1,16 +1,18 @@
-import { getRandomEvent } from '../mock/events';
-import { getDestinations } from '../mock/destinations';
-import { getOffers } from '../mock/offers';
-const EVENTS_NUMBER = 100;
+import { getRandomEvent } from '../mock/events.js';
+import { getDestinations } from '../mock/destinations.js';
+import { getOffers } from '../mock/offers.js';
+import { sortEvents } from '../utils/sort-events.js';
+import { SortType } from '../constants.js';
+
+const EVENTS_NUMBER = 10;
 
 export default class EventsModel{
   #events = Array.from({length: EVENTS_NUMBER}, getRandomEvent);
   #destinations = getDestinations();
   #offers = getOffers();
 
-
   get events(){
-    return this.#events;
+    return sortEvents[SortType.DAY](this.#events);
   }
 
   get destinations(){
@@ -50,5 +52,31 @@ export default class EventsModel{
       }
     });
     return costTripWithoutOffers + costOffersAllEvents;
+  }
+
+  getTripInfo(){
+    const sortDestinationsEvents = [...sortEvents[SortType.DAY](this.#events)];
+    const uniqueIdDestinations = [... new Set(sortDestinationsEvents.map((item) =>item.destination))];
+    const destinations = this.#destinations;
+    let uniqueDestinationNames = [];
+    const nameTripCity = () => uniqueIdDestinations.forEach((uniqueIdDestination) =>{
+      destinations.forEach((destination) =>{
+        if(destination.id === uniqueIdDestination){
+          uniqueDestinationNames.push(destination);
+        }
+      });
+    });
+    nameTripCity();
+    uniqueDestinationNames = uniqueDestinationNames.map((item) => item.name);
+    return uniqueDestinationNames || '';
+  }
+
+  getTripTime(){
+    if(this.#events.length === 0){
+      return ['' , ''];    }
+    const dateStart = sortEvents[SortType.DAY](this.#events)[0]?.dateFrom;
+    const getDateEnd = () => this.#events.sort((a, b) => new Date(b.dateTo) - new Date(a.dateTo));   
+    const dateEnd = getDateEnd().map((item) =>item.dateTo)[0];
+    return [dateStart, dateEnd] || ['', ''];
   }
 }
