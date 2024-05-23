@@ -5,7 +5,7 @@ import { getOffers } from './offers.js';
 
 const startDateFrom = new Date(2024, 1, 1);
 const endDateFrom = new Date(2024, 6, 30);
-const startDateTo = new Date(2024, 7, 1);
+const startDateTo = new Date(2024, 6, 1);
 const endDateTo = new Date(2024, 12, 31);
 
 const getRandomOffersArrayId = (type) =>{

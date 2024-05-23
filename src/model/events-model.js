@@ -4,7 +4,7 @@ import { getOffers } from '../mock/offers.js';
 import { sortEvents } from '../utils/sort-events.js';
 import { SortType } from '../constants.js';
 
-const EVENTS_NUMBER = 10;
+const EVENTS_NUMBER = 3;
 
 export default class EventsModel{
   #events = Array.from({length: EVENTS_NUMBER}, getRandomEvent);
