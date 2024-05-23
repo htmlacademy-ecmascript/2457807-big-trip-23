@@ -1,7 +1,7 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
 const createFilterItemTemplate = (filter, isChecked) => {
-  const {type, count} = filter;
+  const {type} = filter;
   return`<div class="trip-filters__filter">
       <input id="filter-${type}" class="trip-filters__filter-input visually-hidden"
       data-filter-type = ${type} type="radio" name="trip-filter"
