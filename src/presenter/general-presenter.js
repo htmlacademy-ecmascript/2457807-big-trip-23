@@ -7,7 +7,7 @@ import SortView from '../view/sort-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import FilterView from '../view/filter-view.js';
 
-import { generateFilters, filterEvents } from '../utils/filtr-event.js';
+import { generateFilters, filterEvents } from '../utils/filter-event.js';
 import { generateSort, sortEvents } from '../utils/sort-events.js';
 import { updateItem } from '../utils/common.js';
 
