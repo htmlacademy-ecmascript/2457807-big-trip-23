@@ -65,7 +65,8 @@ export default class EventPresenter{
 
   resetView(){
     if(this.#mode !== Mode.DEFAULT){
-      this.#replaceFormEventToEven();
+      this.#eventFormComponent.reset(this.#event);
+      this.#replaceFormEventToEvent();
     }
   }
 
@@ -76,7 +77,7 @@ export default class EventPresenter{
     this.#mode = Mode.EDITING;
   }
 
-  #replaceFormEventToEven(){
+  #replaceFormEventToEvent(){
     replace(this.#eventComponent, this.#eventFormComponent);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#mode = Mode.DEFAULT;
@@ -85,7 +86,8 @@ export default class EventPresenter{
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      this.#replaceFormEventToEven();
+      this.#eventFormComponent.reset(this.#event);
+      this.#replaceFormEventToEvent();
       document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
   };
@@ -95,7 +97,7 @@ export default class EventPresenter{
   };
 
   #handleFormSubmit = () => {
-    this.#replaceFormEventToEven();
+    this.#replaceFormEventToEvent();
   };
 
   #handleFavoriteClick = () => {
