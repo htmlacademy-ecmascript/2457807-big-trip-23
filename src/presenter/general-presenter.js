@@ -7,7 +7,7 @@ import SortView from '../view/sort-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import FilterView from '../view/filter-view.js';
 
-import { generateFilters, filterEvents } from '../utils/filtr-event.js';
+import { generateFilters, filterEvents } from '../utils/filter-event.js';
 import { generateSort, sortEvents } from '../utils/sort-events.js';
 import { updateItem } from '../utils/common.js';
 
@@ -21,6 +21,7 @@ export default class GeneralPresenter {
   #currentFilterType = FilterType.EVERYTHING;
   #sourceBoardTask = [];
   #eventListComponent = new EventListView();
+  #eventEmptyMessageComponent = null;
 
   #eventsModel = null;
   #boardEvents = [];
@@ -57,7 +58,8 @@ export default class GeneralPresenter {
   }
 
   #renderNoEvents(typeMessage){
-    render(new ListEmptyView(typeMessage), this.#eventListContainer);
+    this.#eventEmptyMessageComponent = new ListEmptyView(typeMessage);
+    render(this.#eventEmptyMessageComponent, this.#eventListContainer);
   }
 
   #renderSort(eventsData){
@@ -83,11 +85,27 @@ export default class GeneralPresenter {
   }
 
   #filterEvents(filterType){
+    if(this.#eventEmptyMessageComponent !== null){
+      remove(this.#eventEmptyMessageComponent);
+    }
     this.#boardEvents = this.#sourceBoardTask;
     this.#boardEvents = filterEvents[filterType](this.#boardEvents);
     sortEvents[SortType.DAY](this.#boardEvents);
     this.#currentFilterType = filterType;
     this.#renderSort(this.#boardEvents);
+
+    if(this.#boardEvents.length === 0){
+      switch(filterType){
+        case 'everything': this.#renderNoEvents(EventsMessages.EVERYTHING);
+          break;
+        case 'future': this.#renderNoEvents(EventsMessages.FUTURE);
+          break;
+        case 'present': this.#renderNoEvents(EventsMessages.PRESENT);
+          break;
+        case 'past': this.#renderNoEvents(EventsMessages.PAST);
+          break;
+      }
+    }
   }
 
 

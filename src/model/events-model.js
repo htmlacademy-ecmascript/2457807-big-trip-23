@@ -4,7 +4,7 @@ import { getOffers } from '../mock/offers.js';
 import { sortEvents } from '../utils/sort-events.js';
 import { SortType } from '../constants.js';
 
-const EVENTS_NUMBER = 10;
+const EVENTS_NUMBER = 3;
 
 export default class EventsModel{
   #events = Array.from({length: EVENTS_NUMBER}, getRandomEvent);
@@ -73,9 +73,10 @@ export default class EventsModel{
 
   getTripTime(){
     if(this.#events.length === 0){
-      return ['' , ''];    }
+      return ['' , ''];
+    }
     const dateStart = sortEvents[SortType.DAY](this.#events)[0]?.dateFrom;
-    const getDateEnd = () => this.#events.sort((a, b) => new Date(b.dateTo) - new Date(a.dateTo));   
+    const getDateEnd = () => this.#events.sort((a, b) => new Date(b.dateTo) - new Date(a.dateTo));
     const dateEnd = getDateEnd().map((item) =>item.dateTo)[0];
     return [dateStart, dateEnd] || ['', ''];
   }
