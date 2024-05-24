@@ -108,7 +108,6 @@ export default class GeneralPresenter {
     }
   }
 
-
   #renderEvent(event) {
     const eventPresenter = new EventPresenter({
       eventListContainer: this.#eventListComponent.element, eventsModel: this.#eventsModel,

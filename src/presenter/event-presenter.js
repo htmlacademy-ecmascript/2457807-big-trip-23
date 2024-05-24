@@ -41,7 +41,7 @@ export default class EventPresenter{
       eventData: this.#event,
       destinationsData: [...this.#eventsModel.destinations],
       offersData: [...this.#eventsModel.offers],
-      onFormSubmit: this.#handleFormSummit,
+      onFormSubmit: this.#handleFormSubmit,
     });
 
     if(previewEventComponent === null || previewEventFormComponent === null){
@@ -94,7 +94,7 @@ export default class EventPresenter{
     this.#replaceEvenToFormEvent();
   };
 
-  #handleFormSummit = () => {
+  #handleFormSubmit = () => {
     this.#replaceFormEventToEven();
   };
 
