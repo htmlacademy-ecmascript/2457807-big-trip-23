@@ -26,7 +26,8 @@ const createEventFormPictureTemplate = ({pictures}) =>{
 };
 const createEventOffersTemplateItem = ({id, title, price}, isCheckedOffers) =>`
   <div class="event__offer-selector">
-    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${title}-${id}" type="checkbox" name="event-offer-luggage" ${isCheckedOffers ? 'checked' : ''}>
+    <input class="event__offer-checkbox  visually-hidden" id="event-offer-${title}-${id}"
+     type="checkbox" name="event-offer-luggage" ${isCheckedOffers ? 'checked' : ''} value="${id}">
     <label class="event__offer-label" for="event-offer-${title}-${id}">
       <span class="event__offer-title">${title}</span>
       &plus;&euro;&nbsp;
@@ -55,7 +56,7 @@ const createFormEventTypeItemTemplate = (type, typeEvent) => `
 </div>`;
 
 
-const createFormEventTemplate = (eventData, destinationsData, offersData, state) =>{
+const createFormEventTemplate = (destinationsData, offersData, state) =>{
   const {id, basePrice, dateFrom, dateTo, destination, type,} = state.event;
   const destinations = destinationsData.find((destinationData) => destinationData.id === destination);
   const offersTemplate = createEventOffersTemplate(offersData, state.event);
@@ -141,6 +142,8 @@ export default class FormEventView extends AbstractStatefulView{
   #handleFormSubmit = null;
   #dateStartPicker = null;
   #dateEndPicker = null;
+  #newOffersState = null;
+
   constructor({eventData, destinationsData, offersData, onFormSubmit}) {
     super();
     this.#eventData = eventData;
@@ -149,10 +152,11 @@ export default class FormEventView extends AbstractStatefulView{
     this.#offersData = offersData;
     this._restoreHandlers();
     this.#handleFormSubmit = onFormSubmit;
+    this.#newOffersState = new Map(eventData.offers.map((offer) => [offer, offer]));
   }
 
   get template() {
-    return createFormEventTemplate(this.#eventData, this.#destinationsData, this.#offersData, this._state);
+    return createFormEventTemplate(this.#destinationsData, this.#offersData, this._state);
   }
 
   _restoreHandlers(){
@@ -166,15 +170,15 @@ export default class FormEventView extends AbstractStatefulView{
       .addEventListener('change', this.#destinationTypeHandler);
     this.element.querySelector('.event__input--price')
       .addEventListener('change', this.#basePriceHandler);
+    if(this.element.querySelector('.event__offer-checkbox') !== null){
+      this.element.querySelector('.event__available-offers')
+        .addEventListener('change', this.#offersHandler);
+    }
     this.#setDatePicker();
   }
 
-  #formRollUpHandler = () => {
-    this.reset(this.#eventData);
-    this.#handleFormSubmit();
-  };
-
   reset(event) {
+    this.#newOffersState = new Map(this.#eventData.offers.map((offer) => [offer, offer]));
     this.updateElement(
       FormEventView.parseEventToState(event),
     );
@@ -193,12 +197,40 @@ export default class FormEventView extends AbstractStatefulView{
     }
   }
 
+  #offersHandler = (evt) => {
+    if(evt.target.checked) {
+      this.#newOffersState.set(evt.target.value, evt.target.value);
+      this._setState({
+        event: {
+          ...this._state.event,
+          offers:  Array.from(this.#newOffersState.values()),
+        },
+      });
+    } else{
+      this.#newOffersState.delete(evt.target.value, evt.target.value);
+      this._setState({
+        event: {
+          ...this._state.event,
+          offers:  Array.from(this.#newOffersState.values()),
+        },
+      });
+    }
+  };
+
+  #formRollUpHandler = () => {
+    this.#newOffersState = new Map(this.#eventData.offers.map((offer) => [offer, offer]));
+    this.reset(this.#eventData);
+    this.#handleFormSubmit();
+  };
+
   #eventTypeTripHandler = (evt) =>{
     const newType = evt.target.value;
+    this.#newOffersState.clear();
     this.updateElement({
       event: {
         ...this._state.event,
         type: newType,
+        offers: [],
       },
     });
   };
@@ -218,7 +250,6 @@ export default class FormEventView extends AbstractStatefulView{
   };
 
   #basePriceHandler = (evt) => {
-    // evt.preventDefault();
     const newBasePrice = evt.target.value;
     this._setState({
       event: {
