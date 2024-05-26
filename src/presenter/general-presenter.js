@@ -35,31 +35,47 @@ export default class GeneralPresenter {
   }
 
   init() {
-    this.#boardEvents = [...this.#eventsModel.events];
+    // this.#boardEvents = [...this.#eventsModel.events];
     this.#sourceBoardTask = [...this.#eventsModel.events];
-    this.#renderFilter(this.#boardEvents);
-    this.#renderSort(this.#boardEvents);
+    this.#renderFilter(this.#eventsModel.events);
+    this.#renderSort(this.#eventsModel.events);
     this.#renderBoardEvents();
   }
 
   get events(){
-    return this.#eventsModel.events;
+    let eventsData = [];
+    eventsData = sortEvents[this.#currentSortType]([...this.#eventsModel.events]);
+    eventsData = filterEvents[this.#currentFilterType](eventsData);
+    return eventsData;
   }
 
   #renderBoardEvents(){
     render(this.#eventListComponent, this.#eventListContainer);
-    if(this.#boardEvents.length === 0){
+    if(this.#eventsModel.events.length === 0){
       this.#renderNoEvents(EventsMessages.EVERYTHING);
       return;
     }
     this.#renderEvents();
   }
 
-  #renderEvents(from, to){
+  #renderEvents(){
+    if(this.#eventEmptyMessageComponent !== null){
+      remove(this.#eventEmptyMessageComponent);
+    }
+    if(this.events.length === 0){
+      switch(this.#currentFilterType){
+        case 'everything': this.#renderNoEvents(EventsMessages.EVERYTHING);
+          break;
+        case 'future': this.#renderNoEvents(EventsMessages.FUTURE);
+          break;
+        case 'present': this.#renderNoEvents(EventsMessages.PRESENT);
+          break;
+        case 'past': this.#renderNoEvents(EventsMessages.PAST);
+          break;
+      }
+    }
     render(this.#eventListComponent, this.#eventListContainer);
-    this.#boardEvents
-      .slice(from, to)
-      .forEach((event) => this.#renderEvent(event));
+    this.events.forEach((event) => this.#renderEvent(event));
   }
 
   #renderNoEvents(typeMessage){
@@ -77,40 +93,11 @@ export default class GeneralPresenter {
     render(this.#sortComponent, this.#eventListContainer);
   }
 
-  #sortEvents(sortType){
-    sortEvents[sortType](this.#boardEvents);
-    this.#currentSortType = sortType;
-  }
-
   #renderFilter(eventsData){
     const eventsFilterData = [...eventsData];
     const filters = generateFilters(eventsFilterData);
     this.#filterComponent = new FilterView({filters, onFilterTypeChange: this.#handleFilterTypeChange});
     render(this.#filterComponent, this.#tripFiltersContainer);
-  }
-
-  #filterEvents(filterType){
-    if(this.#eventEmptyMessageComponent !== null){
-      remove(this.#eventEmptyMessageComponent);
-    }
-    this.#boardEvents = this.#sourceBoardTask;
-    this.#boardEvents = filterEvents[filterType](this.#boardEvents);
-    sortEvents[SortType.DAY](this.#boardEvents);
-    this.#currentFilterType = filterType;
-    this.#renderSort(this.#boardEvents);
-
-    if(this.#boardEvents.length === 0){
-      switch(filterType){
-        case 'everything': this.#renderNoEvents(EventsMessages.EVERYTHING);
-          break;
-        case 'future': this.#renderNoEvents(EventsMessages.FUTURE);
-          break;
-        case 'present': this.#renderNoEvents(EventsMessages.PRESENT);
-          break;
-        case 'past': this.#renderNoEvents(EventsMessages.PAST);
-          break;
-      }
-    }
   }
 
   #renderEvent(event) {
@@ -142,7 +129,7 @@ export default class GeneralPresenter {
     if(this.#currentSortType === sortType){
       return;
     }
-    this.#sortEvents(sortType);
+    this.#currentSortType = sortType;
     this.#clearEventList();
     this.#renderEvents();
   };
@@ -151,13 +138,15 @@ export default class GeneralPresenter {
     if(this.#currentFilterType === filterType){
       return;
     }
-    this.#filterEvents(filterType);
+    this.#currentSortType = SortType.DAY;
+    this.#currentFilterType = filterType;
+    this.#renderSort(this.events);
     this.#clearEventList();
     this.#renderEvents();
   };
 
   #handleTaskChange = (updateEvent) =>{
     this.#generalPresenter.get(updateEvent.id).init(updateEvent);
-  }
+  };
 
 }
