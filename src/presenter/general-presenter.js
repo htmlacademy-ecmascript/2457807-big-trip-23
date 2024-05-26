@@ -22,6 +22,7 @@ export default class GeneralPresenter {
   #sourceBoardTask = [];
   #eventListComponent = new EventListView();
   #eventEmptyMessageComponent = null;
+  #generalPresenter = new Map();
 
   #eventsModel = null;
   #boardEvents = [];
@@ -154,4 +155,9 @@ export default class GeneralPresenter {
     this.#clearEventList();
     this.#renderEvents();
   };
+
+  #handleTaskChange = (updateEvent) =>{
+    this.#generalPresenter.get(updateEvent.id).init(updateEvent);
+  }
+
 }
