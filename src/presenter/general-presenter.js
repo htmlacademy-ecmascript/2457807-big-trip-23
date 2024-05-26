@@ -41,6 +41,10 @@ export default class GeneralPresenter {
     this.#renderBoardEvents();
   }
 
+  get events(){
+    return this.#eventsModel.events;
+  }
+
   #renderBoardEvents(){
     render(this.#eventListComponent, this.#eventListContainer);
     if(this.#boardEvents.length === 0){
