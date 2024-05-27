@@ -50,13 +50,39 @@ export default class GeneralPresenter {
     return eventsData;
   }
 
-  #handleViewaction = (actionType, updateType, update) => {
-
+  #handleViewAction = (actionType, updateType, update) => {
+    switch (actionType) {
+      case UserAction.UPDATE_EVENT:
+        this.#eventsModel.updateEvent(updateType, update);
+        break;
+      case UserAction.ADD_EVENT:
+        this.#eventsModel.addEvent(updateType, update);
+        break;
+      case UserAction.DELETE_EVENT:
+        this.#eventsModel.deleteEvent(updateType, update);
+        break;
+    }
 
   };
 
   #handleModelEvent = (updateType, data) => {
+    switch (updateType) {
+      case UpdateType.PATH:
+        // this.#eventsPresenter.get(data.id).init(data);
+        break;
+      case UpdateType.MINOR:
+        this.#clearEventList();
+        this.#renderBoardEvents();
+        break;
+      case UpdateType.MAJOR:
+        this.#clearEventList();
+        this.#renderBoardEvents();
+        break;
+    }
 
+  };
+
+  #handleDataChange = (updateEvent) => {
 
   };
 
@@ -69,9 +95,6 @@ export default class GeneralPresenter {
     this.#renderEvents();
   }
 
-  #handleEventChanges = (updateEvent) => {
-
-  };
 
   #renderEvents(){
     if(this.#eventEmptyMessageComponent !== null){
@@ -118,7 +141,7 @@ export default class GeneralPresenter {
   #renderEvent(event) {
     const eventPresenter = new EventPresenter({
       eventListContainer: this.#eventListComponent.element, eventsModel: this.#eventsModel,
-      onDataChange: this.#handleEventChange,
+      onDataChange: this.#handleViewAction,
       onModeChange: this.#handleModeChange,
     });
     eventPresenter.init(event);

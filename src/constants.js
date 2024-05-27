@@ -46,7 +46,7 @@ const UserAction = {
 };
 
 const UpdateType = {
-  PATH: 'PATH',
+  PATH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
 };

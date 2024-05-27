@@ -96,11 +96,20 @@ export default class EventPresenter{
     this.#replaceEvenToFormEvent();
   };
 
-  #handleFormSubmit = () => {
+  #handleFormSubmit = (eventState) => {
+    this.#handleDataChange(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      eventState,
+    );
+
     this.#replaceFormEventToEvent();
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({...this.#event, isFavorite: !this.#event.isFavorite});
+    this.#handleDataChange(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      {...this.#event, isFavorite: !this.#event.isFavorite});
   };
 }
