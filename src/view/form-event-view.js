@@ -280,6 +280,7 @@ export default class FormEventView extends AbstractStatefulView{
         defaultDate: this._state.event.dateFrom,
         onChange: this.#dateFromeChangeHandler,
         minDate: DATE_NOW,
+        maxDate: this._state.event.dateTo
       }
     );
 
