@@ -220,7 +220,7 @@ export default class FormEventView extends AbstractStatefulView{
   #formRollUpHandler = () => {
     this.#newOffersState = new Map(this.#eventData.offers.map((offer) => [offer, offer]));
     this.reset(this.#eventData);
-    this.#handleFormSubmit();
+    this.#handleFormSubmit(this.#eventData);
   };
 
   #eventTypeTripHandler = (evt) =>{
