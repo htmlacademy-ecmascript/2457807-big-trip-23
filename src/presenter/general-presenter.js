@@ -1,5 +1,5 @@
 import {render, remove} from '../framework/render.js';
-import { EventsMessages, FilterType, SortType } from '../constants.js';
+import { EventsMessages, FilterType, SortType, UserAction, UpdateType } from '../constants.js';
 import EventPresenter from './event-presenter.js';
 
 import EventListView from '../view/event-list-view.js';
@@ -32,6 +32,7 @@ export default class GeneralPresenter {
     this.#eventListContainer = eventListContainer;
     this.#tripFiltersContainer = tripFiltersContainer;
     this.#eventsModel = eventsModel;
+    this.#eventsModel.addObserver(this.#handleModelEvent);
   }
 
   init() {
@@ -49,6 +50,16 @@ export default class GeneralPresenter {
     return eventsData;
   }
 
+  #handleViewaction = (actionType, updateType, update) => {
+
+
+  };
+
+  #handleModelEvent = (updateType, data) => {
+
+
+  };
+
   #renderBoardEvents(){
     render(this.#eventListComponent, this.#eventListContainer);
     if(this.#eventsModel.events.length === 0){
@@ -57,6 +68,10 @@ export default class GeneralPresenter {
     }
     this.#renderEvents();
   }
+
+  #handleEventChanges = (updateEvent) => {
+
+  };
 
   #renderEvents(){
     if(this.#eventEmptyMessageComponent !== null){

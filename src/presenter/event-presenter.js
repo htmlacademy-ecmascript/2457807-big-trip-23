@@ -1,5 +1,5 @@
 import {remove, render, replace} from '../framework/render.js';
-import { Mode } from '../constants.js';
+import { Mode, UserAction, UpdateType } from '../constants.js';
 import FormEventView from '../view/form-event-view.js';
 import EventView from '../view/event-view.js';
 
