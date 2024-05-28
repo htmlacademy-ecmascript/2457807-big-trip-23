@@ -318,6 +318,6 @@ export default class FormEventView extends AbstractStatefulView{
   }
 
   static parseStateToEvent(state){
-    return {...state};
+    return {...state.event};
   }
 }
