@@ -1,5 +1,5 @@
 import {remove, render, replace} from '../framework/render.js';
-import { Mode } from '../constants.js';
+import { Mode, UserAction, UpdateType } from '../constants.js';
 import FormEventView from '../view/form-event-view.js';
 import EventView from '../view/event-view.js';
 
@@ -41,7 +41,7 @@ export default class EventPresenter{
       eventData: this.#event,
       destinationsData: [...this.#eventsModel.destinations],
       offersData: [...this.#eventsModel.offers],
-      onFormSubmit: this.#handleFormSummit,
+      onFormSubmit: this.#handleFormSubmit,
     });
 
     if(previewEventComponent === null || previewEventFormComponent === null){
@@ -65,7 +65,8 @@ export default class EventPresenter{
 
   resetView(){
     if(this.#mode !== Mode.DEFAULT){
-      this.#replaceFormEventToEven();
+      this.#eventFormComponent.reset(this.#event);
+      this.#replaceFormEventToEvent();
     }
   }
 
@@ -76,7 +77,7 @@ export default class EventPresenter{
     this.#mode = Mode.EDITING;
   }
 
-  #replaceFormEventToEven(){
+  #replaceFormEventToEvent(){
     replace(this.#eventComponent, this.#eventFormComponent);
     document.removeEventListener('keydown', this.#escKeyDownHandler);
     this.#mode = Mode.DEFAULT;
@@ -85,7 +86,8 @@ export default class EventPresenter{
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
-      this.#replaceFormEventToEven();
+      this.#eventFormComponent.reset(this.#event);
+      this.#replaceFormEventToEvent();
       document.removeEventListener('keydown', this.#escKeyDownHandler);
     }
   };
@@ -94,12 +96,20 @@ export default class EventPresenter{
     this.#replaceEvenToFormEvent();
   };
 
-  #handleFormSummit = () => {
-    this.#replaceFormEventToEven();
+  #handleFormSubmit = (eventState) => {
+    this.#handleDataChange(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      eventState,
+    );
+
+    this.#replaceFormEventToEvent();
   };
 
   #handleFavoriteClick = () => {
-    this.#handleDataChange({...this.#event, isFavorite: !this.#event.isFavorite});
+    this.#handleDataChange(
+      UserAction.UPDATE_EVENT,
+      UpdateType.MINOR,
+      {...this.#event, isFavorite: !this.#event.isFavorite});
   };
-
 }
