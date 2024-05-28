@@ -1,4 +1,4 @@
-import { EVENT_TYPES_TRIP } from '../constants.js';
+import { EVENT_TYPES } from '../constants.js';
 import { getRandomArrayElement, getRandomInteger, getRandomDate } from '../utils/common.js';
 import { getDestinations } from './destinations.js';
 import { getOffers } from './offers.js';
@@ -19,7 +19,7 @@ const getRandomOffersArrayId = (type) =>{
 };
 
 const getRandomEvent = () => {
-  const type = getRandomArrayElement(EVENT_TYPES_TRIP);
+  const type = getRandomArrayElement(EVENT_TYPES);
   const offersRandomArrayId = getRandomOffersArrayId(type);
   return {
     id: crypto.randomUUID(),

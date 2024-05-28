@@ -36,7 +36,6 @@ export default class GeneralPresenter {
   }
 
   init() {
-    // this.#boardEvents = [...this.#eventsModel.events];
     this.#sourceBoardTask = [...this.#eventsModel.events];
     this.#renderFilter(this.#eventsModel.events);
     this.#renderSort(this.#eventsModel.events);
@@ -67,8 +66,8 @@ export default class GeneralPresenter {
 
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
-      case UpdateType.PATH:
-        // this.#eventsPresenter.get(data.id).init(data);
+      case UpdateType.PATCH:
+        this.#eventsPresenter.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
         this.#clearEventList();
@@ -79,12 +78,11 @@ export default class GeneralPresenter {
         this.#renderBoardEvents();
         break;
     }
-
   };
 
-  #handleDataChange = (updateEvent) => {
+  // #handleDataChange = (updateEvent) => {
 
-  };
+  // };
 
   #renderBoardEvents(){
     render(this.#eventListComponent, this.#eventListContainer);
@@ -102,13 +100,13 @@ export default class GeneralPresenter {
     }
     if(this.events.length === 0){
       switch(this.#currentFilterType){
-        case 'everything': this.#renderNoEvents(EventsMessages.EVERYTHING);
+        case FilterType.EVERYTHING: this.#renderNoEvents(EventsMessages.EVERYTHING);
           break;
-        case 'future': this.#renderNoEvents(EventsMessages.FUTURE);
+        case FilterType.FUTURE: this.#renderNoEvents(EventsMessages.FUTURE);
           break;
-        case 'present': this.#renderNoEvents(EventsMessages.PRESENT);
+        case FilterType.PRESENT: this.#renderNoEvents(EventsMessages.PRESENT);
           break;
-        case 'past': this.#renderNoEvents(EventsMessages.PAST);
+        case FilterType.PAST: this.#renderNoEvents(EventsMessages.PAST);
           break;
       }
     }
@@ -182,6 +180,7 @@ export default class GeneralPresenter {
     this.#clearEventList();
     this.#renderEvents();
   };
+
 
   #handleTaskChange = (updateEvent) =>{
     this.#generalPresenter.get(updateEvent.id).init(updateEvent);

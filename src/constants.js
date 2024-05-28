@@ -1,7 +1,7 @@
 const DATE_NOW = new Date().toISOString();
 const FILTER_TYPES = ['everything', 'future', 'present', 'past'];
 const SORT_TYPES = ['day', 'event', 'time', 'price', 'offers'];
-const EVENT_TYPES_TRIP = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
+const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
 
 const FilterType = {
   EVERYTHING: 'everything',
@@ -46,9 +46,9 @@ const UserAction = {
 };
 
 const UpdateType = {
-  PATH: 'PATCH',
+  PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
 };
 
-export {UserAction, UpdateType, FILTER_TYPES, FilterType, SORT_TYPES, SortType, EVENT_TYPES_TRIP, DateFormat, DATE_NOW, EventsMessages, Mode};
+export {UserAction, UpdateType, FILTER_TYPES, FilterType, SORT_TYPES, SortType, EVENT_TYPES, DateFormat, DATE_NOW, EventsMessages, Mode};

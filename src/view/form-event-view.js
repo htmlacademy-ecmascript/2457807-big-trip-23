@@ -1,5 +1,5 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
-import {EVENT_TYPES_TRIP, DATE_NOW} from '../constants.js';
+import {EVENT_TYPES} from '../constants.js';
 import {formatDateForm } from '../utils/date.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
@@ -52,7 +52,7 @@ const createEventOffersTemplate = (offersData, eventData) => {
 const createFormEventTypeItemTemplate = (type, typeEvent) => `
 <div class="event__type-item">
 <input id="event-type-${type}-1" class="event__type-input  visually-hidden" type="radio" name="event-type" value="${type}" ${typeEvent === type ? 'checked' : ''}>
-<label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type}</label>
+<label class="event__type-label  event__type-label--${type}" for="event-type-${type}-1">${type[0].toUpperCase() + type.slice(1)}</label>
 </div>`;
 
 
@@ -75,7 +75,7 @@ const createFormEventTemplate = (destinationsData, offersData, state) =>{
       <div class="event__type-list">
         <fieldset class="event__type-group">
           <legend class="visually-hidden">Event type</legend>
-          ${EVENT_TYPES_TRIP.map((eventType) => createFormEventTypeItemTemplate(eventType, type)).join('')}
+          ${EVENT_TYPES.map((eventType) => createFormEventTypeItemTemplate(eventType, type)).join('')}
         </fieldset>
       </div>
     </div>
@@ -266,10 +266,10 @@ export default class FormEventView extends AbstractStatefulView{
 
   #setDatePicker() {
     const startDate = this.element.querySelector('[name="event-start-time"]');
-    const endtDate = this.element.querySelector('[name="event-end-time"]');
+    const endDate = this.element.querySelector('[name="event-end-time"]');
 
     const datePickerOptions = {
-      dateFormat: 'd/m/y h:i',
+      dateFormat: 'd/m/y H:i',
       enableTime: true,
       'time_24hr': true,
     };
@@ -278,14 +278,13 @@ export default class FormEventView extends AbstractStatefulView{
       startDate,{
         ...datePickerOptions,
         defaultDate: this._state.event.dateFrom,
-        onChange: this.#dateFromeChangeHandler,
-        minDate: DATE_NOW,
+        onChange: this.#dateFromChangeHandler,
         maxDate: this._state.event.dateTo
       }
     );
 
     this.#dateEndPicker = flatpickr(
-      endtDate,{
+      endDate,{
         ...datePickerOptions,
         defaultDate: this._state.event.dateTo,
         onChange: this.#dateToChangeHandler,
@@ -294,8 +293,8 @@ export default class FormEventView extends AbstractStatefulView{
     );
   }
 
-  #dateFromeChangeHandler = ([userdate]) =>{
-    this.updateElement({
+  #dateFromChangeHandler = ([userdate]) =>{
+    this._setState({
       event: {
         ...this._state.event,
         dateFrom: userdate,
@@ -304,7 +303,7 @@ export default class FormEventView extends AbstractStatefulView{
   };
 
   #dateToChangeHandler = ([userdate]) =>{
-    this.updateElement({
+    this._setState({
       event: {
         ...this._state.event,
         dateTo: userdate,
