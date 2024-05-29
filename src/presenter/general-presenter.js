@@ -74,6 +74,8 @@ export default class GeneralPresenter {
         this.#renderBoardEvents();
         break;
       case UpdateType.MAJOR:
+        this.#renderFilter(this.#eventsModel.events);
+        this.#renderSort(this.#eventsModel.events);
         this.#clearEventList();
         this.#renderBoardEvents();
         break;
@@ -121,14 +123,17 @@ export default class GeneralPresenter {
     }
     const eventsSortData = [...eventsData];
     const sorts = generateSort(eventsSortData);
-    this.#sortComponent = new SortView({sorts, onSortTypeChange: this.#handleSortTypeChange});
+    this.#sortComponent = new SortView({sorts, currentSort: this.#currentSortType, onSortTypeChange: this.#handleSortTypeChange});
     render(this.#sortComponent, this.#eventListContainer);
   }
 
   #renderFilter(eventsData){
+    if(this.#filterComponent !== null){
+      remove(this.#filterComponent);
+    }
     const eventsFilterData = [...eventsData];
     const filters = generateFilters(eventsFilterData);
-    this.#filterComponent = new FilterView({filters, onFilterTypeChange: this.#handleFilterTypeChange});
+    this.#filterComponent = new FilterView({filters, currentFilter: this.#currentFilterType, onFilterTypeChange: this.#handleFilterTypeChange});
     render(this.#filterComponent, this.#tripFiltersContainer);
   }
 

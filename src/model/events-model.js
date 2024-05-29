@@ -5,7 +5,7 @@ import { sortEvents } from '../utils/sort-events.js';
 import { SortType } from '../constants.js';
 import Observable from '../framework/observable.js';
 
-const EVENTS_NUMBER = 3;
+const EVENTS_NUMBER = 7;
 
 export default class EventsModel extends Observable{
   #events = Array.from({length: EVENTS_NUMBER}, getRandomEvent);
@@ -13,7 +13,8 @@ export default class EventsModel extends Observable{
   #offers = getOffers();
 
   get events(){
-    return sortEvents[SortType.DAY](this.#events);
+    // return sortEvents[SortType.DAY](this.#events);
+    return this.#events;
   }
 
   get destinations(){
