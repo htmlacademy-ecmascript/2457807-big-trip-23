@@ -19,14 +19,11 @@ export default class GeneralPresenter {
   #currentSortType = SortType.DAY;
   #filterComponent = null;
   #currentFilterType = FilterType.EVERYTHING;
-  #sourceBoardTask = [];
   #eventListComponent = new EventListView();
   #eventEmptyMessageComponent = null;
-  #generalPresenter = new Map();
   #newEventPresenter = null;
 
   #eventsModel = null;
-  #boardEvents = [];
   #eventsPresenter = new Map();
 
   constructor({eventListContainer,tripFiltersContainer, eventsModel, onNewEventDestroy}) {
@@ -44,7 +41,6 @@ export default class GeneralPresenter {
   }
 
   init() {
-    this.#sourceBoardTask = [...this.#eventsModel.events];
     this.#renderFilter(this.#eventsModel.events);
     this.#renderSort(this.#eventsModel.events);
     this.#renderBoardEvents();
@@ -59,10 +55,12 @@ export default class GeneralPresenter {
 
   createEvent() {
     this.#currentSortType = SortType.DAY;
+    this.#currentFilterType = FilterType.EVERYTHING;
     this.#clearEventList();
     this.#renderEvents();
     this.#newEventPresenter.init();
     this.#renderSort(this.events);
+    this.#renderFilter(this.events);
   }
 
   #handleViewAction = (actionType, updateType, update) => {
@@ -106,7 +104,6 @@ export default class GeneralPresenter {
     }
     this.#renderEvents();
   }
-
 
   #renderEvents(){
     if(this.#eventEmptyMessageComponent !== null){
@@ -168,12 +165,6 @@ export default class GeneralPresenter {
     this.#eventsPresenter.forEach((presenter) => presenter.destroy());
     this.#eventsPresenter.clear();
   }
-
-  // #handleEventChange = (updateEvent) => {
-  //   this.#boardEvents = updateItem(this.#boardEvents, updateEvent);
-  //   this.#sourceBoardTask = updateItem(this.#sourceBoardTask, updateEvent);
-  //   this.#eventsPresenter.get(updateEvent.id).init(updateEvent);
-  // };
 
   #handleModeChange = () => {
     this.#newEventPresenter.destroy();

@@ -13,7 +13,6 @@ export default class EventsModel extends Observable{
   #offers = getOffers();
 
   get events(){
-    // return sortEvents[SortType.DAY](this.#events);
     return this.#events;
   }
 
