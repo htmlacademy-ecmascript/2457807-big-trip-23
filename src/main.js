@@ -9,17 +9,30 @@ const tripFilters = tripMainSection.querySelector('.trip-controls__filters');
 const tripEventSection = document.querySelector('.trip-events');
 const eventsModel = new EventsModel();
 const generalPresenter = new GeneralPresenter({eventListContainer: tripEventSection, tripFiltersContainer: tripFilters, eventsModel});
+const newEventButtonComponent = new NewEventButtonView({
+  onNewEventClick: handleNewEventButtonClick,
+});
 
 let tripInfoComponent = null;
 
-const handleModelEvent = () =>{
+function handleNewEventButtonClick(){
+  // generalPresenter.createEvent();
+  newEventButtonComponent.element.disabled = true;
+}
+
+function handleNewEventFormClose() {
+  newEventButtonComponent.element.disabled = false;
+}
+
+const handleModelEventTripInfo = () =>{
   remove(tripInfoComponent);
   tripInfoComponent = new TripInfoView(eventsModel);
   render(tripInfoComponent, tripMainSection, RenderPosition.AFTERBEGIN);
 };
-eventsModel.addObserver(handleModelEvent);
+
+eventsModel.addObserver(handleModelEventTripInfo);
 tripInfoComponent = new TripInfoView(eventsModel);
 render(tripInfoComponent, tripMainSection, RenderPosition.AFTERBEGIN);
-render(new NewEventButtonView(), tripMainSection, RenderPosition.BEFOREEND);
+render(newEventButtonComponent, tripMainSection, RenderPosition.BEFOREEND);
 generalPresenter.init();
 

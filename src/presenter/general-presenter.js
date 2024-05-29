@@ -152,11 +152,11 @@ export default class GeneralPresenter {
     this.#eventsPresenter.clear();
   }
 
-  #handleEventChange = (updateEvent) => {
-    this.#boardEvents = updateItem(this.#boardEvents, updateEvent);
-    this.#sourceBoardTask = updateItem(this.#sourceBoardTask, updateEvent);
-    this.#eventsPresenter.get(updateEvent.id).init(updateEvent);
-  };
+  // #handleEventChange = (updateEvent) => {
+  //   this.#boardEvents = updateItem(this.#boardEvents, updateEvent);
+  //   this.#sourceBoardTask = updateItem(this.#sourceBoardTask, updateEvent);
+  //   this.#eventsPresenter.get(updateEvent.id).init(updateEvent);
+  // };
 
   #handleModeChange = () => {
     this.#eventsPresenter.forEach((presenter) => presenter.resetView());
@@ -182,9 +182,8 @@ export default class GeneralPresenter {
     this.#renderEvents();
   };
 
-
-  #handleTaskChange = (updateEvent) =>{
-    this.#generalPresenter.get(updateEvent.id).init(updateEvent);
-  };
+  // #handleTaskChange = (updateEvent) =>{
+  //   this.#generalPresenter.get(updateEvent.id).init(updateEvent);
+  // };
 
 }
