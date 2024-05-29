@@ -41,7 +41,7 @@ export default class EventsModel extends Observable{
   }
 
   getTotalCostTrip(){
-    const costTripWithoutOffers = this.#events.reduce((total, eventTrip) => total + eventTrip.basePrice , 0);
+    const costTripWithoutOffers = this.#events.reduce((total, eventTrip) => total + Number(eventTrip.basePrice) , 0);
     let costOffersAllEvents = 0;
     this.#events.forEach((eventTrip) => {
       if(eventTrip.offers.length !== 0){
