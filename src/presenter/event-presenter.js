@@ -43,6 +43,7 @@ export default class EventPresenter{
       offersData: [...this.#eventsModel.offers],
       onFormSubmit: this.#handleFormSubmit,
       onFormDelete: this.#handleFormDelete,
+      onformRollUp: this.#handleFormRollUp,
     });
 
     if(previewEventComponent === null || previewEventFormComponent === null){
@@ -84,6 +85,7 @@ export default class EventPresenter{
     this.#mode = Mode.DEFAULT;
   }
 
+
   #escKeyDownHandler = (evt) => {
     if (evt.key === 'Escape') {
       evt.preventDefault();
@@ -95,6 +97,11 @@ export default class EventPresenter{
 
   #handleEditClick = () => {
     this.#replaceEvenToFormEvent();
+  };
+
+  #handleFormRollUp = () => {
+    this.#eventFormComponent.reset(this.#event);
+    this.#replaceFormEventToEvent();
   };
 
   #handleFormSubmit = (eventState) => {

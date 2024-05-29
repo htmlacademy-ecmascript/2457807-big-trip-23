@@ -3,6 +3,19 @@ import {EVENT_TYPES} from '../constants.js';
 import {formatDateForm } from '../utils/date.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+import { DATE_NOW } from '../constants.js';
+
+const BLANK_EVENT = {
+  // id: 0,
+  basePrice: 0,
+  dateFrom: DATE_NOW,
+  dateTo: DATE_NOW,
+  destination: '',
+  isFavorite: false,
+  type: 'taxi',
+  offers: [],
+};
+
 
 const createListOptionsDestinationItem = ({name}) =>`<option value="${name}"></option>`;
 
@@ -57,8 +70,11 @@ const createFormEventTypeItemTemplate = (type, typeEvent) => `
 
 
 const createFormEventTemplate = (destinationsData, offersData, state) =>{
-  const {id, basePrice, dateFrom, dateTo, destination, type,} = state.event;
-  const destinations = destinationsData.find((destinationData) => destinationData.id === destination);
+  const {id = 0, basePrice, dateFrom, dateTo, destination, type,} = state.event;
+  let destinations = destinationsData?.find((destinationData) => destinationData.id === destination);
+  if(destinations === undefined){
+    destinations = destinationsData[0];
+  }
   const offersTemplate = createEventOffersTemplate(offersData, state.event);
   const isEmptyDestinations = (destinations.description === '') && (destinations.pictures.length === 0);
   const isEmptyOffers = offersTemplate === '';
@@ -106,7 +122,7 @@ const createFormEventTemplate = (destinationsData, offersData, state) =>{
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">Delete</button>
+    <button class="event__reset-btn" type="reset">${id !== 0 ? 'Delete' : 'Cancel' }</button>
     <button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
     </button>
@@ -141,11 +157,12 @@ export default class FormEventView extends AbstractStatefulView{
   #offersData = [];
   #handleFormSubmit = null;
   #handleFormDelete = null;
+  #handleformRollUp = null;
   #dateStartPicker = null;
   #dateEndPicker = null;
   #newOffersState = null;
 
-  constructor({eventData, destinationsData, offersData, onFormSubmit, onFormDelete}) {
+  constructor({eventData = BLANK_EVENT, destinationsData, offersData, onFormSubmit, onFormDelete, onformRollUp}) {
     super();
     this.#eventData = eventData;
     this._setState(FormEventView.parseEventToState(eventData));
@@ -154,6 +171,7 @@ export default class FormEventView extends AbstractStatefulView{
     this._restoreHandlers();
     this.#handleFormSubmit = onFormSubmit;
     this.#handleFormDelete = onFormDelete;
+    this.#handleformRollUp = onformRollUp;
     this.#newOffersState = new Map(eventData.offers.map((offer) => [offer, offer]));
   }
 
@@ -224,7 +242,7 @@ export default class FormEventView extends AbstractStatefulView{
   #formRollUpHandler = () => {
     this.#newOffersState = new Map(this.#eventData.offers.map((offer) => [offer, offer]));
     this.reset(this.#eventData);
-    this.#handleFormSubmit(this.#eventData);
+    this.#handleformRollUp(this.#eventData);
   };
 
   #eventTypeTripHandler = (evt) =>{

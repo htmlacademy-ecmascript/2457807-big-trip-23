@@ -8,7 +8,8 @@ const tripMainSection = document.querySelector('.trip-main');
 const tripFilters = tripMainSection.querySelector('.trip-controls__filters');
 const tripEventSection = document.querySelector('.trip-events');
 const eventsModel = new EventsModel();
-const generalPresenter = new GeneralPresenter({eventListContainer: tripEventSection, tripFiltersContainer: tripFilters, eventsModel});
+const generalPresenter = new GeneralPresenter({eventListContainer: tripEventSection,
+  tripFiltersContainer: tripFilters, eventsModel, onNewEventDestroy: handleNewEventFormClose});
 const newEventButtonComponent = new NewEventButtonView({
   onNewEventClick: handleNewEventButtonClick,
 });
@@ -16,7 +17,7 @@ const newEventButtonComponent = new NewEventButtonView({
 let tripInfoComponent = null;
 
 function handleNewEventButtonClick(){
-  // generalPresenter.createEvent();
+  generalPresenter.createEvent();
   newEventButtonComponent.element.disabled = true;
 }
 
