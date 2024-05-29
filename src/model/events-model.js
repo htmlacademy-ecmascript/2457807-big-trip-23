@@ -83,7 +83,6 @@ export default class EventsModel extends Observable{
   }
 
   updateEvent(updateType, update) {
-    console.log(update.id);
     const index = this.#events.findIndex((event) => event.id === update.id);
 
     if (index === -1) {
