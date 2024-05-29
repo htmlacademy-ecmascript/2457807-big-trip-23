@@ -42,6 +42,7 @@ export default class EventPresenter{
       destinationsData: [...this.#eventsModel.destinations],
       offersData: [...this.#eventsModel.offers],
       onFormSubmit: this.#handleFormSubmit,
+      onFormDelete: this.#handleFormDelete,
     });
 
     if(previewEventComponent === null || previewEventFormComponent === null){
@@ -104,6 +105,14 @@ export default class EventPresenter{
     );
 
     this.#replaceFormEventToEvent();
+  };
+
+  #handleFormDelete = (eventState) => {
+    this.#handleDataChange(
+      UserAction.DELETE_EVENT,
+      UpdateType.MAJOR,
+      eventState,
+    );
   };
 
   #handleFavoriteClick = () => {

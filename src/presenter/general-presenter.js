@@ -80,10 +80,6 @@ export default class GeneralPresenter {
     }
   };
 
-  // #handleDataChange = (updateEvent) => {
-
-  // };
-
   #renderBoardEvents(){
     render(this.#eventListComponent, this.#eventListContainer);
     if(this.#eventsModel.events.length === 0){
