@@ -107,7 +107,7 @@ export default class EventPresenter{
   #handleFormSubmit = (eventState) => {
     this.#handleDataChange(
       UserAction.UPDATE_EVENT,
-      UpdateType.MINOR,
+      UpdateType.MAJOR,
       eventState,
     );
 

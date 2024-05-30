@@ -58,6 +58,7 @@ export default class GeneralPresenter {
     this.#currentFilterType = FilterType.EVERYTHING;
     this.#clearEventList();
     this.#renderEvents();
+    remove(this.#eventEmptyMessageComponent);
     this.#newEventPresenter.init();
     this.#renderSort(this.events);
     this.#renderFilter(this.events);

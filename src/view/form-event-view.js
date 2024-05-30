@@ -70,10 +70,7 @@ const createFormEventTypeItemTemplate = (type, typeEvent) => `
 
 const createFormEventTemplate = (destinationsData, offersData, state) =>{
   const {id = 0, basePrice, dateFrom, dateTo, destination, type,} = state.event;
-  let destinations = destinationsData?.find((destinationData) => destinationData.id === destination);
-  // if(destinations === undefined){
-  //   destinations = destinationsData[0];
-  // }
+  const destinations = destinationsData?.find((destinationData) => destinationData.id === destination);
   const offersTemplate = createEventOffersTemplate(offersData, state.event);
   const isEmptyDestinations = destinations === undefined || ((destinations?.description === '') && (destinations?.pictures.length === 0));
   const isEmptyOffers = offersTemplate === '';
@@ -298,6 +295,7 @@ export default class FormEventView extends AbstractStatefulView{
       dateFormat: 'd/m/y H:i',
       enableTime: true,
       'time_24hr': true,
+      minuteIncrement: 1,
     };
 
     this.#dateStartPicker = flatpickr(
@@ -315,6 +313,7 @@ export default class FormEventView extends AbstractStatefulView{
         defaultDate: this._state.event.dateTo,
         onChange: this.#dateToChangeHandler,
         minDate: this._state.event.dateFrom,
+        allowInvalidPreload: false,
       }
     );
   }
@@ -326,6 +325,7 @@ export default class FormEventView extends AbstractStatefulView{
         dateFrom: userdate,
       },
     });
+    this.#setDatePicker();
   };
 
   #dateToChangeHandler = ([userdate]) =>{
@@ -335,6 +335,7 @@ export default class FormEventView extends AbstractStatefulView{
         dateTo: userdate,
       },
     });
+    this.#setDatePicker();
   };
 
   static parseEventToState(eventData){

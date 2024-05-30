@@ -5,7 +5,7 @@ import { sortEvents } from '../utils/sort-events.js';
 import { SortType } from '../constants.js';
 import Observable from '../framework/observable.js';
 
-const EVENTS_NUMBER = 7;
+const EVENTS_NUMBER = 2;
 
 export default class EventsModel extends Observable{
   #events = Array.from({length: EVENTS_NUMBER}, getRandomEvent);

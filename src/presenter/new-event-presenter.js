@@ -27,8 +27,8 @@ export default class NewEventPresenter {
       onFormDelete: this.#handleFormDelete,
       onformRollUp: this.#handleFormDelete,
     });
-
-    render(this.#eventFormComponent, this.#eventListContainer, RenderPosition.AFTERBEGIN);
+    const newFormContainer = document.querySelector('.trip-events__list');
+    render(this.#eventFormComponent, newFormContainer, RenderPosition.AFTERBEGIN);
 
     document.addEventListener('keydown', this.#escKeyDownHandler);
   }
@@ -49,7 +49,7 @@ export default class NewEventPresenter {
   #handleFormSubmit = (event) => {
     this.#handleDataChange(
       UserAction.ADD_EVENT,
-      UpdateType.MINOR,
+      UpdateType.MAJOR,
       {id: crypto.randomUUID(), ...event},
     );
     this.destroy();
