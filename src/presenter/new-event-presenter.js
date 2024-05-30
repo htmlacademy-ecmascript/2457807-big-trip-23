@@ -8,12 +8,15 @@ export default class NewEventPresenter {
   #handleDestroy = null;
   #eventsModel = null;
   #eventFormComponent = null;
+  #handleDestroyCheck = null;
 
-  constructor({eventListContainer, eventsModel, onDataChange, onDestroy}) {
+
+  constructor({eventListContainer, eventsModel, onDataChange, onDestroy, onNewEventDestroyCheck}) {
     this.#eventListContainer = eventListContainer;
     this.#eventsModel = eventsModel;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;
+    this.#handleDestroyCheck = onNewEventDestroyCheck;
   }
 
   init() {
@@ -39,6 +42,7 @@ export default class NewEventPresenter {
     }
 
     this.#handleDestroy();
+    this.#handleDestroyCheck();
 
     remove(this.#eventFormComponent);
     this.#eventFormComponent = null;

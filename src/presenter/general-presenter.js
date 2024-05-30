@@ -37,6 +37,7 @@ export default class GeneralPresenter {
       taskListContainer: this.#eventListComponent.element,
       onDataChange: this.#handleViewAction,
       onDestroy: onNewEventDestroy,
+      onNewEventDestroyCheck: this.#handleDestroyCheck,
     });
   }
 
@@ -166,6 +167,12 @@ export default class GeneralPresenter {
     this.#eventsPresenter.forEach((presenter) => presenter.destroy());
     this.#eventsPresenter.clear();
   }
+
+  #handleDestroyCheck = () =>{
+    if(this.events.length === 0){
+      this.#renderNoEvents(EventsMessages.EVERYTHING);
+    }
+  };
 
   #handleModeChange = () => {
     this.#newEventPresenter.destroy();
