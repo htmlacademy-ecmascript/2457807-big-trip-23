@@ -71,11 +71,11 @@ const createFormEventTypeItemTemplate = (type, typeEvent) => `
 const createFormEventTemplate = (destinationsData, offersData, state) =>{
   const {id = 0, basePrice, dateFrom, dateTo, destination, type,} = state.event;
   let destinations = destinationsData?.find((destinationData) => destinationData.id === destination);
-  if(destinations === undefined){
-    destinations = destinationsData[0];
-  }
+  // if(destinations === undefined){
+  //   destinations = destinationsData[0];
+  // }
   const offersTemplate = createEventOffersTemplate(offersData, state.event);
-  const isEmptyDestinations = (destinations.description === '') && (destinations.pictures.length === 0);
+  const isEmptyDestinations = destinations === undefined || ((destinations?.description === '') && (destinations?.pictures.length === 0));
   const isEmptyOffers = offersTemplate === '';
   return `
 <li class="trip-events__item">
@@ -98,7 +98,7 @@ const createFormEventTemplate = (destinationsData, offersData, state) =>{
       <label class="event__label  event__type-output" for="event-destination-1">
         ${type}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinations.name}" list="destination-list-1" placeholder = "Choose a trip">
+      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" required value="${destinations?.name === undefined ? '' : destinations.name}" list="destination-list-1" placeholder = "Choose a trip">
       <datalist id="destination-list-1">
        ${createListOptionsDestination(destinationsData)}
       </datalist>
@@ -138,11 +138,11 @@ const createFormEventTemplate = (destinationsData, offersData, state) =>{
 
     <section class="event__section  event__section--destination ${isEmptyDestinations ? 'visually-hidden' : ''}">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${destinations.description}</p>
+      <p class="event__destination-description">${destinations === undefined ? '' : destinations.description}</p>
 
       <div class="event__photos-container">
         <div class="event__photos-tape">
-        ${createEventFormPictureTemplate(destinations)}
+        ${destinations === undefined ? '' : createEventFormPictureTemplate(destinations)}
         </div>
       </div>
     </section>
