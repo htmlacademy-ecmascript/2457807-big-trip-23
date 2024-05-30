@@ -14,7 +14,7 @@ const newEventButtonComponent = new NewEventButtonView({
   onNewEventClick: handleNewEventButtonClick,
 });
 
-let tripInfoComponent = null;
+let tripInfoComponent = new TripInfoView(eventsModel);
 
 function handleNewEventButtonClick(){
   generalPresenter.createEvent();
@@ -32,8 +32,6 @@ const handleModelEventTripInfo = () =>{
 };
 
 eventsModel.addObserver(handleModelEventTripInfo);
-tripInfoComponent = new TripInfoView(eventsModel);
-
 render(tripInfoComponent, tripMainSection, RenderPosition.AFTERBEGIN);
 render(newEventButtonComponent, tripMainSection, RenderPosition.BEFOREEND);
 generalPresenter.init();
