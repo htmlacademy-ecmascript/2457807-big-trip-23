@@ -192,7 +192,9 @@ export default class FormEventView extends AbstractStatefulView{
       this.element.querySelector('.event__available-offers')
         .addEventListener('change', this.#offersHandler);
     }
-    this.#setDatePicker();
+    // this.#setDatePicker();
+    this.#setDateFromPicker();
+    this.#setDateToPicker();
   }
 
   reset(event) {
@@ -287,9 +289,8 @@ export default class FormEventView extends AbstractStatefulView{
     this.#handleFormDelete(FormEventView.parseStateToEvent(this._state));
   };
 
-  #setDatePicker() {
+  #setDateFromPicker() {
     const startDate = this.element.querySelector('[name="event-start-time"]');
-    const endDate = this.element.querySelector('[name="event-end-time"]');
 
     const datePickerOptions = {
       dateFormat: 'd/m/y H:i',
@@ -306,6 +307,17 @@ export default class FormEventView extends AbstractStatefulView{
         maxDate: this._state.event.dateTo
       }
     );
+  }
+
+  #setDateToPicker() {
+    const endDate = this.element.querySelector('[name="event-end-time"]');
+
+    const datePickerOptions = {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      'time_24hr': true,
+      minuteIncrement: 1,
+    };
 
     this.#dateEndPicker = flatpickr(
       endDate,{
@@ -325,7 +337,6 @@ export default class FormEventView extends AbstractStatefulView{
         dateFrom: userdate,
       },
     });
-    this.#setDatePicker();
   };
 
   #dateToChangeHandler = ([userdate]) =>{
@@ -335,7 +346,7 @@ export default class FormEventView extends AbstractStatefulView{
         dateTo: userdate,
       },
     });
-    this.#setDatePicker();
+    this.#setDateFromPicker();
   };
 
   static parseEventToState(eventData){
