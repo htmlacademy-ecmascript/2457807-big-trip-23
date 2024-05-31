@@ -1,14 +1,15 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {EVENT_TYPES} from '../constants.js';
 import {formatDateForm } from '../utils/date.js';
+import { DATE_NOW } from '../constants.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 
 const BLANK_EVENT = {
   basePrice: 0,
-  dateFrom: 'today',
-  dateTo: 'today',
+  dateFrom: DATE_NOW,
+  dateTo: DATE_NOW,
   destination: '',
   isFavorite: false,
   type: 'flight',
