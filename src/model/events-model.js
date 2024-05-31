@@ -60,14 +60,13 @@ export default class EventsModel extends Observable{
     const uniqueIdDestinations = [... new Set(sortDestinationsEvents.map((item) =>item.destination))];
     const destinations = this.#destinations;
     let uniqueDestinationNames = [];
-    const nameTripCity = () => uniqueIdDestinations.forEach((uniqueIdDestination) =>{
+    uniqueIdDestinations.forEach((uniqueIdDestination) =>{
       destinations.forEach((destination) =>{
         if(destination.id === uniqueIdDestination){
           uniqueDestinationNames.push(destination);
         }
       });
     });
-    nameTripCity();
     uniqueDestinationNames = uniqueDestinationNames.map((item) => item.name);
     return uniqueDestinationNames || '';
   }

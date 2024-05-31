@@ -3,12 +3,12 @@ import {EVENT_TYPES} from '../constants.js';
 import {formatDateForm } from '../utils/date.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-import { DATE_NOW } from '../constants.js';
+
 
 const BLANK_EVENT = {
   basePrice: 0,
-  dateFrom: DATE_NOW,
-  dateTo: DATE_NOW,
+  dateFrom: 'today',
+  dateTo: 'today',
   destination: '',
   isFavorite: false,
   type: 'flight',
@@ -95,7 +95,7 @@ const createFormEventTemplate = (destinationsData, offersData, state) =>{
       <label class="event__label  event__type-output" for="event-destination-1">
         ${type}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" required value="${destinations?.name === undefined ? '' : destinations.name}" list="destination-list-1" placeholder = "Choose a trip">
+      <input class="event__input  event__input--destination" list="destination-list-1"   pattern="${destinationsData.map((trip) => trip.name).join('|')}" id="event-destination-1" type="text" name="event-destination" required value="${destinations?.name === undefined ? '' : destinations.name}" list="destination-list-1" placeholder = "Choose a trip">
       <datalist id="destination-list-1">
        ${createListOptionsDestination(destinationsData)}
       </datalist>
