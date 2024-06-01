@@ -5,7 +5,7 @@ import { sortEvents } from '../utils/sort-events.js';
 import { SortType } from '../constants.js';
 import Observable from '../framework/observable.js';
 
-const EVENTS_NUMBER = 3;
+const EVENTS_NUMBER = 4;
 
 export default class EventsModel extends Observable{
   #events = Array.from({length: EVENTS_NUMBER}, getRandomEvent);
@@ -13,7 +13,7 @@ export default class EventsModel extends Observable{
   #offers = getOffers();
 
   get events(){
-    return sortEvents[SortType.DAY](this.#events);
+    return this.#events;
   }
 
   get destinations(){
@@ -40,7 +40,7 @@ export default class EventsModel extends Observable{
   }
 
   getTotalCostTrip(){
-    const costTripWithoutOffers = this.#events.reduce((total, eventTrip) => total + eventTrip.basePrice , 0);
+    const costTripWithoutOffers = this.#events.reduce((total, eventTrip) => total + Number(eventTrip.basePrice) , 0);
     let costOffersAllEvents = 0;
     this.#events.forEach((eventTrip) => {
       if(eventTrip.offers.length !== 0){
@@ -60,14 +60,13 @@ export default class EventsModel extends Observable{
     const uniqueIdDestinations = [... new Set(sortDestinationsEvents.map((item) =>item.destination))];
     const destinations = this.#destinations;
     let uniqueDestinationNames = [];
-    const nameTripCity = () => uniqueIdDestinations.forEach((uniqueIdDestination) =>{
+    uniqueIdDestinations.forEach((uniqueIdDestination) =>{
       destinations.forEach((destination) =>{
         if(destination.id === uniqueIdDestination){
           uniqueDestinationNames.push(destination);
         }
       });
     });
-    nameTripCity();
     uniqueDestinationNames = uniqueDestinationNames.map((item) => item.name);
     return uniqueDestinationNames || '';
   }

@@ -26,8 +26,16 @@ const createOffersTemplate = (offersArray, offersEventArray) => {
 const createEventTemplate = (eventData, destinationsData, offersData) => {
   const {basePrice, dateFrom, dateTo, isFavorite, offers: offersEventArray, type
   } = eventData;
-  const { name, } = destinationsData;
-  const { offers: offersArray } = offersData;
+  let name = 'Trip not selected';
+  if(destinationsData !== undefined){
+    name = destinationsData.name;
+  }
+
+  let offersArray = [];
+  if(offersData !== undefined){
+    offersArray = offersData.offers;
+  }
+
   return (`
   <div class="event">
     <time class="event__date" datetime="${dateFrom}">${formatDate(dateFrom)}</time>

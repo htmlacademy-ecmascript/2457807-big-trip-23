@@ -22,7 +22,7 @@ const createTripInfoViewTemplate = (total, tripTitle, tripInfoTime) =>{
 <section class="trip-main__trip-info  trip-info">
   <div class="trip-info__main">
     <h1 class="trip-info__title">
-    ${tripTitle.length > 0 ? firstCity : ''} 
+    ${tripTitle.length > 0 ? firstCity : ''}
    ${intermediateCityTripInfo}
     ${tripTitle.length > 1 ? endCity : ''}</h1>
 
@@ -41,11 +41,11 @@ export default class TripInfoView extends AbstractView{
   #totalCount = null;
   #tripInfo = null;
   #tripInfoTime = null;
-  constructor (totalCount, tripInfo, tripInfoTime) {
+  constructor (eventsModel) {
     super();
-    this.#totalCount = totalCount;
-    this.#tripInfo = tripInfo;
-    this.#tripInfoTime = tripInfoTime;
+    this.#totalCount = eventsModel.getTotalCostTrip();
+    this.#tripInfo = eventsModel.getTripInfo();
+    this.#tripInfoTime = eventsModel.getTripTime();
   }
 
   get template() {

@@ -1,8 +1,21 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {EVENT_TYPES} from '../constants.js';
 import {formatDateForm } from '../utils/date.js';
+import { DATE_NOW } from '../constants.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
+
+
+const BLANK_EVENT = {
+  basePrice: 0,
+  dateFrom: DATE_NOW,
+  dateTo: DATE_NOW,
+  destination: '',
+  isFavorite: false,
+  type: 'flight',
+  offers: [],
+};
+
 
 const createListOptionsDestinationItem = ({name}) =>`<option value="${name}"></option>`;
 
@@ -57,10 +70,10 @@ const createFormEventTypeItemTemplate = (type, typeEvent) => `
 
 
 const createFormEventTemplate = (destinationsData, offersData, state) =>{
-  const {id, basePrice, dateFrom, dateTo, destination, type,} = state.event;
-  const destinations = destinationsData.find((destinationData) => destinationData.id === destination);
+  const {id = 0, basePrice, dateFrom, dateTo, destination, type,} = state.event;
+  const destinations = destinationsData?.find((destinationData) => destinationData.id === destination);
   const offersTemplate = createEventOffersTemplate(offersData, state.event);
-  const isEmptyDestinations = (destinations.description === '') && (destinations.pictures.length === 0);
+  const isEmptyDestinations = destinations === undefined || ((destinations?.description === '') && (destinations?.pictures.length === 0));
   const isEmptyOffers = offersTemplate === '';
   return `
 <li class="trip-events__item">
@@ -83,7 +96,7 @@ const createFormEventTemplate = (destinationsData, offersData, state) =>{
       <label class="event__label  event__type-output" for="event-destination-1">
         ${type}
       </label>
-      <input class="event__input  event__input--destination" id="event-destination-1" type="text" name="event-destination" value="${destinations.name}" list="destination-list-1" placeholder = "Choose a trip">
+      <input class="event__input  event__input--destination" list="destination-list-1"   pattern="${destinationsData.map((trip) => trip.name).join('|')}" id="event-destination-1" type="text" name="event-destination" required value="${destinations?.name === undefined ? '' : destinations.name}" list="destination-list-1" placeholder = "Choose a trip">
       <datalist id="destination-list-1">
        ${createListOptionsDestination(destinationsData)}
       </datalist>
@@ -102,11 +115,11 @@ const createFormEventTemplate = (destinationsData, offersData, state) =>{
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-${id}" type="number" name="event-price" value="${basePrice}">
+      <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="1" step="1" required name="event-price" value="${basePrice}">
     </div>
 
     <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">Delete</button>
+    <button class="event__reset-btn" type="reset">${id !== 0 ? 'Delete' : 'Cancel' }</button>
     <button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
     </button>
@@ -123,11 +136,11 @@ const createFormEventTemplate = (destinationsData, offersData, state) =>{
 
     <section class="event__section  event__section--destination ${isEmptyDestinations ? 'visually-hidden' : ''}">
       <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${destinations.description}</p>
+      <p class="event__destination-description">${destinations === undefined ? '' : destinations.description}</p>
 
       <div class="event__photos-container">
         <div class="event__photos-tape">
-        ${createEventFormPictureTemplate(destinations)}
+        ${destinations === undefined ? '' : createEventFormPictureTemplate(destinations)}
         </div>
       </div>
     </section>
@@ -141,11 +154,12 @@ export default class FormEventView extends AbstractStatefulView{
   #offersData = [];
   #handleFormSubmit = null;
   #handleFormDelete = null;
+  #handleformRollUp = null;
   #dateStartPicker = null;
   #dateEndPicker = null;
   #newOffersState = null;
 
-  constructor({eventData, destinationsData, offersData, onFormSubmit, onFormDelete}) {
+  constructor({eventData = BLANK_EVENT, destinationsData, offersData, onFormSubmit, onFormDelete, onformRollUp}) {
     super();
     this.#eventData = eventData;
     this._setState(FormEventView.parseEventToState(eventData));
@@ -154,6 +168,7 @@ export default class FormEventView extends AbstractStatefulView{
     this._restoreHandlers();
     this.#handleFormSubmit = onFormSubmit;
     this.#handleFormDelete = onFormDelete;
+    this.#handleformRollUp = onformRollUp;
     this.#newOffersState = new Map(eventData.offers.map((offer) => [offer, offer]));
   }
 
@@ -178,7 +193,8 @@ export default class FormEventView extends AbstractStatefulView{
       this.element.querySelector('.event__available-offers')
         .addEventListener('change', this.#offersHandler);
     }
-    this.#setDatePicker();
+    this.#setDateFromPicker();
+    this.#setDateToPicker();
   }
 
   reset(event) {
@@ -224,7 +240,7 @@ export default class FormEventView extends AbstractStatefulView{
   #formRollUpHandler = () => {
     this.#newOffersState = new Map(this.#eventData.offers.map((offer) => [offer, offer]));
     this.reset(this.#eventData);
-    this.#handleFormSubmit(this.#eventData);
+    this.#handleformRollUp(this.#eventData);
   };
 
   #eventTypeTripHandler = (evt) =>{
@@ -273,14 +289,14 @@ export default class FormEventView extends AbstractStatefulView{
     this.#handleFormDelete(FormEventView.parseStateToEvent(this._state));
   };
 
-  #setDatePicker() {
+  #setDateFromPicker() {
     const startDate = this.element.querySelector('[name="event-start-time"]');
-    const endDate = this.element.querySelector('[name="event-end-time"]');
 
     const datePickerOptions = {
       dateFormat: 'd/m/y H:i',
       enableTime: true,
       'time_24hr': true,
+      minuteIncrement: 1,
     };
 
     this.#dateStartPicker = flatpickr(
@@ -291,6 +307,17 @@ export default class FormEventView extends AbstractStatefulView{
         maxDate: this._state.event.dateTo
       }
     );
+  }
+
+  #setDateToPicker() {
+    const endDate = this.element.querySelector('[name="event-end-time"]');
+
+    const datePickerOptions = {
+      dateFormat: 'd/m/y H:i',
+      enableTime: true,
+      'time_24hr': true,
+      minuteIncrement: 1,
+    };
 
     this.#dateEndPicker = flatpickr(
       endDate,{
@@ -298,6 +325,7 @@ export default class FormEventView extends AbstractStatefulView{
         defaultDate: this._state.event.dateTo,
         onChange: this.#dateToChangeHandler,
         minDate: this._state.event.dateFrom,
+        allowInvalidPreload: false,
       }
     );
   }
@@ -318,6 +346,7 @@ export default class FormEventView extends AbstractStatefulView{
         dateTo: userdate,
       },
     });
+    this.#setDateFromPicker();
   };
 
   static parseEventToState(eventData){

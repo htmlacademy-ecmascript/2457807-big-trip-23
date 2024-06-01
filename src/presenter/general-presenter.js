@@ -1,6 +1,7 @@
-import {render, remove} from '../framework/render.js';
+import {render, remove, RenderPosition} from '../framework/render.js';
 import { EventsMessages, FilterType, SortType, UserAction, UpdateType } from '../constants.js';
 import EventPresenter from './event-presenter.js';
+import NewEventPresenter from './new-event-presenter.js';
 
 import EventListView from '../view/event-list-view.js';
 import SortView from '../view/sort-view.js';
@@ -9,7 +10,6 @@ import FilterView from '../view/filter-view.js';
 
 import { generateFilters, filterEvents } from '../utils/filter-event.js';
 import { generateSort, sortEvents } from '../utils/sort-events.js';
-import { updateItem } from '../utils/common.js';
 
 export default class GeneralPresenter {
   #eventListContainer = null;
@@ -19,24 +19,29 @@ export default class GeneralPresenter {
   #currentSortType = SortType.DAY;
   #filterComponent = null;
   #currentFilterType = FilterType.EVERYTHING;
-  #sourceBoardTask = [];
   #eventListComponent = new EventListView();
   #eventEmptyMessageComponent = null;
-  #generalPresenter = new Map();
+  #newEventPresenter = null;
 
   #eventsModel = null;
-  #boardEvents = [];
   #eventsPresenter = new Map();
 
-  constructor({eventListContainer,tripFiltersContainer, eventsModel,}) {
+  constructor({eventListContainer,tripFiltersContainer, eventsModel, onNewEventDestroy}) {
     this.#eventListContainer = eventListContainer;
     this.#tripFiltersContainer = tripFiltersContainer;
     this.#eventsModel = eventsModel;
     this.#eventsModel.addObserver(this.#handleModelEvent);
+    this.#newEventPresenter = new NewEventPresenter({
+      eventListContainer,
+      eventsModel,
+      taskListContainer: this.#eventListComponent.element,
+      onDataChange: this.#handleViewAction,
+      onDestroy: onNewEventDestroy,
+      onNewEventDestroyCheck: this.#handleDestroyCheck,
+    });
   }
 
   init() {
-    this.#sourceBoardTask = [...this.#eventsModel.events];
     this.#renderFilter(this.#eventsModel.events);
     this.#renderSort(this.#eventsModel.events);
     this.#renderBoardEvents();
@@ -47,6 +52,17 @@ export default class GeneralPresenter {
     eventsData = sortEvents[this.#currentSortType]([...this.#eventsModel.events]);
     eventsData = filterEvents[this.#currentFilterType](eventsData);
     return eventsData;
+  }
+
+  createEvent() {
+    this.#currentSortType = SortType.DAY;
+    this.#currentFilterType = FilterType.EVERYTHING;
+    this.#clearEventList();
+    this.#renderEvents();
+    remove(this.#eventEmptyMessageComponent);
+    this.#newEventPresenter.init();
+    this.#renderSort(this.events);
+    this.#renderFilter(this.events);
   }
 
   #handleViewAction = (actionType, updateType, update) => {
@@ -74,6 +90,8 @@ export default class GeneralPresenter {
         this.#renderBoardEvents();
         break;
       case UpdateType.MAJOR:
+        this.#renderFilter(this.#eventsModel.events);
+        this.#renderSort(this.#eventsModel.events);
         this.#clearEventList();
         this.#renderBoardEvents();
         break;
@@ -88,7 +106,6 @@ export default class GeneralPresenter {
     }
     this.#renderEvents();
   }
-
 
   #renderEvents(){
     if(this.#eventEmptyMessageComponent !== null){
@@ -121,14 +138,17 @@ export default class GeneralPresenter {
     }
     const eventsSortData = [...eventsData];
     const sorts = generateSort(eventsSortData);
-    this.#sortComponent = new SortView({sorts, onSortTypeChange: this.#handleSortTypeChange});
-    render(this.#sortComponent, this.#eventListContainer);
+    this.#sortComponent = new SortView({sorts, currentSort: this.#currentSortType, onSortTypeChange: this.#handleSortTypeChange});
+    render(this.#sortComponent, this.#eventListContainer,RenderPosition.AFTERBEGIN);
   }
 
   #renderFilter(eventsData){
+    if(this.#filterComponent !== null){
+      remove(this.#filterComponent);
+    }
     const eventsFilterData = [...eventsData];
     const filters = generateFilters(eventsFilterData);
-    this.#filterComponent = new FilterView({filters, onFilterTypeChange: this.#handleFilterTypeChange});
+    this.#filterComponent = new FilterView({filters, currentFilter: this.#currentFilterType, onFilterTypeChange: this.#handleFilterTypeChange});
     render(this.#filterComponent, this.#tripFiltersContainer);
   }
 
@@ -143,17 +163,19 @@ export default class GeneralPresenter {
   }
 
   #clearEventList(){
+    this.#newEventPresenter.destroy();
     this.#eventsPresenter.forEach((presenter) => presenter.destroy());
     this.#eventsPresenter.clear();
   }
 
-  #handleEventChange = (updateEvent) => {
-    this.#boardEvents = updateItem(this.#boardEvents, updateEvent);
-    this.#sourceBoardTask = updateItem(this.#sourceBoardTask, updateEvent);
-    this.#eventsPresenter.get(updateEvent.id).init(updateEvent);
+  #handleDestroyCheck = () =>{
+    if(this.events.length === 0){
+      this.#renderNoEvents(EventsMessages.EVERYTHING);
+    }
   };
 
   #handleModeChange = () => {
+    this.#newEventPresenter.destroy();
     this.#eventsPresenter.forEach((presenter) => presenter.resetView());
   };
 
@@ -176,10 +198,4 @@ export default class GeneralPresenter {
     this.#clearEventList();
     this.#renderEvents();
   };
-
-
-  #handleTaskChange = (updateEvent) =>{
-    this.#generalPresenter.get(updateEvent.id).init(updateEvent);
-  };
-
 }
