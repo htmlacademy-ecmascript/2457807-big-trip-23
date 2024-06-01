@@ -1,15 +1,15 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {EVENT_TYPES} from '../constants.js';
 import {formatDateForm } from '../utils/date.js';
-import { DATE_NOW } from '../constants.js';
+import { DATE_NOW} from '../constants.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 
 const BLANK_EVENT = {
   basePrice: 0,
-  dateFrom: DATE_NOW,
-  dateTo: DATE_NOW,
+  dateFrom:DATE_NOW,
+  dateTo: new Date(new Date().valueOf() + 1000 * 3600 * 24),
   destination: '',
   isFavorite: false,
   type: 'flight',
@@ -193,8 +193,8 @@ export default class FormEventView extends AbstractStatefulView{
       this.element.querySelector('.event__available-offers')
         .addEventListener('change', this.#offersHandler);
     }
-    this.#setDateFromPicker();
     this.#setDateToPicker();
+    this.#setDateFromPicker();
   }
 
   reset(event) {
@@ -337,6 +337,7 @@ export default class FormEventView extends AbstractStatefulView{
         dateFrom: userdate,
       },
     });
+    this.#setDateToPicker();
   };
 
   #dateToChangeHandler = ([userdate]) =>{

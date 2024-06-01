@@ -1,4 +1,4 @@
-const DATE_NOW = new Date().toISOString();
+const DATE_NOW = new Date();
 const FILTER_TYPES = ['everything', 'future', 'present', 'past'];
 const SORT_TYPES = ['day', 'event', 'time', 'price', 'offers'];
 const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];

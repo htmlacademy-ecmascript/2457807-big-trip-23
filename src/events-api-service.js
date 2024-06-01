@@ -3,6 +3,8 @@ import ApiService from './framework/api-service';
 const Method = {
   GET: 'GET',
   PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
 };
 
 export default class EventsApiService extends ApiService {
@@ -28,7 +30,6 @@ export default class EventsApiService extends ApiService {
       body: JSON.stringify(this.#adaptToServer(event)),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
-
     const parsedResponse = await ApiService.parseResponse(response);
 
     return parsedResponse;
@@ -41,7 +42,6 @@ export default class EventsApiService extends ApiService {
       body: JSON.stringify(this.#adaptToServer(event)),
       headers: new Headers({'Content-Type': 'application/json'}),
     });
-
     const parsedResponse = await ApiService.parseResponse(response);
 
     return parsedResponse;
@@ -58,7 +58,7 @@ export default class EventsApiService extends ApiService {
 
   #adaptToServer(event) {
     const adaptedEvent = {...event,
-      'base_price': event.base_price,
+      'base_price': Number(event.basePrice),
       'is_favorite': event.isFavorite,
       'date_from': event.dateFrom instanceof Date ? event.dateFrom.toISOString() : null,
       'date_to': event.dateTo instanceof Date ? event.dateTo.toISOString() : null,
