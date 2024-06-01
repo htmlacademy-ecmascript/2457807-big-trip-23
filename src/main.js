@@ -3,11 +3,15 @@ import NewEventButtonView from './view/new-event-button-view.js';
 import TripInfoView from './view/trip-info-view.js';
 import GeneralPresenter from './presenter/general-presenter.js';
 import EventsModel from './model/events-model.js';
+import EventsApiService from './events-api-service.js';
 
+const AUTHORIZATION = 'Basic ht135dwnyhgjkjrj';
+const END_POINT = 'https://23.objects.htmlacademy.pro';
 const tripMainSection = document.querySelector('.trip-main');
+
 const tripFilters = tripMainSection.querySelector('.trip-controls__filters');
 const tripEventSection = document.querySelector('.trip-events');
-const eventsModel = new EventsModel();
+const eventsModel = new EventsModel({eventsApiService: new EventsApiService(END_POINT, AUTHORIZATION)});
 const generalPresenter = new GeneralPresenter({eventListContainer: tripEventSection,
   tripFiltersContainer: tripFilters, eventsModel, onNewEventDestroy: handleNewEventFormClose});
 const newEventButtonComponent = new NewEventButtonView({

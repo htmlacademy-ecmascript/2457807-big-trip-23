@@ -11,6 +11,22 @@ export default class EventsModel extends Observable{
   #events = Array.from({length: EVENTS_NUMBER}, getRandomEvent);
   #destinations = getDestinations();
   #offers = getOffers();
+  #eventsApiService = null;
+  constructor ({eventsApiService}) {
+    super();
+    this.#eventsApiService = eventsApiService;
+
+    this.#eventsApiService.events.then((events) => {
+      console.log(events);
+    });
+    this.#eventsApiService.destinations.then((destinations) => {
+      console.log(destinations);
+    });
+    this.#eventsApiService.offers.then((offers) => {
+      console.log(this.#offers);
+    });
+
+  }
 
   get events(){
     return this.#events;
