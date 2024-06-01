@@ -7,6 +7,7 @@ import EventListView from '../view/event-list-view.js';
 import SortView from '../view/sort-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import FilterView from '../view/filter-view.js';
+import LoadingView from '../view/loading-view.js';
 
 import { generateFilters, filterEvents } from '../utils/filter-event.js';
 import { generateSort, sortEvents } from '../utils/sort-events.js';
@@ -22,6 +23,9 @@ export default class GeneralPresenter {
   #eventListComponent = new EventListView();
   #eventEmptyMessageComponent = null;
   #newEventPresenter = null;
+  #isLoading = true;
+  #loadingViewComponent = null;
+
 
   #eventsModel = null;
   #eventsPresenter = new Map();
@@ -95,14 +99,25 @@ export default class GeneralPresenter {
         this.#clearEventList();
         this.#renderBoardEvents();
         break;
+      case UpdateType.INIT:
+        this. #isLoading = false;
+        remove(this.#loadingViewComponent);
+        this.#renderFilter(this.#eventsModel.events);
+        this.#renderSort(this.#eventsModel.events);
+        this.#clearEventList();
+        this.#renderBoardEvents();
+        break;
     }
   };
 
   #renderBoardEvents(){
     render(this.#eventListComponent, this.#eventListContainer);
-    if(this.#eventsModel.events.length === 0){
+    if(this.#eventsModel.events.length === 0 && this.#isLoading !== true){
       this.#renderNoEvents(EventsMessages.EVERYTHING);
       return;
+    }
+    if(this.#isLoading){
+      this.#renderLoading(EventsMessages.LOADING);
     }
     this.#renderEvents();
   }
@@ -111,7 +126,7 @@ export default class GeneralPresenter {
     if(this.#eventEmptyMessageComponent !== null){
       remove(this.#eventEmptyMessageComponent);
     }
-    if(this.events.length === 0){
+    if(this.events.length === 0 && this.#isLoading !== true){
       switch(this.#currentFilterType){
         case FilterType.EVERYTHING: this.#renderNoEvents(EventsMessages.EVERYTHING);
           break;
@@ -125,6 +140,11 @@ export default class GeneralPresenter {
     }
     render(this.#eventListComponent, this.#eventListContainer);
     this.events.forEach((event) => this.#renderEvent(event));
+  }
+
+  #renderLoading(typeMessage){
+    this.#loadingViewComponent = new LoadingView(typeMessage);
+    render(this.#loadingViewComponent, this.#eventListContainer);
   }
 
   #renderNoEvents(typeMessage){
@@ -164,6 +184,7 @@ export default class GeneralPresenter {
 
   #clearEventList(){
     this.#newEventPresenter.destroy();
+    remove(this.#loadingViewComponent);
     this.#eventsPresenter.forEach((presenter) => presenter.destroy());
     this.#eventsPresenter.clear();
   }

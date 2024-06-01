@@ -49,6 +49,7 @@ const UpdateType = {
   PATCH: 'PATCH',
   MINOR: 'MINOR',
   MAJOR: 'MAJOR',
+  INIT: 'INIT',
 };
 
 export {UserAction, UpdateType, FILTER_TYPES, FilterType, SORT_TYPES, SortType, EVENT_TYPES, DateFormat, DATE_NOW, EventsMessages, Mode};

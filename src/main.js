@@ -34,7 +34,7 @@ const handleModelEventTripInfo = () =>{
   tripInfoComponent = new TripInfoView(eventsModel);
   render(tripInfoComponent, tripMainSection, RenderPosition.AFTERBEGIN);
 };
-
+eventsModel.init();
 eventsModel.addObserver(handleModelEventTripInfo);
 render(tripInfoComponent, tripMainSection, RenderPosition.AFTERBEGIN);
 render(newEventButtonComponent, tripMainSection, RenderPosition.BEFOREEND);

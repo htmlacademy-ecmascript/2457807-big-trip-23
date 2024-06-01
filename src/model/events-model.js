@@ -4,28 +4,31 @@ import { getOffers } from '../mock/offers.js';
 import { sortEvents } from '../utils/sort-events.js';
 import { SortType } from '../constants.js';
 import Observable from '../framework/observable.js';
-
-const EVENTS_NUMBER = 4;
+import { UpdateType } from '../constants.js';
 
 export default class EventsModel extends Observable{
-  #events = Array.from({length: EVENTS_NUMBER}, getRandomEvent);
-  #destinations = getDestinations();
-  #offers = getOffers();
+  #events = [];
+  #destinations = [];
+  #offers = [];
   #eventsApiService = null;
   constructor ({eventsApiService}) {
     super();
     this.#eventsApiService = eventsApiService;
+  }
 
-    this.#eventsApiService.events.then((events) => {
-      console.table(events.map(this.#adaptToClient));
-    });
-    this.#eventsApiService.destinations.then((destinations) => {
-      console.log(destinations);
-    });
-    this.#eventsApiService.offers.then((offers) => {
-      console.log(this.#offers);
-    });
+  async init (){
+    try {
+      const events = await this.#eventsApiService.events;
+      this.#events = events.map(this.#adaptToClient);
+      this.#destinations = await this.#eventsApiService.destinations;
+      this.#offers = await this.#eventsApiService.offers;
+    } catch(err) {
+      this.#events = [];
+      this.#destinations = [];
+      this.#offers = [];
+    }
 
+    this._notify(UpdateType.INIT);
   }
 
   get events(){
@@ -73,7 +76,7 @@ export default class EventsModel extends Observable{
 
   getTripInfo(){
     const sortDestinationsEvents = [...sortEvents[SortType.DAY](this.#events)];
-    const uniqueIdDestinations = [... new Set(sortDestinationsEvents.map((item) =>item.destination))];
+    const uniqueIdDestinations = [... sortDestinationsEvents.map((item) =>item.destination)];
     const destinations = this.#destinations;
     let uniqueDestinationNames = [];
     uniqueIdDestinations.forEach((uniqueIdDestination) =>{
