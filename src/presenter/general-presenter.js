@@ -1,4 +1,5 @@
 import {render, remove, RenderPosition} from '../framework/render.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import { EventsMessages, FilterType, SortType, UserAction, UpdateType } from '../constants.js';
 import EventPresenter from './event-presenter.js';
 import NewEventPresenter from './new-event-presenter.js';
@@ -11,6 +12,11 @@ import LoadingView from '../view/loading-view.js';
 
 import { generateFilters, filterEvents } from '../utils/filter-event.js';
 import { generateSort, sortEvents } from '../utils/sort-events.js';
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
 
 export default class GeneralPresenter {
   #eventListContainer = null;
@@ -25,7 +31,10 @@ export default class GeneralPresenter {
   #newEventPresenter = null;
   #isLoading = true;
   #loadingViewComponent = null;
-
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
 
   #eventsModel = null;
   #eventsPresenter = new Map();
@@ -70,6 +79,7 @@ export default class GeneralPresenter {
   }
 
   #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
         this.#eventsPresenter.get(update.id).setSaving();
@@ -96,6 +106,7 @@ export default class GeneralPresenter {
         }
         break;
     }
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
