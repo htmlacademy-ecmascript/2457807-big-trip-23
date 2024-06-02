@@ -91,6 +91,23 @@ export default class EventPresenter{
     }
   }
 
+  setAborting() {
+    if (this.#mode === Mode.DEFAULT) {
+      this.#eventFormComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#eventFormComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#eventFormComponent.shake(resetFormState);
+  }
+
 
   #replaceEvenToFormEvent(){
     replace(this.#eventFormComponent, this.#eventComponent);

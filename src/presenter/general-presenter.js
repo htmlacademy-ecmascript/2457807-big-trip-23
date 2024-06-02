@@ -69,22 +69,33 @@ export default class GeneralPresenter {
     this.#renderFilter(this.events);
   }
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
         this.#eventsPresenter.get(update.id).setSaving();
-        this.#eventsModel.updateEvent(updateType, update);
+        try{
+          await this.#eventsModel.updateEvent(updateType, update);
+        }catch{
+          this.#eventsPresenter.get(update.id).setAborting();
+        }
         break;
       case UserAction.ADD_EVENT:
         this.#newEventPresenter.setSaving();
-        this.#eventsModel.addEvent(updateType, update);
+        try{
+          await this.#eventsModel.addEvent(updateType, update);
+        }catch{
+          this.#newEventPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_EVENT:
         this.#eventsPresenter.get(update.id).setDeleting();
-        this.#eventsModel.deleteEvent(updateType, update);
+        try{
+          await this.#eventsModel.deleteEvent(updateType, update);
+        }catch{
+          this.#eventsPresenter.get(update.id).setAborting();
+        }
         break;
     }
-
   };
 
   #handleModelEvent = (updateType, data) => {

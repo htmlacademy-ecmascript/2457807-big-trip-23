@@ -15,7 +15,7 @@ const CreateListEmptyViewTemplate = (typeMessage) =>`<section class="trip-events
   color: #ce4233;
   letter-spacing: 0.2em; 
   position: absolute;
-  top: 20%;
+  top: 15%;
   left: 50%;
   transform: translate(-50%, -50%);  
   }
