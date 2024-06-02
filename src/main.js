@@ -5,7 +5,7 @@ import GeneralPresenter from './presenter/general-presenter.js';
 import EventsModel from './model/events-model.js';
 import EventsApiService from './events-api-service.js';
 
-const AUTHORIZATION = 'Basic ht135dwnbyhgjkjrj';
+const AUTHORIZATION = 'Basic ht135dwnbyhgfdjkjrj';
 const END_POINT = 'https://23.objects.htmlacademy.pro';
 const tripMainSection = document.querySelector('.trip-main');
 
