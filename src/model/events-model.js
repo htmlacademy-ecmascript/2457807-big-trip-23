@@ -45,14 +45,14 @@ export default class EventsModel extends Observable{
     return offers.find((offer) => offer.type === type);
   }
 
-  getArrayOffersById(type, idOffersItem){
-    const offersType = this.getOffersByType(type);
-    return offersType.offers.find((offer) => offer.id === idOffersItem);
-  }
-
   getDestinationById(id){
     const destinations = this.destinations;
     return destinations.find((destination) => destination.id === id);
+  }
+
+  getArrayOffersById(type, idOffersItem){
+    const offersType = this.getOffersByType(type);
+    return offersType.offers.find((offer) => offer.id === idOffersItem);
   }
 
   async updateEvent(updateType, update) {
@@ -71,7 +71,7 @@ export default class EventsModel extends Observable{
       ];
       this._notify(updateType, update);
     } catch(err){
-      throw new Error('Can\'t update event');
+      throw new Error('Can\'t update unexisting event');
     }
   }
 
