@@ -8,6 +8,7 @@ export default class EventsModel extends Observable{
   #destinations = [];
   #offers = [];
   #eventsApiService = null;
+  isServerUnavailable = false;
   constructor ({eventsApiService}) {
     super();
     this.#eventsApiService = eventsApiService;
@@ -23,6 +24,7 @@ export default class EventsModel extends Observable{
       this.#events = [];
       this.#destinations = [];
       this.#offers = [];
+      this.isServerUnavailable = true;
     }
 
     this._notify(UpdateType.INIT);

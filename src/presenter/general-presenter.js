@@ -137,7 +137,10 @@ export default class GeneralPresenter {
 
   #renderBoardEvents(){
     render(this.#eventListComponent, this.#eventListContainer);
-    if(this.#eventsModel.events.length === 0 && this.#isLoading !== true){
+    if(this.#eventsModel.isServerUnavailable){
+      this.#renderNoEvents(EventsMessages.FAILED_LOAD);
+    }
+    if(this.#eventsModel.events.length === 0 && this.#isLoading !== true && this.#eventsModel.isServerUnavailable === true){
       this.#renderNoEvents(EventsMessages.EVERYTHING);
       return;
     }
