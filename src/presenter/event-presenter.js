@@ -55,6 +55,7 @@ export default class EventPresenter{
     }
     if(this.#mode === Mode.EDITING){
       replace(this.#eventFormComponent, previewEventFormComponent);
+      this.#mode = Mode.DEFAULT;
     }
     remove(previewEventComponent);
     remove(previewEventFormComponent);
@@ -71,6 +72,25 @@ export default class EventPresenter{
       this.#replaceFormEventToEvent();
     }
   }
+
+  setSaving() {
+    if (this.#mode === Mode.EDITING) {
+      this.#eventFormComponent.updateElement({
+        isDisabled: true,
+        isSaving: true,
+      });
+    }
+  }
+
+  setDeleting() {
+    if (this.#mode === Mode.EDITING) {
+      this.#eventFormComponent.updateElement({
+        isDisabled: true,
+        isDeleting: true,
+      });
+    }
+  }
+
 
   #replaceEvenToFormEvent(){
     replace(this.#eventFormComponent, this.#eventComponent);
@@ -110,8 +130,6 @@ export default class EventPresenter{
       UpdateType.MAJOR,
       eventState,
     );
-
-    this.#replaceFormEventToEvent();
   };
 
   #handleFormDelete = (eventState) => {

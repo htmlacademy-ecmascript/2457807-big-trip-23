@@ -72,12 +72,15 @@ export default class GeneralPresenter {
   #handleViewAction = (actionType, updateType, update) => {
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
+        this.#eventsPresenter.get(update.id).setSaving();
         this.#eventsModel.updateEvent(updateType, update);
         break;
       case UserAction.ADD_EVENT:
+        this.#newEventPresenter.setSaving();
         this.#eventsModel.addEvent(updateType, update);
         break;
       case UserAction.DELETE_EVENT:
+        this.#eventsPresenter.get(update.id).setDeleting();
         this.#eventsModel.deleteEvent(updateType, update);
         break;
     }
