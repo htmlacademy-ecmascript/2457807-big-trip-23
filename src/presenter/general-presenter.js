@@ -144,6 +144,7 @@ export default class GeneralPresenter {
     }
     if(this.#isLoading){
       this.#renderLoading(EventsMessages.LOADING);
+      remove(this.#sortComponent);
       return;
     }
     if(this.#eventsModel.events.length === 0 && this.#isLoading !== true){
@@ -160,12 +161,16 @@ export default class GeneralPresenter {
     if(this.events.length === 0 && this.#isLoading !== true){
       switch(this.#currentFilterType){
         case FilterType.EVERYTHING: this.#renderNoEvents(EventsMessages.EVERYTHING);
+          remove(this.#sortComponent);
           break;
         case FilterType.FUTURE: this.#renderNoEvents(EventsMessages.FUTURE);
+          remove(this.#sortComponent);
           break;
         case FilterType.PRESENT: this.#renderNoEvents(EventsMessages.PRESENT);
+          remove(this.#sortComponent);
           break;
         case FilterType.PAST: this.#renderNoEvents(EventsMessages.PAST);
+          remove(this.#sortComponent);
           break;
       }
     }
