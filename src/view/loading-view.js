@@ -13,11 +13,11 @@ const CreateListEmptyViewTemplate = (typeMessage) =>`<section class="trip-events
   text-transform: uppercase;
   font-weight: 900;
   color: #ce4233;
-  letter-spacing: 0.2em; 
+  letter-spacing: 0.2em;
   position: absolute;
   top: 15%;
   left: 50%;
-  transform: translate(-50%, -50%);  
+  transform: translate(-50%, -50%);
   }
   .loader::before,
   .loader::after {
@@ -35,7 +35,7 @@ const CreateListEmptyViewTemplate = (typeMessage) =>`<section class="trip-events
   .loader::after {
   bottom: 0;
   }
-  
+
   @keyframes load {
   0% {
     left: 0;
@@ -69,6 +69,9 @@ ${typeMessage}</div>
 	<div class="cat cat--5">
 		<img src="https://cdn.dribbble.com/users/6191/screenshots/3661586/cat_sleep_dribbble.gif" alt="">
 	</div>
+  <div class="cat cat--1">
+  <img src="https://media1.tenor.com/m/DqfRST6iWKwAAAAC/mochi-mochimochi.gif" alt="">
+  </div>
 </div>
 <style>$first: 	#abe7db;
 $second: 	#f67c61;
@@ -93,23 +96,23 @@ body, html {
 .cats {
 	display: grid;
 	grid-auto-flow: dense;
-	overflow: hidden;	
+	overflow: hidden;
 }
 @media screen and (min-width: 45em) {
 	.cats {
 		height: 100vh;
-		grid-template-columns: 29% 29% 43.5%;
+		grid-template-columns: 29% 29% 29%;
 		grid-template-rows: 50% 16% 34%;
 	}
 }
 @media screen and (max-width: 45em) and (min-width: 25em) {
-	.cats { 
+	.cats {
 		grid-template-columns: repeat(2, (100vw / 2));
 		grid-template-rows: repeat(3, 1fr);
 	}
 }
 @media screen and (max-width: 25em) {
-	.cats { 
+	.cats {
 		grid-template-columns: 100vw;
 		grid-template-rows: repeat(5, 1fr);
 	}
