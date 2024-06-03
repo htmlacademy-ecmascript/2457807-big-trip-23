@@ -1,12 +1,12 @@
 import { remove, render, RenderPosition} from './framework/render.js';
+import { AUTHORIZATION, END_POINT } from './constants.js';
 import NewEventButtonView from './view/new-event-button-view.js';
 import TripInfoView from './view/trip-info-view.js';
 import GeneralPresenter from './presenter/general-presenter.js';
 import EventsModel from './model/events-model.js';
 import EventsApiService from './events-api-service.js';
 
-const AUTHORIZATION = 'Basic ht135dwnbyhgfdjkjrj';
-const END_POINT = 'https://23.objects.htmlacademy.pro';
+
 const tripMainSection = document.querySelector('.trip-main');
 
 const tripFilters = tripMainSection.querySelector('.trip-controls__filters');
@@ -36,10 +36,11 @@ const handleModelEventTripInfo = () =>{
 };
 eventsModel.init()
   .finally(() => {
-    render(newEventButtonComponent, tripMainSection, RenderPosition.BEFOREEND);
+    if(!eventsModel.isServerUnavailable) {
+      render(newEventButtonComponent, tripMainSection, RenderPosition.BEFOREEND);
+    }
   });
 eventsModel.addObserver(handleModelEventTripInfo);
 render(tripInfoComponent, tripMainSection, RenderPosition.AFTERBEGIN);
-
 generalPresenter.init();
 

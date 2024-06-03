@@ -1,6 +1,6 @@
 import AbstractView from '../framework/view/abstract-view.js';
 
-const CreateListEmptyViewTemplate = (typeMessage) =>`<section class="trip-events">
+const сreateListEmptyViewTemplate = (typeMessage) =>`<section class="trip-events">
 <h2 class="visually-hidden">Trip events</h2>
 <div class="trip-events__msg loader">
 <style>
@@ -165,6 +165,6 @@ export default class LoadingView extends AbstractView{
   }
 
   get template() {
-    return CreateListEmptyViewTemplate(this.#typeMessage);
+    return сreateListEmptyViewTemplate(this.#typeMessage);
   }
 }

@@ -1,4 +1,7 @@
 const DATE_NOW = new Date();
+const AUTHORIZATION = 'Basic ht135dwnbyhgfdjkjrj';
+const END_POINT = 'https://23.objects.htmlacademy.pro';
+
 const FILTER_TYPES = ['everything', 'future', 'present', 'past'];
 const SORT_TYPES = ['day', 'event', 'time', 'price', 'offers'];
 const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
@@ -52,4 +55,4 @@ const UpdateType = {
   INIT: 'INIT',
 };
 
-export {UserAction, UpdateType, FILTER_TYPES, FilterType, SORT_TYPES, SortType, EVENT_TYPES, DateFormat, DATE_NOW, EventsMessages, Mode};
+export {AUTHORIZATION, END_POINT, UserAction, UpdateType, FILTER_TYPES, FilterType, SORT_TYPES, SortType, EVENT_TYPES, DateFormat, DATE_NOW, EventsMessages, Mode};

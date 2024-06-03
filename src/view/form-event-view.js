@@ -128,7 +128,7 @@ const createFormEventTemplate = (destinationsData, offersData, state) =>{
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="1" step="1" required name="event-price" value="${basePrice}">
+      <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="1" max = "100000" step="1" required name="event-price" value="${basePrice}">
     </div>
 
     <button class="event__save-btn btn btn--blue " type="submit" ${state.isDisabled ? 'disabled' : ''}>${state.isSaving ? 'Saving...' : 'Save'}</button>
