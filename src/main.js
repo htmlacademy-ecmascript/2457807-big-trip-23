@@ -36,8 +36,10 @@ const handleModelEventTripInfo = () =>{
 };
 eventsModel.init()
   .finally(() => {
-    if(!eventsModel.isServerUnavailable) {
-      render(newEventButtonComponent, tripMainSection, RenderPosition.BEFOREEND);
+    render(newEventButtonComponent, tripMainSection, RenderPosition.BEFOREEND);
+    if(eventsModel.isServerUnavailable) {
+      newEventButtonComponent.element.disabled = true;
+      remove(tripInfoComponent);
     }
   });
 eventsModel.addObserver(handleModelEventTripInfo);
