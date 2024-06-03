@@ -55,6 +55,7 @@ export default class EventPresenter{
     }
     if(this.#mode === Mode.EDITING){
       replace(this.#eventFormComponent, previewEventFormComponent);
+      this.#mode = Mode.DEFAULT;
     }
     remove(previewEventComponent);
     remove(previewEventFormComponent);
@@ -71,6 +72,43 @@ export default class EventPresenter{
       this.#replaceFormEventToEvent();
     }
   }
+
+  setSaving() {
+    if (this.#mode === Mode.EDITING) {
+      this.#eventFormComponent.updateElement({
+        isDisabled: true,
+        isSaving: true,
+      });
+    }
+  }
+
+  setDeleting() {
+    if (this.#mode === Mode.EDITING) {
+      this.#eventFormComponent.updateElement({
+        isDisabled: true,
+        isDeleting: true,
+      });
+    }
+  }
+
+  setAborting() {
+    if (this.#mode === Mode.DEFAULT) {
+      this.#eventFormComponent.shake();
+      this.#eventComponent.shake();
+      return;
+    }
+
+    const resetFormState = () => {
+      this.#eventFormComponent.updateElement({
+        isDisabled: false,
+        isSaving: false,
+        isDeleting: false,
+      });
+    };
+
+    this.#eventFormComponent.shake(resetFormState);
+  }
+
 
   #replaceEvenToFormEvent(){
     replace(this.#eventFormComponent, this.#eventComponent);
@@ -110,8 +148,6 @@ export default class EventPresenter{
       UpdateType.MAJOR,
       eventState,
     );
-
-    this.#replaceFormEventToEvent();
   };
 
   #handleFormDelete = (eventState) => {

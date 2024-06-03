@@ -1,15 +1,14 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view.js';
 import {EVENT_TYPES} from '../constants.js';
 import {formatDateForm } from '../utils/date.js';
-import { DATE_NOW } from '../constants.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 
 const BLANK_EVENT = {
   basePrice: 0,
-  dateFrom: DATE_NOW,
-  dateTo: DATE_NOW,
+  dateFrom:new Date(),
+  dateTo: new Date(new Date().valueOf() + 1000 * 60),
   destination: '',
   isFavorite: false,
   type: 'flight',
@@ -75,6 +74,20 @@ const createFormEventTemplate = (destinationsData, offersData, state) =>{
   const offersTemplate = createEventOffersTemplate(offersData, state.event);
   const isEmptyDestinations = destinations === undefined || ((destinations?.description === '') && (destinations?.pictures.length === 0));
   const isEmptyOffers = offersTemplate === '';
+  let buttonName = null;
+  if(id !== 0){
+    if(state.isDeleting){
+      buttonName = 'Deleting...';
+    }else{
+      buttonName = 'Delete';
+    }
+  } else{
+    if(state.isCancel){
+      buttonName = 'Canceling...';
+    }else{
+      buttonName = 'Cancel';
+    }
+  }
   return `
 <li class="trip-events__item">
 <form class="event event--edit" action="#" method="post">
@@ -115,11 +128,11 @@ const createFormEventTemplate = (destinationsData, offersData, state) =>{
         <span class="visually-hidden">Price</span>
         &euro;
       </label>
-      <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="1" step="1" required name="event-price" value="${basePrice}">
+      <input class="event__input  event__input--price" id="event-price-${id}" type="number" min="1" max = "100000" step="1" required name="event-price" value="${basePrice}">
     </div>
 
-    <button class="event__save-btn  btn  btn--blue" type="submit">Save</button>
-    <button class="event__reset-btn" type="reset">${id !== 0 ? 'Delete' : 'Cancel' }</button>
+    <button class="event__save-btn btn btn--blue " type="submit" ${state.isDisabled ? 'disabled' : ''}>${state.isSaving ? 'Saving...' : 'Save'}</button>
+    <button class="event__reset-btn" type="reset" ${state.isDisabled ? 'disabled' : ''}>${buttonName}</button>
     <button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
     </button>
@@ -193,8 +206,8 @@ export default class FormEventView extends AbstractStatefulView{
       this.element.querySelector('.event__available-offers')
         .addEventListener('change', this.#offersHandler);
     }
-    this.#setDateFromPicker();
     this.#setDateToPicker();
+    this.#setDateFromPicker();
   }
 
   reset(event) {
@@ -337,6 +350,7 @@ export default class FormEventView extends AbstractStatefulView{
         dateFrom: userdate,
       },
     });
+    this.#setDateToPicker();
   };
 
   #dateToChangeHandler = ([userdate]) =>{
@@ -352,6 +366,10 @@ export default class FormEventView extends AbstractStatefulView{
   static parseEventToState(eventData){
     return {
       event: {...eventData},
+      isSaving: false,
+      isCancel: false,
+      isDeleting: false,
+      isDisabled: false,
     };
   }
 

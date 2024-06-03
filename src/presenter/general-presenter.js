@@ -1,4 +1,5 @@
 import {render, remove, RenderPosition} from '../framework/render.js';
+import UiBlocker from '../framework/ui-blocker/ui-blocker.js';
 import { EventsMessages, FilterType, SortType, UserAction, UpdateType } from '../constants.js';
 import EventPresenter from './event-presenter.js';
 import NewEventPresenter from './new-event-presenter.js';
@@ -7,9 +8,15 @@ import EventListView from '../view/event-list-view.js';
 import SortView from '../view/sort-view.js';
 import ListEmptyView from '../view/list-empty-view.js';
 import FilterView from '../view/filter-view.js';
+import LoadingView from '../view/loading-view.js';
 
 import { generateFilters, filterEvents } from '../utils/filter-event.js';
 import { generateSort, sortEvents } from '../utils/sort-events.js';
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
 
 export default class GeneralPresenter {
   #eventListContainer = null;
@@ -22,6 +29,12 @@ export default class GeneralPresenter {
   #eventListComponent = new EventListView();
   #eventEmptyMessageComponent = null;
   #newEventPresenter = null;
+  #isLoading = true;
+  #loadingViewComponent = null;
+  #uiBlocker = new UiBlocker({
+    lowerLimit: TimeLimit.LOWER_LIMIT,
+    upperLimit: TimeLimit.UPPER_LIMIT
+  });
 
   #eventsModel = null;
   #eventsPresenter = new Map();
@@ -65,19 +78,35 @@ export default class GeneralPresenter {
     this.#renderFilter(this.events);
   }
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (actionType, updateType, update) => {
+    this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
-        this.#eventsModel.updateEvent(updateType, update);
+        this.#eventsPresenter.get(update.id).setSaving();
+        try{
+          await this.#eventsModel.updateEvent(updateType, update);
+        }catch{
+          this.#eventsPresenter.get(update.id).setAborting();
+        }
         break;
       case UserAction.ADD_EVENT:
-        this.#eventsModel.addEvent(updateType, update);
+        this.#newEventPresenter.setSaving();
+        try{
+          await this.#eventsModel.addEvent(updateType, update);
+        }catch{
+          this.#newEventPresenter.setAborting();
+        }
         break;
       case UserAction.DELETE_EVENT:
-        this.#eventsModel.deleteEvent(updateType, update);
+        this.#eventsPresenter.get(update.id).setDeleting();
+        try{
+          await this.#eventsModel.deleteEvent(updateType, update);
+        }catch{
+          this.#eventsPresenter.get(update.id).setAborting();
+        }
         break;
     }
-
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
@@ -95,12 +124,29 @@ export default class GeneralPresenter {
         this.#clearEventList();
         this.#renderBoardEvents();
         break;
+      case UpdateType.INIT:
+        this. #isLoading = false;
+        remove(this.#loadingViewComponent);
+        this.#renderFilter(this.#eventsModel.events);
+        this.#renderSort(this.#eventsModel.events);
+        this.#clearEventList();
+        this.#renderBoardEvents();
+        break;
     }
   };
 
   #renderBoardEvents(){
     render(this.#eventListComponent, this.#eventListContainer);
-    if(this.#eventsModel.events.length === 0){
+    if(this.#eventsModel.isServerUnavailable){
+      this.#renderNoEvents(EventsMessages.FAILED_LOAD);
+      remove(this.#sortComponent);
+      return;
+    }
+    if(this.#isLoading){
+      this.#renderLoading(EventsMessages.LOADING);
+      return;
+    }
+    if(this.#eventsModel.events.length === 0 && this.#isLoading !== true){
       this.#renderNoEvents(EventsMessages.EVERYTHING);
       return;
     }
@@ -111,7 +157,7 @@ export default class GeneralPresenter {
     if(this.#eventEmptyMessageComponent !== null){
       remove(this.#eventEmptyMessageComponent);
     }
-    if(this.events.length === 0){
+    if(this.events.length === 0 && this.#isLoading !== true){
       switch(this.#currentFilterType){
         case FilterType.EVERYTHING: this.#renderNoEvents(EventsMessages.EVERYTHING);
           break;
@@ -125,6 +171,11 @@ export default class GeneralPresenter {
     }
     render(this.#eventListComponent, this.#eventListContainer);
     this.events.forEach((event) => this.#renderEvent(event));
+  }
+
+  #renderLoading(typeMessage){
+    this.#loadingViewComponent = new LoadingView(typeMessage);
+    render(this.#loadingViewComponent, this.#eventListContainer);
   }
 
   #renderNoEvents(typeMessage){
@@ -164,6 +215,7 @@ export default class GeneralPresenter {
 
   #clearEventList(){
     this.#newEventPresenter.destroy();
+    remove(this.#loadingViewComponent);
     this.#eventsPresenter.forEach((presenter) => presenter.destroy());
     this.#eventsPresenter.clear();
   }
