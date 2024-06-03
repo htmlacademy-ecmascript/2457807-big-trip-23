@@ -7,6 +7,7 @@ const sortEvents = {
   [SortType.PRICE]: (events) => events.sort((a, b) => b.basePrice - a.basePrice),
   [SortType.OFFERS]: (events) => events.sort((a, b) => b.offers.length - a.offers.length),
 };
+
 function generateSort(events) {
   return Object.entries(sortEvents).map(([sortType, sortTask]) => ({
     type: sortType,

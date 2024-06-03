@@ -52,11 +52,6 @@ export default class EventsModel extends Observable{
     return destinations.find((destination) => destination.id === id);
   }
 
-  getArrayOffersById(type, idOffersItem){
-    const offersType = this.getOffersByType(type);
-    return offersType.offers.find((offer) => offer.id === idOffersItem);
-  }
-
   async updateEvent(updateType, update) {
     const index = this.#events.findIndex((event) => event.id === update.id);
 
