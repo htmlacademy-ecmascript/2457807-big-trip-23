@@ -1,5 +1,5 @@
 const DATE_NOW = new Date();
-const AUTHORIZATION = 'Basic ht135dwnbyhgfdjkjrj';
+const AUTHORIZATION = 'Basic ht135dwnbyfdjkjrj';
 const END_POINT = 'https://23.objects.htmlacademy.pro';
 
 const EVENT_TYPES = ['taxi', 'bus', 'train', 'ship', 'drive', 'flight', 'check-in', 'sightseeing', 'restaurant'];
