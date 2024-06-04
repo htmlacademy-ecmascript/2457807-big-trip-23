@@ -29,9 +29,6 @@ const createPictureTemplateItem = ({src, description}) =>`
 `;
 
 const createEventFormPictureTemplate = ({pictures}) =>{
-  if (pictures?.length === 0 || pictures?.length === undefined) {
-    return '';
-  }
   const picturesTemplate = pictures.reduce(
     (accumulator, picture) => accumulator + createPictureTemplateItem(picture), '');
   return picturesTemplate;
@@ -140,23 +137,23 @@ const createFormEventTemplate = (destinationsData, offersData, state) =>{
 
   <section class="event__details ${(isEmptyOffers && isEmptyDestinations) ? 'visually-hidden' : ''}">
 
-  <section class="event__section  event__section--offers ${isEmptyOffers ? 'visually-hidden' : ''}">
+  ${isEmptyOffers ? '' : `<section class="event__section  event__section--offers">
   <h3 class="event__section-title  event__section-title--offers">Offers</h3>
   <div class="event__available-offers">
   ${offersTemplate}
   </div>
-</section>
+</section>`}
 
-    <section class="event__section  event__section--destination ${isEmptyDestinations ? 'visually-hidden' : ''}">
-      <h3 class="event__section-title  event__section-title--destination">Destination</h3>
-      <p class="event__destination-description">${destinations === undefined ? '' : destinations.description}</p>
-
-      <div class="event__photos-container">
-        <div class="event__photos-tape">
-        ${destinations === undefined ? '' : createEventFormPictureTemplate(destinations)}
-        </div>
-      </div>
-    </section>
+${isEmptyDestinations ? '' : `<section class="event__section  event__section--destination">
+<h3 class="event__section-title  event__section-title--destination">Destination</h3>
+<p class="event__destination-description">${destinations === undefined ? '' : destinations.description}</p>
+${destinations?.pictures?.length === 0 || destinations?.pictures?.length === undefined ? '' : `
+<div class="event__photos-container">
+  <div class="event__photos-tape">
+  ${destinations === undefined ? '' : createEventFormPictureTemplate(destinations)}
+  </div>
+</div>`}
+</section>`}
   </section>
 </form>
 </li>`;
