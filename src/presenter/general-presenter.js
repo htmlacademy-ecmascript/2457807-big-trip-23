@@ -14,7 +14,7 @@ import { generateFilters, filterEvents } from '../utils/filter-event.js';
 import { generateSort, sortEvents } from '../utils/sort-events.js';
 
 const TimeLimit = {
-  LOWER_LIMIT: 350,
+  LOWER_LIMIT: 500,
   UPPER_LIMIT: 1000,
 };
 
@@ -145,10 +145,6 @@ export default class GeneralPresenter {
     if(this.#isLoading){
       this.#renderLoading(EventsMessages.LOADING);
       remove(this.#sortComponent);
-      return;
-    }
-    if(this.#eventsModel.events.length === 0 && this.#isLoading !== true){
-      this.#renderNoEvents(EventsMessages.EVERYTHING);
       return;
     }
     this.#renderEvents();

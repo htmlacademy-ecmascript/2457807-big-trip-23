@@ -31,8 +31,10 @@ function handleNewEventFormClose() {
 
 const handleModelEventTripInfo = () =>{
   remove(tripInfoComponent);
-  tripInfoComponent = new TripInfoView(eventsModel);
-  render(tripInfoComponent, tripMainSection, RenderPosition.AFTERBEGIN);
+  if(eventsModel.events.length !== 0){
+    tripInfoComponent = new TripInfoView(eventsModel);
+    render(tripInfoComponent, tripMainSection, RenderPosition.AFTERBEGIN);
+  }
 };
 eventsModel.init()
   .finally(() => {
@@ -43,6 +45,8 @@ eventsModel.init()
     }
   });
 eventsModel.addObserver(handleModelEventTripInfo);
-render(tripInfoComponent, tripMainSection, RenderPosition.AFTERBEGIN);
+if(eventsModel.events.length !== 0){
+  render(tripInfoComponent, tripMainSection, RenderPosition.AFTERBEGIN);
+}
 generalPresenter.init();
 

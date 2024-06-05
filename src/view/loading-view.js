@@ -2,7 +2,27 @@ import AbstractView from '../framework/view/abstract-view.js';
 
 const сreateListEmptyViewTemplate = (typeMessage) =>`<section class="trip-events">
 <h2 class="visually-hidden">Trip events</h2>
-<div class="trip-events__msg loader">
+<div class="cats">
+	<div class="cat cat--1">
+		<img src="https://cdn.dribbble.com/users/218750/screenshots/2090988/sleeping_beauty.gif" alt="">
+	</div>
+	<div class="cat cat--2">
+		<img src="https://cdn.dribbble.com/users/6191/screenshots/1192777/catpurr.gif" alt="">
+	</div>
+	<div class="cat cat--3">
+		<img src="https://cdn.dribbble.com/users/6191/screenshots/2211315/meal.gif" alt="">
+	</div>
+  <div class="trip-events__msg loader">${typeMessage}</div>
+	<div class="cat cat--4">
+		<img src="https://cdn.dribbble.com/users/6191/screenshots/1189704/walkingcat.gif" alt="">
+	</div>
+	<div class="cat cat--5">
+		<img src="https://cdn.dribbble.com/users/6191/screenshots/3661586/cat_sleep_dribbble.gif" alt="">
+	</div>
+  <div class="cat cat--1">
+  <img src="https://media1.tenor.com/m/DqfRST6iWKwAAAAC/mochi-mochimochi.gif" alt="">
+  </div>
+</div>
 <style>
 .loader {
   width: 250px;
@@ -52,27 +72,6 @@ const сreateListEmptyViewTemplate = (typeMessage) =>`<section class="trip-event
     width: 15px;
   }
 </style>
-${typeMessage}</div>
-<div class="cats">
-	<div class="cat cat--1">
-		<img src="https://cdn.dribbble.com/users/218750/screenshots/2090988/sleeping_beauty.gif" alt="">
-	</div>
-	<div class="cat cat--2">
-		<img src="https://cdn.dribbble.com/users/6191/screenshots/1192777/catpurr.gif" alt="">
-	</div>
-	<div class="cat cat--3">
-		<img src="https://cdn.dribbble.com/users/6191/screenshots/2211315/meal.gif" alt="">
-	</div>
-	<div class="cat cat--4">
-		<img src="https://cdn.dribbble.com/users/6191/screenshots/1189704/walkingcat.gif" alt="">
-	</div>
-	<div class="cat cat--5">
-		<img src="https://cdn.dribbble.com/users/6191/screenshots/3661586/cat_sleep_dribbble.gif" alt="">
-	</div>
-  <div class="cat cat--1">
-  <img src="https://media1.tenor.com/m/DqfRST6iWKwAAAAC/mochi-mochimochi.gif" alt="">
-  </div>
-</div>
 <style>$first: 	#abe7db;
 $second: 	#f67c61;
 $third: 	#fff9e8;
