@@ -18,9 +18,7 @@ const createOffersTemplate = (offersArray, offersEventArray) => {
       return offerElement;
     }
   }).filter((element) => element !== undefined);
-  const offersTemplate = offersItem.reduce(
-    (accumulator, offer) => accumulator + createOffersItemTemplate(offer), '');
-  return offersTemplate;
+  return offersItem.reduce((accumulator, offer) => accumulator + createOffersItemTemplate(offer), '');
 };
 
 const createEventTemplate = (eventData, destinationsData, offersData) => {
