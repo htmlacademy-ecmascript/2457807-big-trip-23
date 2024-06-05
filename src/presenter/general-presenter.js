@@ -37,7 +37,7 @@ export default class GeneralPresenter {
   });
 
   #eventsModel = null;
-  #eventsPresenter = new Map();
+  #eventPresenters = new Map();
 
   constructor({eventListContainer,tripFiltersContainer, eventsModel, onNewEventDestroy}) {
     this.#eventListContainer = eventListContainer;
@@ -82,11 +82,11 @@ export default class GeneralPresenter {
     this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_EVENT:
-        this.#eventsPresenter.get(update.id).setSaving();
+        this.#eventPresenters.get(update.id).setSaving();
         try{
           await this.#eventsModel.updateEvent(updateType, update);
         }catch{
-          this.#eventsPresenter.get(update.id).setAborting();
+          this.#eventPresenters.get(update.id).setAborting();
         }
         break;
       case UserAction.ADD_EVENT:
@@ -98,11 +98,11 @@ export default class GeneralPresenter {
         }
         break;
       case UserAction.DELETE_EVENT:
-        this.#eventsPresenter.get(update.id).setDeleting();
+        this.#eventPresenters.get(update.id).setDeleting();
         try{
           await this.#eventsModel.deleteEvent(updateType, update);
         }catch{
-          this.#eventsPresenter.get(update.id).setAborting();
+          this.#eventPresenters.get(update.id).setAborting();
         }
         break;
     }
@@ -112,7 +112,7 @@ export default class GeneralPresenter {
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#eventsPresenter.get(data.id).init(data);
+        this.#eventPresenters.get(data.id).init(data);
         break;
       case UpdateType.MINOR:
         this.#clearEventList();
@@ -211,14 +211,14 @@ export default class GeneralPresenter {
       onModeChange: this.#handleModeChange,
     });
     eventPresenter.init(event);
-    this.#eventsPresenter.set(event.id, eventPresenter);
+    this.#eventPresenters.set(event.id, eventPresenter);
   }
 
   #clearEventList(){
     this.#newEventPresenter.destroy();
     remove(this.#loadingViewComponent);
-    this.#eventsPresenter.forEach((presenter) => presenter.destroy());
-    this.#eventsPresenter.clear();
+    this.#eventPresenters.forEach((presenter) => presenter.destroy());
+    this.#eventPresenters.clear();
   }
 
   #handleDestroyCheck = () =>{
@@ -229,7 +229,7 @@ export default class GeneralPresenter {
 
   #handleModeChange = () => {
     this.#newEventPresenter.destroy();
-    this.#eventsPresenter.forEach((presenter) => presenter.resetView());
+    this.#eventPresenters.forEach((presenter) => presenter.resetView());
   };
 
   #handleSortTypeChange = (sortType) => {
