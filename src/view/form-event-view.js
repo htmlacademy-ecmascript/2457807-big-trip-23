@@ -203,8 +203,9 @@ export default class FormEventView extends AbstractStatefulView{
       this.element.querySelector('.event__available-offers')
         .addEventListener('change', this.#offersHandler);
     }
-    this.#setDateToPicker();
-    this.#setDateFromPicker();
+    // this.#setDateToPicker();
+    // this.#setDateFromPicker();
+    this.#setDatePicker();
   }
 
   reset(event) {
@@ -299,65 +300,48 @@ export default class FormEventView extends AbstractStatefulView{
     this.#handleFormDelete(FormEventView.parseStateToEvent(this._state));
   };
 
-  #setDateFromPicker() {
-    const startDate = this.element.querySelector('[name="event-start-time"]');
+  #setDatePicker = () => {
+    const startTime = this.element.querySelector('[name="event-start-time"]');
+    const endTime = this.element.querySelector('[name="event-end-time"]');
 
     const datePickerOptions = {
-      dateFormat: 'd/m/y H:i',
       enableTime: true,
       'time_24hr': true,
-      minuteIncrement: 1,
+      dateFormat: 'd/m/y H:i',
     };
 
     this.#dateStartPicker = flatpickr(
-      startDate,{
+      startTime,
+      {
         ...datePickerOptions,
-        defaultDate: this._state.event.dateFrom,
-        onChange: this.#dateFromChangeHandler,
-        maxDate: this._state.event.dateTo
+        maxDate: this._state.event.dateTo,
+        onChange: this.#changeDateHandler('dateFrom')
       }
     );
-  }
-
-  #setDateToPicker() {
-    const endDate = this.element.querySelector('[name="event-end-time"]');
-
-    const datePickerOptions = {
-      dateFormat: 'd/m/y H:i',
-      enableTime: true,
-      'time_24hr': true,
-      minuteIncrement: 1,
-    };
 
     this.#dateEndPicker = flatpickr(
-      endDate,{
+      endTime,
+      {
         ...datePickerOptions,
-        defaultDate: this._state.event.dateTo,
-        onChange: this.#dateToChangeHandler,
         minDate: this._state.event.dateFrom,
-        allowInvalidPreload: false,
+        onChange: this.#changeDateHandler('dateTo')
       }
     );
-  }
-
-  #dateFromChangeHandler = ([userdate]) =>{
-    this._setState({
-      event: {
-        ...this._state.event,
-        dateFrom: userdate,
-      },
-    });
-    this.#setDateToPicker();
   };
 
-  #dateToChangeHandler = ([userdate]) =>{
+  #changeDateHandler = (date) => ([userDate]) => {
     this._setState({
       event: {
         ...this._state.event,
-        dateTo: userdate,
-      },
+        [date]: userDate
+      }
     });
-    this.#setDateFromPicker();
+
+    if (date === 'dateFrom') {
+      this.#dateEndPicker.set('minDate', userDate);
+    } else if (date === 'dateTo') {
+      this.#dateStartPicker.set('maxDate', userDate);
+    }
   };
 
   static parseEventToState(eventData){
