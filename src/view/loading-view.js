@@ -72,8 +72,7 @@ const сreateListEmptyViewTemplate = (typeMessage) =>`<section class="trip-event
     width: 15px;
   }
 </style>
-<style>
-$first: 	#abe7db;
+<style>$first: 	#abe7db;
 $second: 	#f67c61;
 $third: 	#fff9e8;
 $forth: 	#58a5a3;
@@ -102,7 +101,7 @@ body, html {
 	.cats {
 		height: 100vh;
 		grid-template-columns: 29% 29% 29%;
-		grid-template-rows: 60% 16% 34%;
+		grid-template-rows: 50% 16% 34%;
 	}
 }
 @media screen and (max-width: 45em) and (min-width: 25em) {
