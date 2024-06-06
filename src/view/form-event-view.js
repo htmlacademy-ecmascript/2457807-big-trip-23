@@ -129,7 +129,7 @@ const createFormEventTemplate = (destinationsData, offersData, state) =>{
     </div>
 
     <button class="event__save-btn btn btn--blue " type="submit" ${state.isDisabled ? 'disabled' : ''}>${state.isSaving ? 'Saving...' : 'Save'}</button>
-    <button class="event__reset-btn" type="reset" ${state.isDisabled ? 'disabled' : ''}>${buttonName}</button>
+    <button class="event__reset-btn" type="reset"}>${buttonName}</button>
     <button class="event__rollup-btn" type="button">
     <span class="visually-hidden">Open event</span>
     </button>
