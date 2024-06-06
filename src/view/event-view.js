@@ -7,13 +7,13 @@ const createOffersItemTemplate = ({title, price}) => `<li class="event__offer">
   <span class="event__offer-price">${price}</span>
 </li>`;
 
-const createOffersTemplate = (offersArray, offersEventArray) => {
-  if (offersEventArray.length === 0 || offersArray.length === 0) {
+const createOffersTemplate = (offers, offersEvent) => {
+  if (offersEvent.length === 0 || offers.length === 0) {
     return '';
   }
-  const offersItem = offersArray.map((offerElement) => {
+  const offersItem = offers.map((offerElement) => {
 
-    const isOffers = offersEventArray.find((offersEventItem) => offersEventItem === offerElement.id);
+    const isOffers = offersEvent.find((offersEventItem) => offersEventItem === offerElement.id);
     if (isOffers || isOffers !== undefined) {
       return offerElement;
     }
@@ -22,16 +22,16 @@ const createOffersTemplate = (offersArray, offersEventArray) => {
 };
 
 const createEventTemplate = (eventData, destinationsData, offersData) => {
-  const {basePrice, dateFrom, dateTo, isFavorite, offers: offersEventArray, type
+  const {basePrice, dateFrom, dateTo, isFavorite, offers: offersEvent, type
   } = eventData;
   let name = 'Trip not selected';
   if(destinationsData !== undefined){
     name = destinationsData.name;
   }
 
-  let offersArray = [];
+  let offers = [];
   if(offersData !== undefined){
-    offersArray = offersData.offers;
+    offers = offersData.offers;
   }
 
   return (`
@@ -54,7 +54,7 @@ const createEventTemplate = (eventData, destinationsData, offersData) => {
   </p>
     <h4 class="visually-hidden">Offers:</h4>
     <ul class="event__selected-offers">
-    ${createOffersTemplate(offersArray, offersEventArray)}
+    ${createOffersTemplate(offers, offersEvent)}
     </ul>
     <button class="event__favorite-btn ${isFavorite ? 'event__favorite-btn--active' : ''}" type="button">
       <span class="visually-hidden">Add to favorite</span>
