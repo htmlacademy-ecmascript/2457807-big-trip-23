@@ -16,7 +16,7 @@ const createTripInfoViewTemplate = (total, tripTitle, tripInfoTime) =>{
   }else if(tripTitle.length === 2){
     intermediateCityTripInfo = ' &mdash;';
   }else{
-    intermediateCityTripInfo = ' ';
+    intermediateCityTripInfo = '';
   }
   return `<div class="trip-main">
 <section class="trip-main__trip-info  trip-info">
