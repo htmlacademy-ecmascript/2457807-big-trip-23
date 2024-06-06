@@ -142,7 +142,7 @@ export default class GeneralPresenter {
       remove(this.#sortComponent);
       return;
     }
-    if(this.#isLoading){
+    if(this.#isLoading && !this.#eventsModel.isServerUnavailable){
       this.#renderLoading(EventsMessages.LOADING);
       remove(this.#sortComponent);
       return;
