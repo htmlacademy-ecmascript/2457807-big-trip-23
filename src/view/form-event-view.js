@@ -203,8 +203,6 @@ export default class FormEventView extends AbstractStatefulView{
       this.element.querySelector('.event__available-offers')
         .addEventListener('change', this.#offersHandler);
     }
-    // this.#setDateToPicker();
-    // this.#setDateFromPicker();
     this.#setDatePicker();
   }
 
