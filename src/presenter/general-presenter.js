@@ -154,7 +154,7 @@ export default class GeneralPresenter {
     if(this.#eventEmptyMessageComponent !== null){
       remove(this.#eventEmptyMessageComponent);
     }
-    if(this.events.length === 0 && this.#isLoading !== true){
+    if(this.events.length === 0 && !this.#isLoading){
       switch(this.#currentFilterType){
         case FilterType.EVERYTHING: this.#renderNoEvents(EventsMessages.EVERYTHING);
           remove(this.#sortComponent);
