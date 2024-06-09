@@ -18,7 +18,7 @@ const newEventButtonComponent = new NewEventButtonView({
   onNewEventClick: handleNewEventButtonClick,
 });
 
-let tripInfoComponent = new TripInfoView(eventsModel);
+const tripInfoComponent = new TripInfoView(eventsModel);
 
 function handleNewEventButtonClick(){
   generalPresenter.createEvent();
@@ -32,10 +32,11 @@ function handleNewEventFormClose() {
 const handleModelEventTripInfo = () =>{
   remove(tripInfoComponent);
   if(eventsModel.events.length !== 0){
-    tripInfoComponent = new TripInfoView(eventsModel);
+    tripInfoComponent.changeTripInfo(eventsModel);
     render(tripInfoComponent, tripMainSection, RenderPosition.AFTERBEGIN);
   }
 };
+
 eventsModel.init()
   .finally(() => {
     render(newEventButtonComponent, tripMainSection, RenderPosition.BEFOREEND);
@@ -44,9 +45,12 @@ eventsModel.init()
       remove(tripInfoComponent);
     }
   });
+
 eventsModel.addObserver(handleModelEventTripInfo);
+
 if(eventsModel.events.length !== 0){
   render(tripInfoComponent, tripMainSection, RenderPosition.AFTERBEGIN);
 }
+
 generalPresenter.init();
 

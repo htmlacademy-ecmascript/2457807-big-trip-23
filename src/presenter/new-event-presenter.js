@@ -3,7 +3,6 @@ import FormEventView from '../view/form-event-view.js';
 import { UserAction, UpdateType } from '../constants.js';
 
 export default class NewEventPresenter {
-  #eventListContainer = null;
   #handleDataChange = null;
   #handleDestroy = null;
   #eventsModel = null;
@@ -11,8 +10,7 @@ export default class NewEventPresenter {
   #handleDestroyCheck = null;
 
 
-  constructor({eventListContainer, eventsModel, onDataChange, onDestroy, onNewEventDestroyCheck}) {
-    this.#eventListContainer = eventListContainer;
+  constructor({eventsModel, onDataChange, onDestroy, onNewEventDestroyCheck}) {
     this.#eventsModel = eventsModel;
     this.#handleDataChange = onDataChange;
     this.#handleDestroy = onDestroy;

@@ -7,7 +7,7 @@ const сreateListEmptyViewTemplate = (typeMessage) =>`<section class="trip-event
 		<img src="https://cdn.dribbble.com/users/218750/screenshots/2090988/sleeping_beauty.gif" alt="">
 	</div>
 	<div class="cat cat--2">
-		<img src="https://cdn.dribbble.com/users/6191/screenshots/1192777/catpurr.gif" alt="">
+	<img src="https://media1.tenor.com/m/DqfRST6iWKwAAAAC/mochi-mochimochi.gif" alt="">		
 	</div>
 	<div class="cat cat--3">
 		<img src="https://cdn.dribbble.com/users/6191/screenshots/2211315/meal.gif" alt="">
@@ -20,7 +20,7 @@ const сreateListEmptyViewTemplate = (typeMessage) =>`<section class="trip-event
 		<img src="https://cdn.dribbble.com/users/6191/screenshots/3661586/cat_sleep_dribbble.gif" alt="">
 	</div>
   <div class="cat cat--1">
-  <img src="https://media1.tenor.com/m/DqfRST6iWKwAAAAC/mochi-mochimochi.gif" alt="">
+  <img src="https://cdn.dribbble.com/users/6191/screenshots/1192777/catpurr.gif" alt="">
   </div>
 </div>
 <style>
