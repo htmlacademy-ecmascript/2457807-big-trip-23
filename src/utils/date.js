@@ -5,8 +5,8 @@ dayjs.extend(duration);
 
 const formatDate = (dueDate) => dayjs(dueDate).format(DateFormat.DATE);
 const formatTime = (dueDate) => dayjs(dueDate).format(DateFormat.TIME);
-const formatDateForm = (dueDate) => dayjs(dueDate).format(DateFormat.DATE__FORM);
-const formatDateTripInfo = (dueDate) => dayjs(dueDate).format(DateFormat.DATE__TRIP_INFO);
+const formatDateForm = (dueDate) => dayjs(dueDate).format(DateFormat.DATE_FORM);
+const formatDateTripInfo = (dueDate) => dayjs(dueDate).format(DateFormat.DATE_TRIP_INFO);
 
 const getDuration = (dateFrom, dateTo) => {
 
