@@ -36,8 +36,8 @@ const EventsMessages = {
 const DateFormat = {
   DATE: 'MMM DD',
   TIME: 'HH:mm',
-  DATE__FORM: 'DD/MM/YY HH:mm',
-  DATE__TRIP_INFO: 'DD MMM YYYY',
+  DATE_FORM: 'DD/MM/YY HH:mm',
+  DATE_TRIP_INFO: 'DD MMM YYYY',
 };
 
 const UserAction = {
