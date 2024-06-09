@@ -72,7 +72,8 @@ const сreateListEmptyViewTemplate = (typeMessage) =>`<section class="trip-event
     width: 15px;
   }
 </style>
-<style>$first: 	#abe7db;
+<style>
+$first: 	#abe7db;
 $second: 	#f67c61;
 $third: 	#fff9e8;
 $forth: 	#58a5a3;
