@@ -4,7 +4,6 @@ import {formatDateForm } from '../utils/date.js';
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
-
 const BLANK_EVENT = {
   basePrice: 0,
   dateFrom:'',
@@ -14,7 +13,6 @@ const BLANK_EVENT = {
   type: 'flight',
   offers: [],
 };
-
 
 const createListOptionsDestinationItem = ({name}) =>`<option value="${name}"></option>`;
 
@@ -114,10 +112,10 @@ const createFormEventTemplate = (destinationsData, offersData, state) =>{
 
     <div class="event__field-group  event__field-group--time">
       <label class="visually-hidden" for="event-start-time-1">From</label>
-      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" requed value="${ id === 0 ? '' : formatDateForm(dateFrom)}">
+      <input class="event__input  event__input--time" id="event-start-time-1" type="text" name="event-start-time" required value="${ id === 0 ? '' : formatDateForm(dateFrom)}">
       &mdash;
       <label class="visually-hidden" for="event-end-time-1">To</label>
-      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" requed value="${id === 0 ? '' : formatDateForm(dateTo)}">
+      <input class="event__input  event__input--time" id="event-end-time-1" type="text" name="event-end-time" required value="${id === 0 ? '' : formatDateForm(dateTo)}">
     </div>
 
     <div class="event__field-group  event__field-group--price">
@@ -306,6 +304,7 @@ export default class FormEventView extends AbstractStatefulView{
       enableTime: true,
       'time_24hr': true,
       dateFormat: 'd/m/y H:i',
+      allowInput:true,
     };
 
     this.#dateStartPicker = flatpickr(
