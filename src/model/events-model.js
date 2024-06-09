@@ -1,7 +1,6 @@
 import { sortEvents } from '../utils/sort-events.js';
-import { SortType } from '../constants.js';
+import { SortType, UpdateType } from '../constants.js';
 import Observable from '../framework/observable.js';
-import { UpdateType } from '../constants.js';
 
 export default class EventsModel extends Observable{
   #events = [];

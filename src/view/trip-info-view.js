@@ -48,6 +48,12 @@ export default class TripInfoView extends AbstractView{
     this.#tripInfoTime = eventsModel.getTripTime();
   }
 
+  changeTripInfo(eventsModel){
+    this.#totalCount = eventsModel.getTotalCostTrip();
+    this.#tripInfo = eventsModel.getTripInfo();
+    this.#tripInfoTime = eventsModel.getTripTime();
+  }
+
   get template() {
     return createTripInfoViewTemplate(this.#totalCount, this.#tripInfo, this.#tripInfoTime);
   }

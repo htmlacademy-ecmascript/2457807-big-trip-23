@@ -45,7 +45,6 @@ export default class GeneralPresenter {
     this.#eventsModel = eventsModel;
     this.#eventsModel.addObserver(this.#handleModelEvent);
     this.#newEventPresenter = new NewEventPresenter({
-      eventListContainer,
       eventsModel,
       taskListContainer: this.#eventListComponent.element,
       onDataChange: this.#handleViewAction,

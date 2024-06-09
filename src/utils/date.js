@@ -3,10 +3,10 @@ import { DateFormat } from '../constants';
 import duration from 'dayjs/plugin/duration';
 dayjs.extend(duration);
 
-const formatDate = (dueDate) => dayjs(dueDate).format(DateFormat.DATE_FORMATE);
-const formatTime = (dueDate) => dayjs(dueDate).format(DateFormat.TIME_FORMAT);
-const formatDateForm = (dueDate) => dayjs(dueDate).format(DateFormat.DATE_FORMATE_FORM);
-const formatDateTripInfo = (dueDate) => dayjs(dueDate).format(DateFormat.DATE_FORMATE_TRIP_INFO);
+const formatDate = (dueDate) => dayjs(dueDate).format(DateFormat.DATE);
+const formatTime = (dueDate) => dayjs(dueDate).format(DateFormat.TIME);
+const formatDateForm = (dueDate) => dayjs(dueDate).format(DateFormat.DATE__FORM);
+const formatDateTripInfo = (dueDate) => dayjs(dueDate).format(DateFormat.DATE__TRIP_INFO);
 
 const getDuration = (dateFrom, dateTo) => {
 

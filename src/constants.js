@@ -34,10 +34,10 @@ const EventsMessages = {
 };
 
 const DateFormat = {
-  DATE_FORMATE: 'MMM DD',
-  TIME_FORMAT: 'HH:mm',
-  DATE_FORMATE_FORM: 'DD/MM/YY HH:mm',
-  DATE_FORMATE_TRIP_INFO: 'DD MMM YYYY',
+  DATE: 'MMM DD',
+  TIME: 'HH:mm',
+  DATE__FORM: 'DD/MM/YY HH:mm',
+  DATE__TRIP_INFO: 'DD MMM YYYY',
 };
 
 const UserAction = {
