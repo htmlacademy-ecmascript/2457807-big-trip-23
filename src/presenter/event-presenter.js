@@ -42,8 +42,8 @@ export default class EventPresenter{
       destinationsData: [...this.#eventsModel.destinations],
       offersData: [...this.#eventsModel.offers],
       onFormSubmit: this.#handleFormSubmit,
-      onFormDelete: this.#handleFormDelete,
-      onformRollUp: this.#handleFormRollUp,
+      onFormDeleteClick: this.#handleFormDeleteClick,
+      onformRollUpClick: this.#handleFormRollUpClick,
     });
 
     if(previewEventComponent === null || previewEventFormComponent === null){
@@ -137,7 +137,7 @@ export default class EventPresenter{
     this.#replaceEvenToFormEvent();
   };
 
-  #handleFormRollUp = () => {
+  #handleFormRollUpClick = () => {
     this.#eventFormComponent.reset(this.#event);
     this.#replaceFormEventToEvent();
   };
@@ -150,7 +150,7 @@ export default class EventPresenter{
     );
   };
 
-  #handleFormDelete = (eventState) => {
+  #handleFormDeleteClick = (eventState) => {
     this.#handleDataChange(
       UserAction.DELETE_EVENT,
       UpdateType.MAJOR,

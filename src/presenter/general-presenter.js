@@ -48,8 +48,8 @@ export default class GeneralPresenter {
       eventsModel,
       taskListContainer: this.#eventListComponent.element,
       onDataChange: this.#handleViewAction,
-      onDestroy: onNewEventDestroy,
-      onNewEventDestroyCheck: this.#handleDestroyCheck,
+      onNewEventDestroy: onNewEventDestroy,
+      onNewEventDestroyCheck: this.#handleNewEventDestroyCheck,
     });
   }
 
@@ -220,7 +220,7 @@ export default class GeneralPresenter {
     this.#eventPresenters.clear();
   }
 
-  #handleDestroyCheck = () =>{
+  #handleNewEventDestroyCheck = () =>{
     if(this.events.length === 0){
       this.#renderNoEvents(EventsMessages.EVERYTHING);
     }

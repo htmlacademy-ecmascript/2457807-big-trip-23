@@ -161,13 +161,13 @@ export default class FormEventView extends AbstractStatefulView{
   #destinationsData = [];
   #offersData = [];
   #handleFormSubmit = null;
-  #handleFormDelete = null;
-  #handleformRollUp = null;
+  #handleFormDeleteClick = null;
+  #handleformRollUpClick = null;
   #dateStartPicker = null;
   #dateEndPicker = null;
   #newOffersState = null;
 
-  constructor({eventData = BLANK_EVENT, destinationsData, offersData, onFormSubmit, onFormDelete, onformRollUp}) {
+  constructor({eventData = BLANK_EVENT, destinationsData, offersData, onFormSubmit, onFormDeleteClick, onformRollUpClick}) {
     super();
     this.#eventData = eventData;
     this._setState(FormEventView.parseEventToState(eventData));
@@ -175,8 +175,8 @@ export default class FormEventView extends AbstractStatefulView{
     this.#offersData = offersData;
     this._restoreHandlers();
     this.#handleFormSubmit = onFormSubmit;
-    this.#handleFormDelete = onFormDelete;
-    this.#handleformRollUp = onformRollUp;
+    this.#handleFormDeleteClick = onFormDeleteClick;
+    this.#handleformRollUpClick = onformRollUpClick;
     this.#newOffersState = new Map(eventData.offers.map((offer) => [offer, offer]));
   }
 
@@ -188,18 +188,18 @@ export default class FormEventView extends AbstractStatefulView{
     this.element.querySelector('form')
       .addEventListener('submit', this.#formSubmitHandler);
     this.element.querySelector('.event__rollup-btn')
-      .addEventListener('click', this.#formRollUpHandler);
+      .addEventListener('click', this.#formRollUpClickHandler);
     this.element.querySelector('.event__reset-btn')
-      .addEventListener('click', this.#formDeleteHandler);
+      .addEventListener('click', this.#formDeleteClickHandler);
     this.element.querySelector('.event__type-group')
-      .addEventListener('change', this.#eventTypeTripHandler);
+      .addEventListener('change', this.#eventTypeTripChangeHandler);
     this.element.querySelector('.event__input--destination')
-      .addEventListener('change', this.#destinationTypeHandler);
+      .addEventListener('change', this.#destinationTypeChangeHandler);
     this.element.querySelector('.event__input--price')
-      .addEventListener('change', this.#basePriceHandler);
+      .addEventListener('change', this.#basePriceChangeHandler);
     if(this.element.querySelector('.event__offer-checkbox') !== null){
       this.element.querySelector('.event__available-offers')
-        .addEventListener('change', this.#offersHandler);
+        .addEventListener('change', this.#offersChangeHandler);
     }
     this.#setDatePicker();
   }
@@ -224,7 +224,7 @@ export default class FormEventView extends AbstractStatefulView{
     }
   }
 
-  #offersHandler = (evt) => {
+  #offersChangeHandler = (evt) => {
     if(evt.target.checked) {
       this.#newOffersState.set(evt.target.value, evt.target.value);
       this._setState({
@@ -244,13 +244,13 @@ export default class FormEventView extends AbstractStatefulView{
     }
   };
 
-  #formRollUpHandler = () => {
+  #formRollUpClickHandler = () => {
     this.#newOffersState = new Map(this.#eventData.offers.map((offer) => [offer, offer]));
     this.reset(this.#eventData);
-    this.#handleformRollUp(this.#eventData);
+    this.#handleformRollUpClick(this.#eventData);
   };
 
-  #eventTypeTripHandler = (evt) =>{
+  #eventTypeTripChangeHandler = (evt) =>{
     const newType = evt.target.value;
     this.#newOffersState.clear();
     this.updateElement({
@@ -262,7 +262,7 @@ export default class FormEventView extends AbstractStatefulView{
     });
   };
 
-  #destinationTypeHandler = (evt) => {
+  #destinationTypeChangeHandler = (evt) => {
     const newDestination = evt.target.value;
     const typeDestination = this.#destinationsData.find((destination) => destination.name === newDestination);
     if (!typeDestination) {
@@ -276,7 +276,7 @@ export default class FormEventView extends AbstractStatefulView{
     });
   };
 
-  #basePriceHandler = (evt) => {
+  #basePriceChangeHandler = (evt) => {
     const newBasePrice = evt.target.value;
     this._setState({
       event: {
@@ -291,9 +291,9 @@ export default class FormEventView extends AbstractStatefulView{
     this.#handleFormSubmit(FormEventView.parseStateToEvent(this._state));
   };
 
-  #formDeleteHandler = (evt) => {
+  #formDeleteClickHandler = (evt) => {
     evt.preventDefault();
-    this.#handleFormDelete(FormEventView.parseStateToEvent(this._state));
+    this.#handleFormDeleteClick(FormEventView.parseStateToEvent(this._state));
   };
 
   #setDatePicker = () => {
