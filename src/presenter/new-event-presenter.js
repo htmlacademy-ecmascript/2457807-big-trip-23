@@ -4,17 +4,17 @@ import { UserAction, UpdateType } from '../constants.js';
 
 export default class NewEventPresenter {
   #handleDataChange = null;
-  #handleDestroy = null;
+  #handleNewEventDestroy = null;
   #eventsModel = null;
   #eventFormComponent = null;
-  #handleDestroyCheck = null;
+  #handleNewEventDestroyCheck = null;
 
 
-  constructor({eventsModel, onDataChange, onDestroy, onNewEventDestroyCheck}) {
+  constructor({eventsModel, onDataChange, onNewEventDestroy, onNewEventDestroyCheck}) {
     this.#eventsModel = eventsModel;
     this.#handleDataChange = onDataChange;
-    this.#handleDestroy = onDestroy;
-    this.#handleDestroyCheck = onNewEventDestroyCheck;
+    this.#handleNewEventDestroy = onNewEventDestroy;
+    this.#handleNewEventDestroyCheck = onNewEventDestroyCheck;
   }
 
   init() {
@@ -25,8 +25,8 @@ export default class NewEventPresenter {
       destinationsData: [...this.#eventsModel.destinations],
       offersData: [...this.#eventsModel.offers],
       onFormSubmit: this.#handleFormSubmit,
-      onFormDelete: this.#handleFormDelete,
-      onformRollUp: this.#handleFormDelete,
+      onFormDeleteClick: this.#handleFormDelete,
+      onformRollUpClick: this.#handleFormDelete,
     });
     const newFormContainer = document.querySelector('.trip-events__list');
     render(this.#eventFormComponent, newFormContainer, RenderPosition.AFTERBEGIN);
@@ -39,8 +39,8 @@ export default class NewEventPresenter {
       return;
     }
 
-    this.#handleDestroy();
-    this.#handleDestroyCheck();
+    this.#handleNewEventDestroy();
+    this.#handleNewEventDestroyCheck();
 
     remove(this.#eventFormComponent);
     this.#eventFormComponent = null;

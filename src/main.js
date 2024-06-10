@@ -15,7 +15,7 @@ const eventsModel = new EventsModel({eventsApiService: new EventsApiService(END_
 const generalPresenter = new GeneralPresenter({eventListContainer: tripEventSection,
   tripFiltersContainer: tripFilters, eventsModel, onNewEventDestroy: handleNewEventFormClose});
 const newEventButtonComponent = new NewEventButtonView({
-  onNewEventClick: handleNewEventButtonClick,
+  onNewEventButtonClick: handleNewEventButtonClick,
 });
 
 const tripInfoComponent = new TripInfoView(eventsModel);
@@ -29,7 +29,7 @@ function handleNewEventFormClose() {
   newEventButtonComponent.element.disabled = false;
 }
 
-const handleModelEventTripInfo = () =>{
+const handleModelEventTripInfoChange = () =>{
   remove(tripInfoComponent);
   if(eventsModel.events.length !== 0){
     tripInfoComponent.changeTripInfo(eventsModel);
@@ -46,7 +46,7 @@ eventsModel.init()
     }
   });
 
-eventsModel.addObserver(handleModelEventTripInfo);
+eventsModel.addObserver(handleModelEventTripInfoChange);
 
 if(eventsModel.events.length !== 0){
   render(tripInfoComponent, tripMainSection, RenderPosition.AFTERBEGIN);

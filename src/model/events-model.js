@@ -156,7 +156,7 @@ export default class EventsModel extends Observable{
       return ['' , ''];
     }
     const dateStart = sortEvents[SortType.DAY](this.#events)[0]?.dateFrom;
-    const getDateEnd = () => this.#events.sort((a, b) => new Date(b.dateTo) - new Date(a.dateTo));
+    const getDateEnd = () => this.#events.sort((firstEvent, secondEvent) => new Date(secondEvent.dateTo) - new Date(firstEvent.dateTo));
     const dateEnd = getDateEnd().map((item) =>item.dateTo)[0];
     return [dateStart, dateEnd] || ['', ''];
   }
